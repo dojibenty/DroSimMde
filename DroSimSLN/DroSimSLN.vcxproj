@@ -1,0 +1,225 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug|Win32">
+      <Configuration>Debug</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|Win32">
+      <Configuration>Release</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Debug|x64">
+      <Configuration>Debug</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|x64">
+      <Configuration>Release</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <VCProjectVersion>15.0</VCProjectVersion>
+    <ProjectGuid>{8EF6B48B-666F-4740-8F50-F0D05B264C7C}</ProjectGuid>
+    <Keyword>Win32Proj</Keyword>
+    <RootNamespace>DroSimSLN</RootNamespace>
+    <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup>
+    <PreferredToolArchitecture>x64</PreferredToolArchitecture>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <PlatformToolset>v143</PlatformToolset>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <PlatformToolset>v143</PlatformToolset>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <PlatformToolset>v143</PlatformToolset>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <PlatformToolset>v143</PlatformToolset>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <ImportGroup Label="ExtensionSettings">
+  </ImportGroup>
+  <ImportGroup Label="Shared">
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <LinkIncremental>true</LinkIncremental>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <LinkIncremental>true</LinkIncremental>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <LinkIncremental>false</LinkIncremental>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <LinkIncremental>false</LinkIncremental>
+  </PropertyGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <ClCompile>
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
+      <WarningLevel>Level3</WarningLevel>
+      <Optimization>Disabled</Optimization>
+      <SDLCheck>true</SDLCheck>
+      <PreprocessorDefinitions>WIN32;_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <ConformanceMode>true</ConformanceMode>
+      <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
+    </ClCompile>
+    <Link>
+      <SubSystem>Console</SubSystem>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <ClCompile>
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
+      <WarningLevel>Level3</WarningLevel>
+      <Optimization>Disabled</Optimization>
+      <SDLCheck>true</SDLCheck>
+      <PreprocessorDefinitions>_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <ConformanceMode>true</ConformanceMode>
+      <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
+      <ScanSourceForModuleDependencies>true</ScanSourceForModuleDependencies>
+      <AdditionalIncludeDirectories>application/headers;components/headers;factory/headers;interfaces/headers;observation/headers;run/headers;scenario/headers;types/headers;framework/headers</AdditionalIncludeDirectories>
+    </ClCompile>
+    <Link>
+      <SubSystem>Console</SubSystem>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <ClCompile>
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
+      <WarningLevel>Level3</WarningLevel>
+      <Optimization>MaxSpeed</Optimization>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <SDLCheck>true</SDLCheck>
+      <PreprocessorDefinitions>WIN32;NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <ConformanceMode>true</ConformanceMode>
+      <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
+    </ClCompile>
+    <Link>
+      <SubSystem>Console</SubSystem>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <OptimizeReferences>true</OptimizeReferences>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <ClCompile>
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
+      <WarningLevel>Level3</WarningLevel>
+      <Optimization>MaxSpeed</Optimization>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <SDLCheck>true</SDLCheck>
+      <PreprocessorDefinitions>NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <ConformanceMode>true</ConformanceMode>
+      <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
+    </ClCompile>
+    <Link>
+      <SubSystem>Console</SubSystem>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <OptimizeReferences>true</OptimizeReferences>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemGroup>
+    <ClCompile Include="application\src\DroneSpiral.cpp" />
+    <ClCompile Include="application\src\DroneSweep.cpp" />
+    <ClCompile Include="application\src\Environment.cpp" />
+    <ClCompile Include="application\src\Manager.cpp" />
+    <ClCompile Include="application\src\Objective.cpp" />
+    <ClCompile Include="components\src\compDroneSpiral.cpp" />
+    <ClCompile Include="components\src\compDroneSweep.cpp" />
+    <ClCompile Include="components\src\compEnvironment.cpp" />
+    <ClCompile Include="components\src\compManager.cpp" />
+    <ClCompile Include="components\src\compObjective.cpp" />
+    <ClCompile Include="DroSimSLN.cpp" />
+    <ClCompile Include="factory\src\ADroneSpiral.cpp" />
+    <ClCompile Include="factory\src\ADroneSweep.cpp" />
+    <ClCompile Include="factory\src\AEnvironment.cpp" />
+    <ClCompile Include="factory\src\AManager.cpp" />
+    <ClCompile Include="factory\src\AObjective.cpp" />
+    <ClCompile Include="factory\src\DroSimSystem.cpp" />
+    <ClCompile Include="framework\src\Clock.cpp" />
+    <ClCompile Include="framework\src\LeafComponent.cpp" />
+    <ClCompile Include="framework\src\LogComponent.cpp" />
+    <ClCompile Include="framework\src\RootComponent.cpp" />
+    <ClCompile Include="framework\src\Scenario.cpp" />
+    <ClCompile Include="framework\src\TimeableObject.cpp" />
+    <ClCompile Include="observation\src\myDronesPositionsLogObservationComponent.cpp" />
+    <ClCompile Include="observation\src\mySwimmerPositionLogObservationComponent.cpp" />
+    <ClCompile Include="run\src\MainDroSimSystem.cpp" />
+    <ClCompile Include="scenario\src\ScenarLog.cpp" />
+    <ClCompile Include="types\src\DroneData.cpp" />
+    <ClCompile Include="types\src\vect2.cpp" />
+    <ClCompile Include="types\src\wect2.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="application\headers\DroneSpiral.h" />
+    <ClInclude Include="application\headers\DroneSweep.h" />
+    <ClInclude Include="application\headers\Environment.h" />
+    <ClInclude Include="application\headers\Manager.h" />
+    <ClInclude Include="application\headers\Objective.h" />
+    <ClInclude Include="components\headers\compDroneSpiral.h" />
+    <ClInclude Include="components\headers\compDroneSweep.h" />
+    <ClInclude Include="components\headers\compEnvironment.h" />
+    <ClInclude Include="components\headers\compManager.h" />
+    <ClInclude Include="components\headers\compObjective.h" />
+    <ClInclude Include="factory\headers\ADroneSpiral.h" />
+    <ClInclude Include="factory\headers\ADroneSweep.h" />
+    <ClInclude Include="factory\headers\AEnvironment.h" />
+    <ClInclude Include="factory\headers\AManager.h" />
+    <ClInclude Include="factory\headers\AObjective.h" />
+    <ClInclude Include="factory\headers\DroSimSystem.h" />
+    <ClInclude Include="framework\headers\Clock.h" />
+    <ClInclude Include="framework\headers\LeafComponent.h" />
+    <ClInclude Include="framework\headers\LogComponent.h" />
+    <ClInclude Include="framework\headers\RootComponent.h" />
+    <ClInclude Include="framework\headers\Scenario.h" />
+    <ClInclude Include="framework\headers\TimeableObject.h" />
+    <ClInclude Include="interfaces\headers\ItfEnvironmentInterface.h" />
+    <ClInclude Include="interfaces\headers\ItfTargetObjectInterface.h" />
+    <ClInclude Include="observation\headers\myDronesPositionsLogObservationComponent.h" />
+    <ClInclude Include="observation\headers\mySwimmerPositionLogObservationComponent.h" />
+    <ClInclude Include="scenario\headers\ScenarLog.h" />
+    <ClInclude Include="types\headers\DroneData.h" />
+    <ClInclude Include="types\headers\vect2.h" />
+    <ClInclude Include="types\headers\wect2.h" />
+  </ItemGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <ImportGroup Label="ExtensionTargets">
+  </ImportGroup>
+</Project>
