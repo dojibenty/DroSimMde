@@ -11,111 +11,121 @@
 // End of user code
 
 
-DroneSpiral::DroneSpiral(compDroneSpiral *container)	{
-		myContainer = container;
-		rItfEnvironmentSpiral = 0;
-		rItfTargetObjectSpiral = 0;
-// Start of user code  : Implementation of constructor method
+DroneSpiral::DroneSpiral(compDroneSpiral* container) {
+    myContainer = container;
+    rItfEnvironmentSpiral = 0;
+    rItfTargetObjectSpiral = 0;
+    // Start of user code  : Implementation of constructor method
 
-// End of user code
-	}
-DroneSpiral::~DroneSpiral(){
-// Start of user code  : Implementation of destructor method
+    // End of user code
+}
 
-// End of user code
-	}
+DroneSpiral::~DroneSpiral() {
+    // Start of user code  : Implementation of destructor method
+
+    // End of user code
+}
+
 void DroneSpiral::initialize() {
-// Start of user code  : Implementation of initialize method
+    // Start of user code  : Implementation of initialize method
 
-// End of user code
-	}
+    // End of user code
+}
 
 void DroneSpiral::end() {
-// Start of user code  : Implementation of end method
+    // Start of user code  : Implementation of end method
 
-// End of user code
-	}
+    // End of user code
+}
 
 void DroneSpiral::doStep(int nStep) {
-// Start of user code  : Implementation of doStep method
-		// to implement
-// End of user code
-	}
-	
-	
+    // Start of user code  : Implementation of doStep method
+    // to implement
+    // End of user code
+}
+
+
 // Start of user code  : Additional methods
 
 // End of user code
-	
 
-void DroneSpiral::setrItfEnvironmentSpiral(ItfEnvironmentInterface *arItfEnvironmentSpiral) {
-		rItfEnvironmentSpiral = arItfEnvironmentSpiral;
-	}
-void DroneSpiral::setrItfTargetObjectSpiral(ItfTargetObjectInterface *arItfTargetObjectSpiral) {
-		rItfTargetObjectSpiral = arItfTargetObjectSpiral;
-	}
-	// +++++++++++++ Access for ID parameter +++++++++++++
+
+void DroneSpiral::setrItfEnvironmentSpiral(ItfEnvironmentInterface* arItfEnvironmentSpiral) {
+    rItfEnvironmentSpiral = arItfEnvironmentSpiral;
+}
+
+void DroneSpiral::setrItfTargetObjectSpiral(ItfTargetObjectInterface* arItfTargetObjectSpiral) {
+    rItfTargetObjectSpiral = arItfTargetObjectSpiral;
+}
+
+// +++++++++++++ Access for ID parameter +++++++++++++
 long DroneSpiral::getID() {
-		return ID;
-	}
-	
-void DroneSpiral::setID(long arg) {
-		ID = arg;
-	}
-	// +++++++++++++ Access for speed parameter +++++++++++++
-double DroneSpiral::getSpeed() {
-		return speed;
-	}
-	
-void DroneSpiral::setSpeed(double arg) {
-		speed = arg;
-	}
-	// +++++++++++++ Access for position parameter +++++++++++++
-vect2 DroneSpiral::getPosition() {
-		return position;
-	}
-	
-void DroneSpiral::setPosition(vect2 arg) {
-		position = arg;
-	}
-	// +++++++++++++ Access for direction parameter +++++++++++++
-vect2 DroneSpiral::getDirection() {
-		return direction;
-	}
-	
-void DroneSpiral::setDirection(vect2 arg) {
-		direction = arg;
-	}
-	// +++++++++++++ Access for visionRadius parameter +++++++++++++
-double DroneSpiral::getVisionRadius() {
-		return visionRadius;
-	}
-	
-void DroneSpiral::setVisionRadius(double arg) {
-		visionRadius = arg;
-	}
-	// +++++++++++++ Access for spiralRadius parameter +++++++++++++
-double DroneSpiral::getSpiralRadius() {
-		return spiralRadius;
-	}
-	
-void DroneSpiral::setSpiralRadius(double arg) {
-		spiralRadius = arg;
-	}
-	// +++++++++++++ Access for concentricCircles parameter +++++++++++++
-bool DroneSpiral::getConcentricCircles() {
-		return concentricCircles;
-	}
-	
-void DroneSpiral::setConcentricCircles(bool arg) {
-		concentricCircles = arg;
-	}
-	// +++++++++++++ Access for nbCirclePoints parameter +++++++++++++
-long DroneSpiral::getNbCirclePoints() {
-		return nbCirclePoints;
-	}
-	
-void DroneSpiral::setNbCirclePoints(long arg) {
-		nbCirclePoints = arg;
-	}
+    return ID;
+}
 
+void DroneSpiral::setID(long arg) {
+    ID = arg;
+}
+
+// +++++++++++++ Access for speed parameter +++++++++++++
+double DroneSpiral::getSpeed() {
+    return speed;
+}
+
+void DroneSpiral::setSpeed(double arg) {
+    speed = arg;
+}
+
+// +++++++++++++ Access for position parameter +++++++++++++
+vect2 DroneSpiral::getPosition() {
+    return position;
+}
+
+void DroneSpiral::setPosition(vect2 arg) {
+    position = arg;
+}
+
+// +++++++++++++ Access for direction parameter +++++++++++++
+vect2 DroneSpiral::getDirection() {
+    return direction;
+}
+
+void DroneSpiral::setDirection(vect2 arg) {
+    direction = arg;
+}
+
+// +++++++++++++ Access for visionRadius parameter +++++++++++++
+double DroneSpiral::getVisionRadius() {
+    return visionRadius;
+}
+
+void DroneSpiral::setVisionRadius(double arg) {
+    visionRadius = arg;
+}
+
+// +++++++++++++ Access for spiralRadius parameter +++++++++++++
+double DroneSpiral::getSpiralRadius() {
+    return spiralRadius;
+}
+
+void DroneSpiral::setSpiralRadius(double arg) {
+    spiralRadius = arg;
+}
+
+// +++++++++++++ Access for concentricCircles parameter +++++++++++++
+bool DroneSpiral::getConcentricCircles() {
+    return concentricCircles;
+}
+
+void DroneSpiral::setConcentricCircles(bool arg) {
+    concentricCircles = arg;
+}
+
+// +++++++++++++ Access for nbCirclePoints parameter +++++++++++++
+long DroneSpiral::getNbCirclePoints() {
+    return nbCirclePoints;
+}
+
+void DroneSpiral::setNbCirclePoints(long arg) {
+    nbCirclePoints = arg;
+}

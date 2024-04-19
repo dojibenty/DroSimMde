@@ -11,60 +11,61 @@
 // End of user code
 
 
-Environment::Environment(compEnvironment *container)	{
-		myContainer = container;
-// Start of user code  : Implementation of constructor method
+Environment::Environment(compEnvironment* container) {
+    myContainer = container;
+    // Start of user code  : Implementation of constructor method
 
-// End of user code
-	}
-Environment::~Environment(){
-// Start of user code  : Implementation of destructor method
+    // End of user code
+}
 
-// End of user code
-	}
+Environment::~Environment() {
+    // Start of user code  : Implementation of destructor method
+
+    // End of user code
+}
+
 void Environment::initialize() {
-// Start of user code  : Implementation of initialize method
+    // Start of user code  : Implementation of initialize method
 
-// End of user code
-	}
+    // End of user code
+}
 
 void Environment::end() {
-// Start of user code  : Implementation of end method
+    // Start of user code  : Implementation of end method
 
-// End of user code
-	}
+    // End of user code
+}
 
 void Environment::doStep(int nStep) {
-// Start of user code  : Implementation of doStep method
-		// to implement
-// End of user code
-	}
-	
-	// +++++++++++++ Methods of the pItfEnvironment interface +++++++++++++
-vect2 Environment::getEnvLimits(){
-// Start of user code  : Implementation of method getEnvLimits
-		// to implement
-// End of user code
-	}
+    // Start of user code  : Implementation of doStep method
+    // to implement
+    // End of user code
+}
 
-wect2 Environment::getAssignedZone(){
-// Start of user code  : Implementation of method getAssignedZone
-		// to implement
-// End of user code
-	}
+// +++++++++++++ Methods of the pItfEnvironment interface +++++++++++++
+vect2 Environment::getEnvLimits() {
+    // Start of user code  : Implementation of method getEnvLimits
+    // to implement
+    // End of user code
+}
 
-	
+wect2 Environment::getAssignedZone() {
+    // Start of user code  : Implementation of method getAssignedZone
+    // to implement
+    // End of user code
+}
+
+
 // Start of user code  : Additional methods
 
 // End of user code
-	
 
-	// +++++++++++++ Access for envSize parameter +++++++++++++
+
+// +++++++++++++ Access for envSize parameter +++++++++++++
 vect2 Environment::getEnvSize() {
-		return envSize;
-	}
-	
-void Environment::setEnvSize(vect2 arg) {
-		envSize = arg;
-	}
+    return envSize;
+}
 
+void Environment::setEnvSize(vect2 arg) {
+    envSize = arg;
+}

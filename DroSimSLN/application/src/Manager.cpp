@@ -6,8 +6,12 @@
  */
 
 #include "Manager.h"
+
 #include "compManager.h"
+
 // Start of user code  : Additional imports for Manager
+#include <vector>
+#include "wect2.h"
 // End of user code
 
 
@@ -24,7 +28,6 @@ Manager::~Manager(){
 	}
 void Manager::initialize() {
 // Start of user code  : Implementation of initialize method
-	Zones = AssignZones();
  	
 // End of user code
 	}
@@ -43,36 +46,34 @@ void Manager::doStep(int nStep) {
 	
 	
 // Start of user code  : Additional methods
- void AssignZone(ADroneSweep droneSweepInst, int zone) {
-   droneSweepInst->
- }
- 
- void AssignZone(ADroneSpiral droneSpiralInst, int zone) {
-   
- }
- 
-std::vector<std::vector<std::vector<double>>> AManager::CreateZones() {
-	int FilledLines = floor((float)NumDrones/(float)ColMax);
-	int TotalLines = ceil((float)NumDrones/(float)ColMax);
-	int ZonesLastLine = NumDrones - FilledLines * ColMax;
+std::vector<wect2> Manager::CreateZones() {
+	int NumDrones = sweepNumber + spiralNumber;
+
+	// TODO ajouter maxInlineZones dans la dcl
+	// TODO obtenir envSize ici
+	// TODO assigner les zones aux drones : passage par une interface ?
 	
-	std::vector<std::vector<std::vector<std::vector<double>>>> Zones;
+	int FilledLines = floor((float)NumDrones/(float)maxInlineZones);
+	int TotalLines = ceil((float)NumDrones/(float)maxInlineZones);
+	int ZonesLastLine = NumDrones - FilledLines * maxInlineZones;
+	
+	std::vector<std::vector<wect2>> Zones;
 
 	// Filled lines
 	for (int line = 0; line < FilledLines; line++) {
-   		std::vector<std::vector<std::vector<double>>> Line;
- 		for (int zone = 0; zone < ColMax; zone++) {
-   			std::vector<std::vector<double>> Zone;
+   		std::vector<wect2> Line;
+ 		for (int zone = 0; zone < maxInlineZones; zone++) {
+   			wect2 Zone;
 
    			// Top left point
-			Zone.push_back({
-				EnvSize.X - (EnvSize.X / TotalLines) * line,
-				(EnvSize.Y / ColMax) * zone) });
+			Zone.setV1({
+				envSize.X - (envSize.X / TotalLines) * line,
+				(envSize.Y / maxInlineZones) * zone });
 
 			// Bottom right point
-			Zone.push_back({
-				EnvSize.X - (EnvSize.X / TotalLines) * (line + 1),
-			  	(EnvSize.Y / ColMax) * (zone + 1) });
+			Zone.setV2({
+				envSize.X - (envSize.X / TotalLines) * (line + 1),
+			  	(envSize.Y / maxInlineZones) * (zone + 1) });
 			
 			Line.push_back(Zone);
   		}
@@ -81,30 +82,30 @@ std::vector<std::vector<std::vector<double>>> AManager::CreateZones() {
 
    	// Last line if excess zones
    	if (ZonesLastLine != 0) {
-   		std::vector<std::vector<std::vector<double>>> Line;
+   		std::vector<wect2> Line;
   		for (int zone = 0; zone < ZonesLastLine; zone++) {
-    		std::vector<std::vector<double>> Zone;
+    		wect2 Zone;
 
 			// Top left point
-			Zone.push_back({
-  				EnvSize.X - (EnvSize.X / TotalLines) * FilledLines,
-				(EnvSize.Y / ZonesLastLine) * zone)});
+			Zone.setV1({
+  				envSize.X - (envSize.X / TotalLines) * FilledLines,
+				(envSize.Y / ZonesLastLine) * zone });
 
  			// Bottom right point
-		   Zone.push_back({
+		   Zone.setV2({
 			   0,
-			   (EnvSize.Y / ZonesLastLine) * (zone + 1)});
+			   (envSize.Y / ZonesLastLine) * (zone + 1) });
 
  			Line.push_back(Zone);
   		}
   		Zones.push_back(Line);
  	}
 
-    std::vector<std::vector<std::vector<double>>> ZonesList;
+    std::vector<wect2> ZonesList;
 
     for (const auto& line : Zones)
-    for (const std::vector<std::vector<double>>& zone : line)
- 		ZonesList.Add(zone);
+    for (const wect2& zone : line)
+ 		ZonesList.push_back(zone);
 
    return ZonesList;
  }

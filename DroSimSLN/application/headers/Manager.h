@@ -6,11 +6,14 @@
  */
 #ifndef Manager_H_
 #define Manager_H_
+
 #include "Clock.h"
 class compManager;
 
 
 // Start of user code  : Additional imports for Manager
+#include <vector>
+#include "wect2.h"
 // End of user code
 
 class Manager {
@@ -26,7 +29,7 @@ class Manager {
 
 // Start of user code  : Properties of Manager
     private:
-        std::vector<std::vector<std::vector<double>>> Zones;
+        std::vector<wect2> Zones;
 // End of user code
 
 	public :
@@ -40,7 +43,7 @@ class Manager {
 	
 // Start of user code  : Additional methods
     private:
-        std::vector<std::vector<std::vector<double>>> CreateZones()
+        std::vector<wect2> CreateZones();
 // End of user code
 	
 

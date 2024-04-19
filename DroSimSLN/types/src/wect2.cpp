@@ -6,36 +6,33 @@
  */
 #include "wect2.h"
 // Start of user code  : Additional imports for wect2
+#include "vect2.h"
 // End of user code
 
-wect2::wect2() {
-	}
-wect2::~wect2() {
-	}
+wect2::wect2() {}
+wect2::~wect2() {}
 
-wect2::wect2( vect2 varv1, vect2 varv2) {
-		v1 = varv1;
-		v2 = varv2;
-	}
+wect2::wect2(vect2 varv1, vect2 varv2) {
+    v1 = varv1;
+    v2 = varv2;
+}
 
-vect2 wect2::getV1 () {
-		return v1 ;
-	}
+vect2 wect2::getV1() {
+    return v1;
+}
 
-void wect2::setV1 (vect2 varv1 ) {
-		v1  = varv1 ;
-	}
+void wect2::setV1(vect2 varv1) {
+    v1 = varv1;
+}
 
-vect2 wect2::getV2 () {
-		return v2 ;
-	}
+vect2 wect2::getV2() {
+    return v2;
+}
 
-void wect2::setV2 (vect2 varv2 ) {
-		v2  = varv2 ;
-	}
+void wect2::setV2(vect2 varv2) {
+    v2 = varv2;
+}
 
 // Start of user code  : Additional methods
 
 // End of user code
-
-

@@ -180,10 +180,8 @@
     <ClCompile Include="framework\src\Scenario.cpp" />
     <ClCompile Include="framework\src\TimeableObject.cpp" />
     <ClCompile Include="observation\src\myDronesPositionsLogObservationComponent.cpp" />
-    <ClCompile Include="observation\src\mySwimmerPositionLogObservationComponent.cpp" />
     <ClCompile Include="run\src\MainDroSimSystem.cpp" />
     <ClCompile Include="scenario\src\ScenarLog.cpp" />
-    <ClCompile Include="types\src\DroneData.cpp" />
     <ClCompile Include="types\src\vect2.cpp" />
     <ClCompile Include="types\src\wect2.cpp" />
   </ItemGroup>
@@ -213,9 +211,7 @@
     <ClInclude Include="interfaces\headers\ItfEnvironmentInterface.h" />
     <ClInclude Include="interfaces\headers\ItfTargetObjectInterface.h" />
     <ClInclude Include="observation\headers\myDronesPositionsLogObservationComponent.h" />
-    <ClInclude Include="observation\headers\mySwimmerPositionLogObservationComponent.h" />
     <ClInclude Include="scenario\headers\ScenarLog.h" />
-    <ClInclude Include="types\headers\DroneData.h" />
     <ClInclude Include="types\headers\vect2.h" />
     <ClInclude Include="types\headers\wect2.h" />
   </ItemGroup>

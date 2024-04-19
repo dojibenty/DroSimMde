@@ -20,79 +20,79 @@ class compDroneSweep;
 // End of user code
 
 class DroneSweep {
+protected :
+    compDroneSweep* myContainer;
 
-	protected :
-              compDroneSweep *myContainer;
+    // Parameters
+    long ID;
+    double speed;
+    vect2 position;
+    vect2 direction;
+    double visionRadius;
+    double sweepHeight;
 
-	// Parameters
-	          long ID;
-	          double speed;
-	          vect2 position;
-	          vect2 direction;
-	          double visionRadius;
-	          double sweepHeight;
+    // Required Interfaces
+    ItfEnvironmentInterface* rItfEnvironmentSweep;
+    ItfTargetObjectInterface* rItfTargetObjectSweep;
 
-	// Required Interfaces
-	          ItfEnvironmentInterface *rItfEnvironmentSweep;
-	          ItfTargetObjectInterface *rItfTargetObjectSweep;
+    // Start of user code  : Properties of DroneSweep
+protected:
+    wect2 assignedZone;
 
-// Start of user code  : Properties of DroneSweep
-     protected:
-    	std::vector<std::vector<double>> assignedZone;
-     private:
-    	double dirX;
-  		double dirY;
-  		bool goesUp = true;
-  		bool leftToRight = true;
-  		bool topToBottom = false;
-  		long heightCount = 0;
-  		double sweepLength;
-  		double leftYBound;
-// End of user code
+private:
+    vect2 destination;
+    bool goesUp = true;
+    bool leftToRight = true;
+    bool topToBottom = false;
+    long heightCount = 0;
+    double sweepLength;
+    double leftYBound;
+    // End of user code
 
-	public :
-            DroneSweep(compDroneSweep *container);
-            ~DroneSweep();
-	        void initialize();
-	       void end();
+public :
+    explicit DroneSweep(compDroneSweep* container);
+    ~DroneSweep();
+    void initialize();
+    void end();
 
-	       void doStep(int nStep) ;
-	
-	
-// Start of user code  : Additional methods
-   	public:
-  		void setAssignedZone(std::vector<std::vector<double>> zone);
-	private:
-   		void SetDestination();
-  		bool GoesOutOfBounds();
-// End of user code
-	
+    void doStep(int nStep);
 
-	    void setrItfEnvironmentSweep(ItfEnvironmentInterface *arItfEnvironmentSweep);
-	    void setrItfTargetObjectSweep(ItfTargetObjectInterface *arItfTargetObjectSweep);
-	// +++++++++++++ Access for ID parameter +++++++++++++
-	    long getID();
-	
-	    void setID(long arg);
-	// +++++++++++++ Access for speed parameter +++++++++++++
-	    double getSpeed();
-	
-	    void setSpeed(double arg);
-	// +++++++++++++ Access for position parameter +++++++++++++
-	    vect2 getPosition();
-	
-	    void setPosition(vect2 arg);
-	// +++++++++++++ Access for direction parameter +++++++++++++
-	    vect2 getDirection();
-	
-	    void setDirection(vect2 arg);
-	// +++++++++++++ Access for visionRadius parameter +++++++++++++
-	    double getVisionRadius();
-	
-	    void setVisionRadius(double arg);
-	// +++++++++++++ Access for sweepHeight parameter +++++++++++++
-	    double getSweepHeight();
-	
-	    void setSweepHeight(double arg);
+
+    // Start of user code  : Additional methods
+public:
+    void setAssignedZone(wect2 zone);
+
+private:
+    void SetDestination();
+    bool GoesOutOfBounds();
+    // End of user code
+
+
+    void setrItfEnvironmentSweep(ItfEnvironmentInterface* arItfEnvironmentSweep);
+    void setrItfTargetObjectSweep(ItfTargetObjectInterface* arItfTargetObjectSweep);
+    // +++++++++++++ Access for ID parameter +++++++++++++
+    long getID();
+
+    void setID(long arg);
+    // +++++++++++++ Access for speed parameter +++++++++++++
+    double getSpeed();
+
+    void setSpeed(double arg);
+    // +++++++++++++ Access for position parameter +++++++++++++
+    vect2 getPosition();
+
+    void setPosition(vect2 arg);
+    // +++++++++++++ Access for direction parameter +++++++++++++
+    vect2 getDirection();
+
+    void setDirection(vect2 arg);
+    // +++++++++++++ Access for visionRadius parameter +++++++++++++
+    double getVisionRadius();
+
+    void setVisionRadius(double arg);
+    // +++++++++++++ Access for sweepHeight parameter +++++++++++++
+    double getSweepHeight();
+
+    void setSweepHeight(double arg);
 };
 #endif /*  DroneSweep_H_ */

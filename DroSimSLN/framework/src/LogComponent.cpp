@@ -9,7 +9,6 @@ LogComponent::LogComponent(string filename, double aFrequency) : TimeableObject(
 			cout << "LogComponent creation fichier csv : " << path << endl;
 			open();
 		} catch (exception &e) {
-			// TODO Auto-generated catch block
 			cout << e.what() << endl;
 		}
 		counter = 0;
@@ -32,7 +31,6 @@ string LogComponent::filePath( string filename ) {
 		  }
 		return path + filename + ".csv";
 	} catch (IOException e) {
-		// TODO Auto-generated catch block
 		e.printStackTrace();
 		return "";
 	}
@@ -116,7 +114,7 @@ void LogComponent::write(string value) {
 
 void LogComponent::endLine() {
 	outputFile << endl ;
-	/*ù
+	/*ï¿½
 		if (counter == 0 && usage <= 1) {
 			try {
 				dataWriterBuffer.write("\n");
