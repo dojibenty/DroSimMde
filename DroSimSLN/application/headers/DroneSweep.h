@@ -8,34 +8,38 @@
 #define DroneSweep_H_
 #include "Clock.h"
 class compDroneSweep;
+	// Inputs
+#include "vect2.h"
 #include "vect2.h"
 #include "vect2.h"
 
 #include "ItfEnvironmentInterface.h"
 #include "vect2.h"
 #include "wect2.h"
-#include "ItfTargetObjectInterface.h"
 
 // Start of user code  : Additional imports for DroneSweep
 // End of user code
 
 class DroneSweep {
-protected :
-    compDroneSweep* myContainer;
 
-    // Parameters
-    long ID;
-    double speed;
-    vect2 position;
-    vect2 direction;
-    double visionRadius;
-    double sweepHeight;
+	protected :
+              compDroneSweep *myContainer;
 
-    // Required Interfaces
-    ItfEnvironmentInterface* rItfEnvironmentSweep;
-    ItfTargetObjectInterface* rItfTargetObjectSweep;
+	// Inputs
+	          vect2 objposition;
+	// Parameters
+	          long ID;
+	          double speed;
+	          vect2 position;
+	          vect2 direction;
+	          double visionRadius;
+	          double sweepHeight;
+	          double movementTolerance;
 
-    // Start of user code  : Properties of DroneSweep
+	// Required Interfaces
+	          ItfEnvironmentInterface *rItfEnvironmentSweep;
+
+// Start of user code  : Properties of DroneSweep
 protected:
     wect2 assignedZone;
 
@@ -49,50 +53,55 @@ private:
     double leftYBound;
     // End of user code
 
-public :
-    explicit DroneSweep(compDroneSweep* container);
-    ~DroneSweep();
-    void initialize();
-    void end();
+	public :
+            DroneSweep(compDroneSweep *container);
+            ~DroneSweep();
+	        void initialize();
+	       void end();
 
-    void doStep(int nStep);
+	       void doStep(int nStep);
 
 
-    // Start of user code  : Additional methods
-public:
-    void setAssignedZone(wect2 zone);
-
+              // Start of user code  : Additional methods
 private:
     void SetDestination();
     bool GoesOutOfBounds();
+public:
+	void setAssignedZone(wect2 zone);
+	void lateinitialize();
     // End of user code
+	
 
+	     void setObjposition(vect2 arg) ;
 
-    void setrItfEnvironmentSweep(ItfEnvironmentInterface* arItfEnvironmentSweep);
-    void setrItfTargetObjectSweep(ItfTargetObjectInterface* arItfTargetObjectSweep);
-    // +++++++++++++ Access for ID parameter +++++++++++++
-    long getID();
-
-    void setID(long arg);
-    // +++++++++++++ Access for speed parameter +++++++++++++
-    double getSpeed();
-
-    void setSpeed(double arg);
-    // +++++++++++++ Access for position parameter +++++++++++++
-    vect2 getPosition();
-
-    void setPosition(vect2 arg);
-    // +++++++++++++ Access for direction parameter +++++++++++++
-    vect2 getDirection();
-
-    void setDirection(vect2 arg);
-    // +++++++++++++ Access for visionRadius parameter +++++++++++++
-    double getVisionRadius();
-
-    void setVisionRadius(double arg);
-    // +++++++++++++ Access for sweepHeight parameter +++++++++++++
-    double getSweepHeight();
-
-    void setSweepHeight(double arg);
+	    void setrItfEnvironmentSweep(ItfEnvironmentInterface *arItfEnvironmentSweep);
+	// +++++++++++++ Access for ID parameter +++++++++++++
+	    long getID();
+	
+	    void setID(long arg);
+	// +++++++++++++ Access for speed parameter +++++++++++++
+	    double getSpeed();
+	
+	    void setSpeed(double arg);
+	// +++++++++++++ Access for position parameter +++++++++++++
+	    vect2 getPosition();
+	
+	    void setPosition(vect2 arg);
+	// +++++++++++++ Access for direction parameter +++++++++++++
+	    vect2 getDirection();
+	
+	    void setDirection(vect2 arg);
+	// +++++++++++++ Access for visionRadius parameter +++++++++++++
+	    double getVisionRadius();
+	
+	    void setVisionRadius(double arg);
+	// +++++++++++++ Access for sweepHeight parameter +++++++++++++
+	    double getSweepHeight();
+	
+	    void setSweepHeight(double arg);
+	// +++++++++++++ Access for movementTolerance parameter +++++++++++++
+	    double getMovementTolerance();
+	
+	    void setMovementTolerance(double arg);
 };
 #endif /*  DroneSweep_H_ */

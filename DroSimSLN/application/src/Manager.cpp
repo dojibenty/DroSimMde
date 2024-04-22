@@ -6,12 +6,8 @@
  */
 
 #include "Manager.h"
-
 #include "compManager.h"
-
 // Start of user code  : Additional imports for Manager
-#include <vector>
-#include "wect2.h"
 // End of user code
 
 
@@ -28,7 +24,7 @@ Manager::~Manager(){
 	}
 void Manager::initialize() {
 // Start of user code  : Implementation of initialize method
- 	
+	
 // End of user code
 	}
 
@@ -46,69 +42,9 @@ void Manager::doStep(int nStep) {
 	
 	
 // Start of user code  : Additional methods
-std::vector<wect2> Manager::CreateZones() {
-	int NumDrones = sweepNumber + spiralNumber;
-
-	// TODO ajouter maxInlineZones dans la dcl
-	// TODO obtenir envSize ici
-	// TODO assigner les zones aux drones : passage par une interface ?
-	
-	int FilledLines = floor((float)NumDrones/(float)maxInlineZones);
-	int TotalLines = ceil((float)NumDrones/(float)maxInlineZones);
-	int ZonesLastLine = NumDrones - FilledLines * maxInlineZones;
-	
-	std::vector<std::vector<wect2>> Zones;
-
-	// Filled lines
-	for (int line = 0; line < FilledLines; line++) {
-   		std::vector<wect2> Line;
- 		for (int zone = 0; zone < maxInlineZones; zone++) {
-   			wect2 Zone;
-
-   			// Top left point
-			Zone.setV1({
-				envSize.X - (envSize.X / TotalLines) * line,
-				(envSize.Y / maxInlineZones) * zone });
-
-			// Bottom right point
-			Zone.setV2({
-				envSize.X - (envSize.X / TotalLines) * (line + 1),
-			  	(envSize.Y / maxInlineZones) * (zone + 1) });
-			
-			Line.push_back(Zone);
-  		}
-  		Zones.push_back(Line);
- 	}
-
-   	// Last line if excess zones
-   	if (ZonesLastLine != 0) {
-   		std::vector<wect2> Line;
-  		for (int zone = 0; zone < ZonesLastLine; zone++) {
-    		wect2 Zone;
-
-			// Top left point
-			Zone.setV1({
-  				envSize.X - (envSize.X / TotalLines) * FilledLines,
-				(envSize.Y / ZonesLastLine) * zone });
-
- 			// Bottom right point
-		   Zone.setV2({
-			   0,
-			   (envSize.Y / ZonesLastLine) * (zone + 1) });
-
- 			Line.push_back(Zone);
-  		}
-  		Zones.push_back(Line);
- 	}
-
-    std::vector<wect2> ZonesList;
-
-    for (const auto& line : Zones)
-    for (const wect2& zone : line)
- 		ZonesList.push_back(zone);
-
-   return ZonesList;
- }
+double Manager::rand_range(double min, double max) {
+	return min + (rand() / (RAND_MAX + 1.0) * (max - min + 1));
+}
 // End of user code
 	
 
@@ -119,21 +55,5 @@ double Manager::getSimSpeed() {
 	
 void Manager::setSimSpeed(double arg) {
 		simSpeed = arg;
-	}
-	// +++++++++++++ Access for sweepNumber parameter +++++++++++++
-long Manager::getSweepNumber() {
-		return sweepNumber;
-	}
-	
-void Manager::setSweepNumber(long arg) {
-		sweepNumber = arg;
-	}
-	// +++++++++++++ Access for spiralNumber parameter +++++++++++++
-long Manager::getSpiralNumber() {
-		return spiralNumber;
-	}
-	
-void Manager::setSpiralNumber(long arg) {
-		spiralNumber = arg;
 	}
 

@@ -43,12 +43,24 @@ class compEnvironment : public LeafComponent  , public ItfEnvironmentInterface {
 	// +++++++++++++ Methods of the pItfEnvironment interface +++++++++++++
 	      vect2 getEnvLimits();
 
-	      wect2 getAssignedZone();
+	      wect2 getAssignedZone(long ID);
 
 	     Environment *getAppli() ;
 	// +++++++++++++ Access for envSize parameter +++++++++++++
 	     vect2 getEnvSize();
 	
 	     void setEnvSize(vect2 arg);
+	// +++++++++++++ Access for maxInlineZones parameter +++++++++++++
+	     long getMaxInlineZones();
+	
+	     void setMaxInlineZones(long arg);
+	// +++++++++++++ Access for sweepNumber parameter +++++++++++++
+	     long getSweepNumber();
+	
+	     void setSweepNumber(long arg);
+	// +++++++++++++ Access for spiralNumber parameter +++++++++++++
+	     long getSpiralNumber();
+	
+	     void setSpiralNumber(long arg);
 };
 #endif /* compEnvironment_H_ */

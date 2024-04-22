@@ -33,9 +33,14 @@ public :
     // Start of user code  : Additional methods
     void switchSignX();
     void switchSignY();
+    void normalize();
+    static double distance(vect2& v1, vect2& v2);
+    string toString() const;
+    
     vect2 operator+(const vect2& vect2) const;
     vect2 operator*(double arg) const;
     vect2 operator-(const vect2& vect2) const;
+    vect2 operator/(double arg) const;
     // End of user code
 };
 #endif /* vect2_H_ */

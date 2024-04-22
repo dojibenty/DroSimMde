@@ -14,8 +14,12 @@ ADroneSweep::ADroneSweep(double aFrequency)	: compDroneSweep(aFrequency){
 ADroneSweep::~ADroneSweep()	{
 		
 }
+void ADroneSweep::setAObjective(AObjective *pAObjective) {
+		attAObjective = pAObjective;
+}
 
 void ADroneSweep::readInputs() {
+		appli->setObjposition(attAObjective->getObjposition());
 }
 
 

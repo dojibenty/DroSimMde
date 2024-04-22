@@ -13,6 +13,8 @@ compObjective::compObjective(double aFrequency) : LeafComponent( aFrequency) {
 		delayMax = 0;
 		newValue = false;
 		isActive = true;
+		oldObjposition = appli->getObjposition();
+		newObjposition = appli->getObjposition();
 	}
 compObjective::~compObjective()	{}
 
@@ -20,16 +22,22 @@ void compObjective::doOneStep() {
 		if (newValue) {
 			delay++;
 			if (delay == delayMax) {
+					oldObjposition = newObjposition;
+					newValue = false;
 			}
 		}
 	}
 
 void compObjective::doStep(int nStep) {	
 		if (newValue) {
+			oldObjposition = newObjposition;
+			newValue = false;
 		}
 		readInputs();
 		appli->doStep(nStep);
+		newObjposition = appli->getObjposition();
 		if (delayMax == 0) {
+			oldObjposition = newObjposition;
 			newValue = false;
 		} else {
 			newValue = true;
@@ -42,16 +50,21 @@ void compObjective::readInputs() {
 void compObjective::initialize() {
 		appli->initialize();
 	}
+void compObjective::lateinitialize() {
+	appli->lateinitialize();
+}
+
 
 void compObjective::end() {
 		appli->end();
 	}
 	
-	// +++++++++++++ Methods of the pItfTargetObject interface +++++++++++++
-bool compObjective::isObjectNear(){
-		return appli->isObjectNear();
+vect2 compObjective::getObjposition() {
+		return oldObjposition;
 	}
-
+void compObjective::setrItfEnvironmentObj(ItfEnvironmentInterface *arItfEnvironmentObj) {
+		appli->setrItfEnvironmentObj(arItfEnvironmentObj);
+	}
 Objective *compObjective::getAppli() {
 		return appli;
 	}

@@ -52,8 +52,8 @@ vect2 compEnvironment::getEnvLimits(){
 		return appli->getEnvLimits();
 	}
 
-wect2 compEnvironment::getAssignedZone(){
-		return appli->getAssignedZone();
+wect2 compEnvironment::getAssignedZone(long ID){
+		return appli->getAssignedZone(ID);
 	}
 
 Environment *compEnvironment::getAppli() {
@@ -66,5 +66,29 @@ vect2 compEnvironment::getEnvSize() {
 	
 void compEnvironment::setEnvSize(vect2 arg) {
 		appli->setEnvSize(arg);
+	}
+	// +++++++++++++ Access for maxInlineZones parameter +++++++++++++
+long compEnvironment::getMaxInlineZones() {
+		return appli->getMaxInlineZones();
+	}
+	
+void compEnvironment::setMaxInlineZones(long arg) {
+		appli->setMaxInlineZones(arg);
+	}
+	// +++++++++++++ Access for sweepNumber parameter +++++++++++++
+long compEnvironment::getSweepNumber() {
+		return appli->getSweepNumber();
+	}
+	
+void compEnvironment::setSweepNumber(long arg) {
+		appli->setSweepNumber(arg);
+	}
+	// +++++++++++++ Access for spiralNumber parameter +++++++++++++
+long compEnvironment::getSpiralNumber() {
+		return appli->getSpiralNumber();
+	}
+	
+void compEnvironment::setSpiralNumber(long arg) {
+		appli->setSpiralNumber(arg);
 	}
 

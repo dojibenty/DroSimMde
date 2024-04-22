@@ -14,8 +14,12 @@ ADroneSpiral::ADroneSpiral(double aFrequency)	: compDroneSpiral(aFrequency){
 ADroneSpiral::~ADroneSpiral()	{
 		
 }
+void ADroneSpiral::setAObjective(AObjective *pAObjective) {
+		attAObjective = pAObjective;
+}
 
 void ADroneSpiral::readInputs() {
+		appli->setObjposition(attAObjective->getObjposition());
 }
 
 

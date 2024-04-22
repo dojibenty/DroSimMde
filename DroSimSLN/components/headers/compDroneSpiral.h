@@ -13,17 +13,20 @@ class DroneSpiral;
 
 #include "vect2.h"
 #include "vect2.h"
+#include "vect2.h"
 
 
 #include "ItfEnvironmentInterface.h"
 #include "vect2.h"
 #include "wect2.h"
-#include "ItfTargetObjectInterface.h"
 
 class compDroneSpiral : public LeafComponent {
 
 	protected :
 /*pyp : inutile
+	//inputs source
+	 LeafComponent ObjpositionSourceComponent;
+	 String portNameObjposition;
 */
 
 	 bool newValue;
@@ -40,10 +43,10 @@ class compDroneSpiral : public LeafComponent {
 
 	       virtual void readInputs() ;
 	       void initialize();
-	       void end();
+void lateinitialize();
+void end();
 	
 	     void setrItfEnvironmentSpiral(ItfEnvironmentInterface *arItfEnvironmentSpiral);
-	     void setrItfTargetObjectSpiral(ItfTargetObjectInterface *arItfTargetObjectSpiral);
 	     DroneSpiral *getAppli() ;
 	// +++++++++++++ Access for ID parameter +++++++++++++
 	     long getID();
@@ -77,5 +80,17 @@ class compDroneSpiral : public LeafComponent {
 	     long getNbCirclePoints();
 	
 	     void setNbCirclePoints(long arg);
+	// +++++++++++++ Access for spiralIncrementFactor parameter +++++++++++++
+	     double getSpiralIncrementFactor();
+	
+	     void setSpiralIncrementFactor(double arg);
+	// +++++++++++++ Access for wanderSteps parameter +++++++++++++
+	     long getWanderSteps();
+	
+	     void setWanderSteps(long arg);
+	// +++++++++++++ Access for movementTolerance parameter +++++++++++++
+	     double getMovementTolerance();
+	
+	     void setMovementTolerance(double arg);
 };
 #endif /* compDroneSpiral_H_ */

@@ -9,15 +9,19 @@
 #define ADroneSweep_H_
 
 #include "compDroneSweep.h"
+#include "AObjective.h"
+class AObjective;
 
 class ADroneSweep : public compDroneSweep {
 	protected :
+              AObjective *attAObjective;
 
 	public :
 
             ADroneSweep(double aFrequency);
             virtual ~ADroneSweep();
 
+	        void setAObjective(AObjective *pAObjective);
 
 	        void readInputs()  override;
 };

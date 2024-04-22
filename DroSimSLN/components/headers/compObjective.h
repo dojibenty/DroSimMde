@@ -12,15 +12,20 @@
 class Objective;
 
 #include "vect2.h"
+#include "vect2.h"
 
 
-#include "ItfTargetObjectInterface.h"
+#include "ItfEnvironmentInterface.h"
+#include "vect2.h"
+#include "wect2.h"
 
-class compObjective : public LeafComponent  , public ItfTargetObjectInterface {
+class compObjective : public LeafComponent {
 
 	protected :
 /*pyp : inutile
 */
+	 vect2 oldObjposition;
+	 vect2 newObjposition;
 
 	 bool newValue;
 	 int delay;
@@ -36,11 +41,11 @@ class compObjective : public LeafComponent  , public ItfTargetObjectInterface {
 
 	       virtual void readInputs() ;
 	       void initialize();
-	       void end();
+void lateinitialize();
+void end();
 	
-	// +++++++++++++ Methods of the pItfTargetObject interface +++++++++++++
-	      bool isObjectNear();
-
+	     vect2 getObjposition();
+	     void setrItfEnvironmentObj(ItfEnvironmentInterface *arItfEnvironmentObj);
 	     Objective *getAppli() ;
 	// +++++++++++++ Access for speed parameter +++++++++++++
 	     double getSpeed();

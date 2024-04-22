@@ -41,13 +41,5 @@ class compManager : public LeafComponent {
 	     double getSimSpeed();
 	
 	     void setSimSpeed(double arg);
-	// +++++++++++++ Access for sweepNumber parameter +++++++++++++
-	     long getSweepNumber();
-	
-	     void setSweepNumber(long arg);
-	// +++++++++++++ Access for spiralNumber parameter +++++++++++++
-	     long getSpiralNumber();
-	
-	     void setSpiralNumber(long arg);
 };
 #endif /* compManager_H_ */

@@ -8,11 +8,13 @@
 #include "Objective.h"
 #include "compObjective.h"
 // Start of user code  : Additional imports for Objective
+#include "Manager.h"
 // End of user code
 
 
 Objective::Objective(compObjective *container)	{
 		myContainer = container;
+		rItfEnvironmentObj = 0;
 // Start of user code  : Implementation of constructor method
 
 // End of user code
@@ -24,7 +26,7 @@ Objective::~Objective(){
 	}
 void Objective::initialize() {
 // Start of user code  : Implementation of initialize method
-
+	direction = vect2(0,1.0);
 // End of user code
 	}
 
@@ -36,23 +38,38 @@ void Objective::end() {
 
 void Objective::doStep(int nStep) {
 // Start of user code  : Implementation of doStep method
-		// to implement
+	if (speed == 0.0) return;
+	
+	vect2 nextPosition = position + direction * speed;
+	
+	if (nextPosition.getY() >= 0 && nextPosition.getY() <= YLimit) position = nextPosition;
+	else direction.switchSignY();
+
+	objposition = position;
+
+	cout << "OBJECTIVE: " << position.toString() << '\n';
 // End of user code
 	}
 	
-	// +++++++++++++ Methods of the pItfTargetObject interface +++++++++++++
-bool Objective::isObjectNear(){
-// Start of user code  : Implementation of method isObjectNear
-		// to implement
-// End of user code
-	}
-
 	
 // Start of user code  : Additional methods
+void Objective::lateinitialize() {
+	vect2 envLimits = rItfEnvironmentObj->getEnvLimits();
+	const double posX = Manager::rand_range(envLimits.getX() / 2, envLimits.getX());
+	const double posY = Manager::rand_range(0, envLimits.getY());
 
+	setPosition(vect2(posX,posY));
+	YLimit = envLimits.getY();
+}
 // End of user code
 	
 
+vect2 Objective::getObjposition() {
+		return objposition;
+	}
+void Objective::setrItfEnvironmentObj(ItfEnvironmentInterface *arItfEnvironmentObj) {
+		rItfEnvironmentObj = arItfEnvironmentObj;
+	}
 	// +++++++++++++ Access for speed parameter +++++++++++++
 double Objective::getSpeed() {
 		return speed;

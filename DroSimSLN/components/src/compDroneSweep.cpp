@@ -42,6 +42,9 @@ void compDroneSweep::readInputs() {
 void compDroneSweep::initialize() {
 		appli->initialize();
 	}
+void compDroneSweep::lateinitialize() {
+	appli->lateinitialize();
+}
 
 void compDroneSweep::end() {
 		appli->end();
@@ -49,9 +52,6 @@ void compDroneSweep::end() {
 	
 void compDroneSweep::setrItfEnvironmentSweep(ItfEnvironmentInterface *arItfEnvironmentSweep) {
 		appli->setrItfEnvironmentSweep(arItfEnvironmentSweep);
-	}
-void compDroneSweep::setrItfTargetObjectSweep(ItfTargetObjectInterface *arItfTargetObjectSweep) {
-		appli->setrItfTargetObjectSweep(arItfTargetObjectSweep);
 	}
 DroneSweep *compDroneSweep::getAppli() {
 		return appli;
@@ -103,5 +103,13 @@ double compDroneSweep::getSweepHeight() {
 	
 void compDroneSweep::setSweepHeight(double arg) {
 		appli->setSweepHeight(arg);
+	}
+	// +++++++++++++ Access for movementTolerance parameter +++++++++++++
+double compDroneSweep::getMovementTolerance() {
+		return appli->getMovementTolerance();
+	}
+	
+void compDroneSweep::setMovementTolerance(double arg) {
+		appli->setMovementTolerance(arg);
 	}
 

@@ -39,37 +39,43 @@ DroSimSystem::DroSimSystem() {
 	leafComponents.push_back(instAManager);
 	instAEnvironment = new AEnvironment(0.0);
 	leafComponents.push_back(instAEnvironment);
+	instADroneSweep->setAObjective(instAObjective);
+	instADroneSpiral->setAObjective(instAObjective);
 	instADroneSweep->setrItfEnvironmentSweep(instAEnvironment->getAppli());
-	instADroneSweep->setrItfTargetObjectSweep(instAObjective->getAppli());
 	instADroneSpiral->setrItfEnvironmentSpiral(instAEnvironment->getAppli());
-	instADroneSpiral->setrItfTargetObjectSpiral(instAObjective->getAppli());
+	instAObjective->setrItfEnvironmentObj(instAEnvironment->getAppli());
 	}
 DroSimSystem::~DroSimSystem() {}
 void DroSimSystem::initialize() {
-	instADroneSweep->setID(1);
+	instADroneSweep->setID(0);
 	instADroneSweep->setSpeed(20.0);
 	instADroneSweep->setVisionRadius(100.0);
 	instADroneSweep->setSweepHeight(200.0);
-	instADroneSweep->setPosition((0,0));
-	instADroneSweep->setDirection((1.0,0));
+	instADroneSweep->setPosition(vect2(0,0));
+	instADroneSweep->setDirection(vect2(1.0,0));
+	instADroneSweep->setMovementTolerance(10);
 	//instADroneSweep->setFrequency(0.0);
-	instADroneSpiral->setID(2);
+	instADroneSpiral->setID(1);
 	instADroneSpiral->setSpeed(20.0);
 	instADroneSpiral->setVisionRadius(100.0);
 	instADroneSpiral->setSpiralRadius(200.0);
 	instADroneSpiral->setConcentricCircles(false);
 	instADroneSpiral->setNbCirclePoints(8);
-	instADroneSpiral->setPosition((0,0));
-	instADroneSpiral->setDirection((1.0,0));
+	instADroneSpiral->setPosition(vect2(0,0));
+	instADroneSpiral->setDirection(vect2(1.0,0));
+	instADroneSpiral->setSpiralIncrementFactor(3);
+	instADroneSpiral->setWanderSteps(2);
+	instADroneSpiral->setMovementTolerance(10);
 	//instADroneSpiral->setFrequency(0.0);
 	instAObjective->setSpeed(10.0);
-	instAObjective->setPosition((0,0));
+	instAObjective->setPosition(vect2(0,0));
 	//instAObjective->setFrequency(0.0);
 	instAManager->setSimSpeed(1.0);
-	instAManager->setSweepNumber(1);
-	instAManager->setSpiralNumber(1);
 	//instAManager->setFrequency(0.0);
-	instAEnvironment->setEnvSize((9000.0,8000.0));
+	instAEnvironment->setEnvSize(vect2(9000.0,8000.0));
+	instAEnvironment->setMaxInlineZones(3);
+	instAEnvironment->setSweepNumber(1);
+	instAEnvironment->setSpiralNumber(1);
 	//instAEnvironment->setFrequency(0.0);
 	if(instADroneSweep->getIsActive()) instADroneSweep->initialize();
 	if(instADroneSpiral->getIsActive()) instADroneSpiral->initialize();
@@ -77,6 +83,9 @@ void DroSimSystem::initialize() {
 	if(instAManager->getIsActive()) instAManager->initialize();
 	if(instAEnvironment->getIsActive()) instAEnvironment->initialize();
 // Start of user code  : Implementation of initialize method DroSimSystem
+	if(instADroneSweep->getIsActive()) instADroneSweep->lateinitialize();
+	if(instADroneSpiral->getIsActive()) instADroneSpiral->lateinitialize();
+	if(instAObjective->getIsActive()) instAObjective->lateinitialize();
 // End of user code
 	}
 

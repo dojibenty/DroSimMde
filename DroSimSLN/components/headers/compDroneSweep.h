@@ -13,17 +13,20 @@ class DroneSweep;
 
 #include "vect2.h"
 #include "vect2.h"
+#include "vect2.h"
 
 
 #include "ItfEnvironmentInterface.h"
 #include "vect2.h"
 #include "wect2.h"
-#include "ItfTargetObjectInterface.h"
 
 class compDroneSweep : public LeafComponent {
 
 	protected :
 /*pyp : inutile
+	//inputs source
+	 LeafComponent ObjpositionSourceComponent;
+	 String portNameObjposition;
 */
 
 	 bool newValue;
@@ -40,10 +43,10 @@ class compDroneSweep : public LeafComponent {
 
 	       virtual void readInputs() ;
 	       void initialize();
-	       void end();
+		   void lateinitialize();
+		   void end();
 	
 	     void setrItfEnvironmentSweep(ItfEnvironmentInterface *arItfEnvironmentSweep);
-	     void setrItfTargetObjectSweep(ItfTargetObjectInterface *arItfTargetObjectSweep);
 	     DroneSweep *getAppli() ;
 	// +++++++++++++ Access for ID parameter +++++++++++++
 	     long getID();
@@ -69,5 +72,9 @@ class compDroneSweep : public LeafComponent {
 	     double getSweepHeight();
 	
 	     void setSweepHeight(double arg);
+	// +++++++++++++ Access for movementTolerance parameter +++++++++++++
+	     double getMovementTolerance();
+	
+	     void setMovementTolerance(double arg);
 };
 #endif /* compDroneSweep_H_ */

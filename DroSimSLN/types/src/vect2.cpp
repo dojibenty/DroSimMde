@@ -5,7 +5,9 @@
  * Author: pyp
  */
 #include "vect2.h"
+
 // Start of user code  : Additional imports for vect2
+#include <sstream>
 // End of user code
 
 vect2::vect2() {}
@@ -51,6 +53,25 @@ vect2 vect2::operator*(const double arg) const {
 
 vect2 vect2::operator-(const vect2& vect2) const {
     return {x - vect2.x, y - vect2.y};
+}
+
+vect2 vect2::operator/(const double arg) const {
+    return {x / arg, y / arg};
+}
+
+void vect2::normalize() {
+    const double mag = sqrt(x*x + y*y);
+    if (mag != 0.0) *this = *this / mag;
+}
+
+double vect2::distance(vect2& v1, vect2& v2) {
+    return sqrt(pow(v2.getX() - v1.getX(), 2) + pow(v2.getY() - v1.getY(), 2));
+}
+
+string vect2::toString() const {
+    stringstream ss;
+    ss << '(' << x << ',' << y << ')';
+    return ss.str();
 }
 
 // End of user code

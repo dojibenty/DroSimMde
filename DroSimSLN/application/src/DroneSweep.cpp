@@ -8,57 +8,76 @@
 #include "DroneSweep.h"
 #include "compDroneSweep.h"
 // Start of user code  : Additional imports for DroneSweep
+#include <iostream>
 // End of user code
 
 
-DroneSweep::DroneSweep(compDroneSweep* container) {
-    myContainer = container;
-    rItfEnvironmentSweep = 0;
-    rItfTargetObjectSweep = 0;
-    // Start of user code  : Implementation of constructor method
+DroneSweep::DroneSweep(compDroneSweep *container)	{
+		myContainer = container;
+		rItfEnvironmentSweep = 0;
+// Start of user code  : Implementation of constructor method
+    // End of user code
+	}
+DroneSweep::~DroneSweep(){
+// Start of user code  : Implementation of destructor method
 
     // End of user code
-}
-
-DroneSweep::~DroneSweep() {
-    // Start of user code  : Implementation of destructor method
-
-    // End of user code
-}
-
+	}
 void DroneSweep::initialize() {
-    // Start of user code  : Implementation of initialize method
-
+// Start of user code  : Implementation of initialize method
     // End of user code
-}
+	}
 
 void DroneSweep::end() {
-    // Start of user code  : Implementation of end method
+// Start of user code  : Implementation of end method
 
     // End of user code
-}
+	}
 
 void DroneSweep::doStep(int nStep) {
-    // Start of user code  : Implementation of doStep method
-    // to implement
+// Start of user code  : Implementation of doStep method
+	// Calculate the Drone's next position
+	vect2 nextPosition = position + direction * speed;
+	double DistanceToDestination = vect2::distance(position, destination);
+	double NextDistanceToDestination = vect2::distance(nextPosition, destination);
+	
+	// If the Drone is close enough or has passed its destination, it is considered arrived
+	if (DistanceToDestination <= movementTolerance)
+	{
+		position = destination;
+		SetDestination();
+	} else if (NextDistanceToDestination >= DistanceToDestination) nextPosition = destination;
+	
+	position = nextPosition;
+
+	cout << "SWEEP-" << ID << ": " << position.toString() << '\n';
+
+	// TODO si objectif proche : fin de la simulation
+
+	
     // End of user code
+	}
+	
+	
+// Start of user code  : Additional methods
+void DroneSweep::lateinitialize() {
+	assignedZone = rItfEnvironmentSweep->getAssignedZone(ID);
+	destination = vect2(assignedZone.getV2().getX(), assignedZone.getV1().getY());
+	direction = destination;
+	direction.normalize();
 }
 
-
-// Start of user code  : Additional methods
 void DroneSweep::SetDestination() {
     if (goesUp && position.getX() >= sweepHeight * heightCount) {
-        direction.setX(0);
-        direction.setY(1.0f);
-        if (!leftToRight) direction.switchSignY();
+        direction = vect2(1.0,0);
+        if (!leftToRight) direction.switchSignX();
         goesUp = false;
         leftToRight = !leftToRight;
     }
     else if (position.getY() - speed < leftYBound
         || position.getY() + speed > sweepLength + leftYBound) {
-        direction.setX(1.0f);
-        direction.setY(0);
-        if (topToBottom) direction.switchSignX();
+        direction = vect2(0,1.0);
+        if (topToBottom) direction.switchSignY();
         if (!goesUp) heightCount++;
         goesUp = true;
     }
@@ -86,66 +105,69 @@ void DroneSweep::setAssignedZone(wect2 zone) {
 }
 
 // End of user code
+	
 
+void DroneSweep::setObjposition(vect2 arg) {
+		objposition = arg;
+	}
 
-void DroneSweep::setrItfEnvironmentSweep(ItfEnvironmentInterface* arItfEnvironmentSweep) {
-    rItfEnvironmentSweep = arItfEnvironmentSweep;
-}
-
-void DroneSweep::setrItfTargetObjectSweep(ItfTargetObjectInterface* arItfTargetObjectSweep) {
-    rItfTargetObjectSweep = arItfTargetObjectSweep;
-}
-
-// +++++++++++++ Access for ID parameter +++++++++++++
+void DroneSweep::setrItfEnvironmentSweep(ItfEnvironmentInterface *arItfEnvironmentSweep) {
+		rItfEnvironmentSweep = arItfEnvironmentSweep;
+	}
+	// +++++++++++++ Access for ID parameter +++++++++++++
 long DroneSweep::getID() {
-    return ID;
-}
-
+		return ID;
+	}
+	
 void DroneSweep::setID(long arg) {
-    ID = arg;
-}
-
-// +++++++++++++ Access for speed parameter +++++++++++++
+		ID = arg;
+	}
+	// +++++++++++++ Access for speed parameter +++++++++++++
 double DroneSweep::getSpeed() {
-    return speed;
-}
-
+		return speed;
+	}
+	
 void DroneSweep::setSpeed(double arg) {
-    speed = arg;
-}
-
-// +++++++++++++ Access for position parameter +++++++++++++
+		speed = arg;
+	}
+	// +++++++++++++ Access for position parameter +++++++++++++
 vect2 DroneSweep::getPosition() {
-    return position;
-}
-
+		return position;
+	}
+	
 void DroneSweep::setPosition(vect2 arg) {
-    position = arg;
-}
-
-// +++++++++++++ Access for direction parameter +++++++++++++
+		position = arg;
+	}
+	// +++++++++++++ Access for direction parameter +++++++++++++
 vect2 DroneSweep::getDirection() {
-    return direction;
-}
-
+		return direction;
+	}
+	
 void DroneSweep::setDirection(vect2 arg) {
-    direction = arg;
-}
-
-// +++++++++++++ Access for visionRadius parameter +++++++++++++
+		direction = arg;
+	}
+	// +++++++++++++ Access for visionRadius parameter +++++++++++++
 double DroneSweep::getVisionRadius() {
-    return visionRadius;
-}
-
+		return visionRadius;
+	}
+	
 void DroneSweep::setVisionRadius(double arg) {
-    visionRadius = arg;
-}
-
-// +++++++++++++ Access for sweepHeight parameter +++++++++++++
+		visionRadius = arg;
+	}
+	// +++++++++++++ Access for sweepHeight parameter +++++++++++++
 double DroneSweep::getSweepHeight() {
-    return sweepHeight;
-}
-
+		return sweepHeight;
+	}
+	
 void DroneSweep::setSweepHeight(double arg) {
-    sweepHeight = arg;
-}
+		sweepHeight = arg;
+	}
+	// +++++++++++++ Access for movementTolerance parameter +++++++++++++
+double DroneSweep::getMovementTolerance() {
+		return movementTolerance;
+	}
+	
+void DroneSweep::setMovementTolerance(double arg) {
+		movementTolerance = arg;
+	}
+

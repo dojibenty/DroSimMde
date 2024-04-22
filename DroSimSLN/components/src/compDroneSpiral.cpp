@@ -42,6 +42,9 @@ void compDroneSpiral::readInputs() {
 void compDroneSpiral::initialize() {
 		appli->initialize();
 	}
+void compDroneSpiral::lateinitialize() {
+	appli->lateinitialize();
+}
 
 void compDroneSpiral::end() {
 		appli->end();
@@ -49,9 +52,6 @@ void compDroneSpiral::end() {
 	
 void compDroneSpiral::setrItfEnvironmentSpiral(ItfEnvironmentInterface *arItfEnvironmentSpiral) {
 		appli->setrItfEnvironmentSpiral(arItfEnvironmentSpiral);
-	}
-void compDroneSpiral::setrItfTargetObjectSpiral(ItfTargetObjectInterface *arItfTargetObjectSpiral) {
-		appli->setrItfTargetObjectSpiral(arItfTargetObjectSpiral);
 	}
 DroneSpiral *compDroneSpiral::getAppli() {
 		return appli;
@@ -119,5 +119,29 @@ long compDroneSpiral::getNbCirclePoints() {
 	
 void compDroneSpiral::setNbCirclePoints(long arg) {
 		appli->setNbCirclePoints(arg);
+	}
+	// +++++++++++++ Access for spiralIncrementFactor parameter +++++++++++++
+double compDroneSpiral::getSpiralIncrementFactor() {
+		return appli->getSpiralIncrementFactor();
+	}
+	
+void compDroneSpiral::setSpiralIncrementFactor(double arg) {
+		appli->setSpiralIncrementFactor(arg);
+	}
+	// +++++++++++++ Access for wanderSteps parameter +++++++++++++
+long compDroneSpiral::getWanderSteps() {
+		return appli->getWanderSteps();
+	}
+	
+void compDroneSpiral::setWanderSteps(long arg) {
+		appli->setWanderSteps(arg);
+	}
+	// +++++++++++++ Access for movementTolerance parameter +++++++++++++
+double compDroneSpiral::getMovementTolerance() {
+		return appli->getMovementTolerance();
+	}
+	
+void compDroneSpiral::setMovementTolerance(double arg) {
+		appli->setMovementTolerance(arg);
 	}
 

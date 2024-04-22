@@ -6,7 +6,6 @@
  */
 #ifndef Manager_H_
 #define Manager_H_
-
 #include "Clock.h"
 class compManager;
 
@@ -23,13 +22,9 @@ class Manager {
 
 	// Parameters
 	          double simSpeed;
-	          long sweepNumber;
-	          long spiralNumber;
 
 
 // Start of user code  : Properties of Manager
-    private:
-        std::vector<wect2> Zones;
 // End of user code
 
 	public :
@@ -42,8 +37,7 @@ class Manager {
 	
 	
 // Start of user code  : Additional methods
-    private:
-        std::vector<wect2> CreateZones();
+	static double rand_range(double min, double max);
 // End of user code
 	
 
@@ -51,13 +45,5 @@ class Manager {
 	    double getSimSpeed();
 	
 	    void setSimSpeed(double arg);
-	// +++++++++++++ Access for sweepNumber parameter +++++++++++++
-	    long getSweepNumber();
-	
-	    void setSweepNumber(long arg);
-	// +++++++++++++ Access for spiralNumber parameter +++++++++++++
-	    long getSpiralNumber();
-	
-	    void setSpiralNumber(long arg);
 };
 #endif /*  Manager_H_ */

@@ -6,9 +6,7 @@
  */
 
 #include "compManager.h"
-
 #include "Manager.h"
-
 compManager::compManager(double aFrequency) : LeafComponent( aFrequency) {
 		appli = new Manager( this);
 		delay = 0;
@@ -59,21 +57,5 @@ double compManager::getSimSpeed() {
 	
 void compManager::setSimSpeed(double arg) {
 		appli->setSimSpeed(arg);
-	}
-	// +++++++++++++ Access for sweepNumber parameter +++++++++++++
-long compManager::getSweepNumber() {
-		return appli->getSweepNumber();
-	}
-	
-void compManager::setSweepNumber(long arg) {
-		appli->setSweepNumber(arg);
-	}
-	// +++++++++++++ Access for spiralNumber parameter +++++++++++++
-long compManager::getSpiralNumber() {
-		return appli->getSpiralNumber();
-	}
-	
-void compManager::setSpiralNumber(long arg) {
-		appli->setSpiralNumber(arg);
 	}
 

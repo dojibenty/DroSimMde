@@ -15,6 +15,6 @@ using namespace std;
 class ItfEnvironmentInterface {
 	public :
            virtual vect2 getEnvLimits() = 0;
-           virtual wect2 getAssignedZone() = 0;
+           virtual wect2 getAssignedZone(long ID) = 0;
 };
 #endif /* ItfEnvironmentInterface_H_ */

@@ -9,23 +9,32 @@
 #include "Clock.h"
 class compObjective;
 #include "vect2.h"
+#include "vect2.h"
 
-#include "ItfTargetObjectInterface.h"
+#include "ItfEnvironmentInterface.h"
+#include "vect2.h"
+#include "wect2.h"
 
 // Start of user code  : Additional imports for Objective
 // End of user code
 
-class Objective  : public ItfTargetObjectInterface {
+class Objective {
 
 	protected :
               compObjective *myContainer;
 
+	// Outputs
+	          vect2 objposition;
 	// Parameters
 	          double speed;
 	          vect2 position;
 
+	// Required Interfaces
+	          ItfEnvironmentInterface *rItfEnvironmentObj;
 
 // Start of user code  : Properties of Objective
+			  vect2 direction;
+			  double YLimit;
 // End of user code
 
 	public :
@@ -35,16 +44,15 @@ class Objective  : public ItfTargetObjectInterface {
 	       void end();
 
 	       void doStep(int nStep) ;
-	
-	// +++++++++++++ Methods of the pItfTargetObject interface +++++++++++++
-	       bool isObjectNear();
 
-	
-// Start of user code  : Additional methods
 
+              // Start of user code  : Additional methods
+	void lateinitialize();
 // End of user code
 	
 
+	    vect2 getObjposition();
+	    void setrItfEnvironmentObj(ItfEnvironmentInterface *arItfEnvironmentObj);
 	// +++++++++++++ Access for speed parameter +++++++++++++
 	    double getSpeed();
 	

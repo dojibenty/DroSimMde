@@ -24,9 +24,14 @@ class Environment  : public ItfEnvironmentInterface {
 
 	// Parameters
 	          vect2 envSize;
+	          long maxInlineZones;
+	          long sweepNumber;
+	          long spiralNumber;
 
 
 // Start of user code  : Properties of Environment
+private:
+	std::vector<wect2> Zones;
 // End of user code
 
 	public :
@@ -40,11 +45,13 @@ class Environment  : public ItfEnvironmentInterface {
 	// +++++++++++++ Methods of the pItfEnvironment interface +++++++++++++
 	       vect2 getEnvLimits();
 
-	       wect2 getAssignedZone();
+	       wect2 getAssignedZone(long ID);
 
 	
 // Start of user code  : Additional methods
-
+private:
+	std::vector<wect2> CreateZones();
+public:
 // End of user code
 	
 
@@ -52,5 +59,17 @@ class Environment  : public ItfEnvironmentInterface {
 	    vect2 getEnvSize();
 	
 	    void setEnvSize(vect2 arg);
+	// +++++++++++++ Access for maxInlineZones parameter +++++++++++++
+	    long getMaxInlineZones();
+	
+	    void setMaxInlineZones(long arg);
+	// +++++++++++++ Access for sweepNumber parameter +++++++++++++
+	    long getSweepNumber();
+	
+	    void setSweepNumber(long arg);
+	// +++++++++++++ Access for spiralNumber parameter +++++++++++++
+	    long getSpiralNumber();
+	
+	    void setSpiralNumber(long arg);
 };
 #endif /*  Environment_H_ */

@@ -166,7 +166,6 @@
     <ClCompile Include="components\src\compEnvironment.cpp" />
     <ClCompile Include="components\src\compManager.cpp" />
     <ClCompile Include="components\src\compObjective.cpp" />
-    <ClCompile Include="DroSimSLN.cpp" />
     <ClCompile Include="factory\src\ADroneSpiral.cpp" />
     <ClCompile Include="factory\src\ADroneSweep.cpp" />
     <ClCompile Include="factory\src\AEnvironment.cpp" />
@@ -179,7 +178,6 @@
     <ClCompile Include="framework\src\RootComponent.cpp" />
     <ClCompile Include="framework\src\Scenario.cpp" />
     <ClCompile Include="framework\src\TimeableObject.cpp" />
-    <ClCompile Include="observation\src\myDronesPositionsLogObservationComponent.cpp" />
     <ClCompile Include="run\src\MainDroSimSystem.cpp" />
     <ClCompile Include="scenario\src\ScenarLog.cpp" />
     <ClCompile Include="types\src\vect2.cpp" />
@@ -210,7 +208,6 @@
     <ClInclude Include="framework\headers\TimeableObject.h" />
     <ClInclude Include="interfaces\headers\ItfEnvironmentInterface.h" />
     <ClInclude Include="interfaces\headers\ItfTargetObjectInterface.h" />
-    <ClInclude Include="observation\headers\myDronesPositionsLogObservationComponent.h" />
     <ClInclude Include="scenario\headers\ScenarLog.h" />
     <ClInclude Include="types\headers\vect2.h" />
     <ClInclude Include="types\headers\wect2.h" />

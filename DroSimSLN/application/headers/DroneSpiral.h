@@ -8,13 +8,14 @@
 #define DroneSpiral_H_
 #include "Clock.h"
 class compDroneSpiral;
+	// Inputs
+#include "vect2.h"
 #include "vect2.h"
 #include "vect2.h"
 
 #include "ItfEnvironmentInterface.h"
 #include "vect2.h"
 #include "wect2.h"
-#include "ItfTargetObjectInterface.h"
 
 // Start of user code  : Additional imports for DroneSpiral
 // End of user code
@@ -24,6 +25,8 @@ class DroneSpiral {
 	protected :
               compDroneSpiral *myContainer;
 
+	// Inputs
+	          vect2 objposition;
 	// Parameters
 	          long ID;
 	          double speed;
@@ -33,12 +36,22 @@ class DroneSpiral {
 	          double spiralRadius;
 	          bool concentricCircles;
 	          long nbCirclePoints;
+	          double spiralIncrementFactor;
+	          long wanderSteps;
+	          double movementTolerance;
 
 	// Required Interfaces
 	          ItfEnvironmentInterface *rItfEnvironmentSpiral;
-	          ItfTargetObjectInterface *rItfTargetObjectSpiral;
 
 // Start of user code  : Properties of DroneSpiral
+private:
+	vect2 destination;
+	wect2 assignedZone;
+	int wander = 0;
+	std::vector<vect2> circlePoints;
+	int currentCirclePointID;
+	vect2 currentCircleCenter;
+	double currentSpiralIncrementFactor;
 // End of user code
 
 	public :
@@ -48,14 +61,22 @@ class DroneSpiral {
 	       void end();
 
 	       void doStep(int nStep) ;
-	
-	
-// Start of user code  : Additional methods
-// End of user code
+
+
+              // Start of user code  : Additional methods
+private:
+	void SetDestination();
+	void SetCircle();
+    void GetRandomDirection();
+	bool GoesOutOfBounds(vect2 point);
+public:
+	void lateinitialize();
+              // End of user code
 	
 
+	     void setObjposition(vect2 arg) ;
+
 	    void setrItfEnvironmentSpiral(ItfEnvironmentInterface *arItfEnvironmentSpiral);
-	    void setrItfTargetObjectSpiral(ItfTargetObjectInterface *arItfTargetObjectSpiral);
 	// +++++++++++++ Access for ID parameter +++++++++++++
 	    long getID();
 	
@@ -88,5 +109,17 @@ class DroneSpiral {
 	    long getNbCirclePoints();
 	
 	    void setNbCirclePoints(long arg);
+	// +++++++++++++ Access for spiralIncrementFactor parameter +++++++++++++
+	    double getSpiralIncrementFactor();
+	
+	    void setSpiralIncrementFactor(double arg);
+	// +++++++++++++ Access for wanderSteps parameter +++++++++++++
+	    long getWanderSteps();
+	
+	    void setWanderSteps(long arg);
+	// +++++++++++++ Access for movementTolerance parameter +++++++++++++
+	    double getMovementTolerance();
+	
+	    void setMovementTolerance(double arg);
 };
 #endif /*  DroneSpiral_H_ */
