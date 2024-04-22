@@ -36,24 +36,16 @@ void DroneSweep::end() {
 
 void DroneSweep::doStep(int nStep) {
 // Start of user code  : Implementation of doStep method
-	// Calculate the Drone's next position
-	vect2 nextPosition = position + direction * speed;
-	double DistanceToDestination = vect2::distance(position, destination);
-	double NextDistanceToDestination = vect2::distance(nextPosition, destination);
-	
-	// If the Drone is close enough or has passed its destination, it is considered arrived
-	if (DistanceToDestination <= movementTolerance)
-	{
-		position = destination;
-		SetDestination();
-	} else if (NextDistanceToDestination >= DistanceToDestination) nextPosition = destination;
-	
-	position = nextPosition;
-
+	position = SetNextPosition();
+	if (!isInZone)
+		if (vect2::distance(position,zoneStartPoint) <= movementTolerance) {
+			position = zoneStartPoint;
+			isInZone = true;
+		}
 	cout << "SWEEP-" << ID << ": " << position.toString() << '\n';
-
+	
 	// TODO si objectif proche : fin de la simulation
-
+	// if (vect2::distance(position,objposition) <= visionRadius)
 	
     // End of user code
 	}
@@ -62,12 +54,12 @@ void DroneSweep::doStep(int nStep) {
 // Start of user code  : Additional methods
 void DroneSweep::lateinitialize() {
 	assignedZone = rItfEnvironmentSweep->getAssignedZone(ID);
-	destination = vect2(assignedZone.getV2().getX(), assignedZone.getV1().getY());
-	direction = destination;
+	zoneStartPoint = vect2(assignedZone.getV2().getX(), assignedZone.getV1().getY());
+	direction = zoneStartPoint;
 	direction.normalize();
 }
 
-void DroneSweep::SetDestination() {
+vect2 DroneSweep::SetNextPosition() {
     if (goesUp && position.getX() >= sweepHeight * heightCount) {
         direction = vect2(1.0,0);
         if (!leftToRight) direction.switchSignX();
@@ -82,22 +74,24 @@ void DroneSweep::SetDestination() {
         goesUp = true;
     }
 
-    destination = position + direction * speed;
-    if (GoesOutOfBounds()) {
+    vect2 nextPosition = position + direction * speed;
+    if (GoesOutOfBounds(nextPosition)) {
         if (goesUp) {
-            destination = position - direction * speed;
+            nextPosition = position - direction * speed;
             topToBottom = !topToBottom;
         }
-        else if (leftToRight) destination = position + direction * (assignedZone.getV2().getY() - position.getY());
-        else destination = position + direction * (position.getY() - assignedZone.getV1().getY());
+        else if (leftToRight) nextPosition = position + direction * (assignedZone.getV2().getY() - position.getY());
+        else nextPosition = position + direction * (position.getY() - assignedZone.getV1().getY());
     }
+
+	return nextPosition;
 }
 
-bool DroneSweep::GoesOutOfBounds() {
-    return destination.getX() < assignedZone.getV2().getX()
-        || destination.getY() < assignedZone.getV1().getY()
-        || destination.getX() > assignedZone.getV1().getX()
-        || destination.getY() > assignedZone.getV2().getY();
+bool DroneSweep::GoesOutOfBounds(vect2& point) {
+    return point.getX() < assignedZone.getV2().getX()
+        || point.getY() < assignedZone.getV1().getY()
+        || point.getX() > assignedZone.getV1().getX()
+        || point.getY() > assignedZone.getV2().getY();
 }
 
 void DroneSweep::setAssignedZone(wect2 zone) {

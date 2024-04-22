@@ -44,13 +44,14 @@ protected:
     wect2 assignedZone;
 
 private:
-    vect2 destination;
     bool goesUp = true;
     bool leftToRight = true;
     bool topToBottom = false;
     long heightCount = 0;
     double sweepLength;
     double leftYBound;
+	bool isInZone = false;
+	vect2 zoneStartPoint;
     // End of user code
 
 	public :
@@ -64,12 +65,12 @@ private:
 
               // Start of user code  : Additional methods
 private:
-    void SetDestination();
-    bool GoesOutOfBounds();
+              vect2 SetNextPosition();
+    bool GoesOutOfBounds(vect2& point);
 public:
 	void setAssignedZone(wect2 zone);
 	void lateinitialize();
-    // End of user code
+              // End of user code
 	
 
 	     void setObjposition(vect2 arg) ;

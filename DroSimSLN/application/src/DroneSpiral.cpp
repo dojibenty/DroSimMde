@@ -40,19 +40,14 @@ void DroneSpiral::end() {
 void DroneSpiral::doStep(int nStep) {
 // Start of user code  : Implementation of doStep method
 	// Calculate the Drone's next position
-	vect2 nextPosition = position + direction * speed;
-	double DistanceToDestination = vect2::distance(position, destination);
-	double NextDistanceToDestination = vect2::distance(nextPosition, destination);
-
-	// If the Drone is close enough or has passed its destination, it is considered arrived
-	if (DistanceToDestination <= movementTolerance)
-	{
-		if (--wander <= 0) SetCircle();
-		SetDestination();
-	} else if (NextDistanceToDestination >= DistanceToDestination) nextPosition = destination;
-
-	position = nextPosition;
-
+	if (wander <= 0) SetCircle();
+	position = SetNextPosition();
+	if (!isInZone)
+		if (vect2::distance(position,zoneStartPoint) <= movementTolerance) {
+			position = zoneStartPoint;
+			isInZone = true;
+		}
+			
 	cout << "SPIRAL-" << ID << ": " << position.toString() << '\n';
 	
 	// TODO si objectif proche : fin de la simulation 
@@ -65,14 +60,17 @@ void DroneSpiral::doStep(int nStep) {
 // Start of user code  : Additional methods
 void DroneSpiral::lateinitialize() {
 	assignedZone = rItfEnvironmentSpiral->getAssignedZone(ID);
-	destination = (assignedZone.getV1() + assignedZone.getV2()) / 2;
-	direction = destination;
+	zoneStartPoint = (assignedZone.getV1() + assignedZone.getV2()) / 2;
+	direction = zoneStartPoint;
 	direction.normalize();
 }
 
-void DroneSpiral::SetDestination()
+vect2 DroneSpiral::SetNextPosition()
 {
-	if (wander > 0) GetRandomDirection();
+	vect2 nextPosition;
+
+	if (!isInZone) nextPosition = position + direction * speed;
+	else if (wander > 0) nextPosition = GetRandomDirection();
 	else // Making spiral
 	{
 		currentCirclePointID = currentCirclePointID % nbCirclePoints + 1;
@@ -88,24 +86,26 @@ void DroneSpiral::SetDestination()
 
 		if (!concentricCircles) currentSpiralIncrementFactor += spiralIncrementFactor / nbCirclePoints;
 		else if (currentCirclePointID == nbCirclePoints) currentSpiralIncrementFactor += spiralIncrementFactor;
-
+		
 		// Can be translated as "if the current intermediate point is equal or is greater than the selected circle point"
 		if (currentSpiralIncrementFactor >= nbCirclePoints
 			|| GoesOutOfBounds(IntermediatePoint))
 		{
 			// Go back at the center of the circle
 			direction = currentCircleCenter - position;
-			destination = currentCircleCenter;
+			nextPosition = currentCircleCenter;
 			wander = wanderSteps + 1;
 		}
 		else
 		{
 			direction = IntermediatePoint - position;
-			destination = IntermediatePoint;
+			nextPosition = IntermediatePoint;
 		}
 		
 		direction.normalize();
 	}
+
+	return nextPosition;
 }
 
 void DroneSpiral::SetCircle()
@@ -128,8 +128,10 @@ void DroneSpiral::SetCircle()
 	currentSpiralIncrementFactor = 1;
 }
 
-void DroneSpiral::GetRandomDirection()
+vect2 DroneSpiral::GetRandomDirection()
 {
+	vect2 nextPosition;
+	
 	do
 	{
 		auto NewMoveDirection = vect2(
@@ -137,9 +139,12 @@ void DroneSpiral::GetRandomDirection()
 			direction.getY() + Manager::rand_range(-1.0f,1.0f));
 		NewMoveDirection.normalize();
 		direction = NewMoveDirection;
-		destination = position + direction * speed;
+		nextPosition = position + direction * speed;
 	}
-	while (GoesOutOfBounds(destination));
+	while (GoesOutOfBounds(nextPosition));
+
+	wander--;
+	return nextPosition;
 }
 
 bool DroneSpiral::GoesOutOfBounds(vect2 point) {

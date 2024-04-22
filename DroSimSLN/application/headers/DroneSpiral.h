@@ -45,9 +45,10 @@ class DroneSpiral {
 
 // Start of user code  : Properties of DroneSpiral
 private:
-	vect2 destination;
+	bool isInZone = false;
+	vect2 zoneStartPoint;
 	wect2 assignedZone;
-	int wander = 0;
+	int wander = 1;
 	std::vector<vect2> circlePoints;
 	int currentCirclePointID;
 	vect2 currentCircleCenter;
@@ -65,9 +66,9 @@ private:
 
               // Start of user code  : Additional methods
 private:
-	void SetDestination();
+              vect2 SetNextPosition();
 	void SetCircle();
-    void GetRandomDirection();
+              vect2 GetRandomDirection();
 	bool GoesOutOfBounds(vect2 point);
 public:
 	void lateinitialize();
