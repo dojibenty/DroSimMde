@@ -19,6 +19,7 @@ class DroneSweep;
 #include "ItfEnvironmentInterface.h"
 #include "vect2.h"
 #include "wect2.h"
+#include "ItfManagerInterface.h"
 
 class compDroneSweep : public LeafComponent {
 
@@ -43,10 +44,11 @@ class compDroneSweep : public LeafComponent {
 
 	       virtual void readInputs() ;
 	       void initialize();
-		   void lateinitialize();
-		   void end();
+void lateinitialize();
+void end();
 	
 	     void setrItfEnvironmentSweep(ItfEnvironmentInterface *arItfEnvironmentSweep);
+	     void setrItfManagerSweep(ItfManagerInterface *arItfManagerSweep);
 	     DroneSweep *getAppli() ;
 	// +++++++++++++ Access for ID parameter +++++++++++++
 	     long getID();

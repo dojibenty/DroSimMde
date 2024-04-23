@@ -47,15 +47,20 @@ void compManager::end() {
 		appli->end();
 	}
 	
+	// +++++++++++++ Methods of the pItfManager interface +++++++++++++
+void compManager::signalObjectiveFound(long droneID){
+		 appli->signalObjectiveFound(droneID);
+	}
+
 Manager *compManager::getAppli() {
 		return appli;
 	}
-	// +++++++++++++ Access for simSpeed parameter +++++++++++++
-double compManager::getSimSpeed() {
-		return appli->getSimSpeed();
+	// +++++++++++++ Access for expectedEndTime parameter +++++++++++++
+double compManager::getExpectedEndTime() {
+		return appli->getExpectedEndTime();
 	}
 	
-void compManager::setSimSpeed(double arg) {
-		appli->setSimSpeed(arg);
+void compManager::setExpectedEndTime(double arg) {
+		appli->setExpectedEndTime(arg);
 	}
 

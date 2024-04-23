@@ -13,8 +13,9 @@ class Manager;
 
 
 
+#include "ItfManagerInterface.h"
 
-class compManager : public LeafComponent {
+class compManager : public LeafComponent  , public ItfManagerInterface {
 
 	protected :
 /*pyp : inutile
@@ -36,10 +37,13 @@ class compManager : public LeafComponent {
 	       void initialize();
 	       void end();
 	
+	// +++++++++++++ Methods of the pItfManager interface +++++++++++++
+	      void signalObjectiveFound(long droneID);
+
 	     Manager *getAppli() ;
-	// +++++++++++++ Access for simSpeed parameter +++++++++++++
-	     double getSimSpeed();
+	// +++++++++++++ Access for expectedEndTime parameter +++++++++++++
+	     double getExpectedEndTime();
 	
-	     void setSimSpeed(double arg);
+	     void setExpectedEndTime(double arg);
 };
 #endif /* compManager_H_ */

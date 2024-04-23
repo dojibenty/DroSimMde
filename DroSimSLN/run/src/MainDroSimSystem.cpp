@@ -27,13 +27,11 @@
 int main() {
 		DroSimSystem *root = new DroSimSystem();
 		for(int i = 0; i < 5; i++){
-			
-			cout << "#####\nSIMULATION " << i+1 << '\n' << "#####" << endl;
         	//pyp : configuration des switches et autres actions
 			root->initialize();
 			//pyp : run des observations
 			ScenarLog *simulatedScenario = new ScenarLog(root);
-			simulatedScenario->setTime(0,10000);
+			simulatedScenario->setTime(0,100000);
 			simulatedScenario->startSimulation();
 			root->end();
         	simulatedScenario->end();

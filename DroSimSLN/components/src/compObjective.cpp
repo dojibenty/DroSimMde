@@ -54,7 +54,6 @@ void compObjective::lateinitialize() {
 	appli->lateinitialize();
 }
 
-
 void compObjective::end() {
 		appli->end();
 	}

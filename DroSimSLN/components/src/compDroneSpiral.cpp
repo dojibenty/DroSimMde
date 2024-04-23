@@ -53,6 +53,9 @@ void compDroneSpiral::end() {
 void compDroneSpiral::setrItfEnvironmentSpiral(ItfEnvironmentInterface *arItfEnvironmentSpiral) {
 		appli->setrItfEnvironmentSpiral(arItfEnvironmentSpiral);
 	}
+void compDroneSpiral::setrItfManagerSpiral(ItfManagerInterface *arItfManagerSpiral) {
+		appli->setrItfManagerSpiral(arItfManagerSpiral);
+	}
 DroneSpiral *compDroneSpiral::getAppli() {
 		return appli;
 	}

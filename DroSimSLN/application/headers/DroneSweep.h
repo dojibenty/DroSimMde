@@ -16,6 +16,7 @@ class compDroneSweep;
 #include "ItfEnvironmentInterface.h"
 #include "vect2.h"
 #include "wect2.h"
+#include "ItfManagerInterface.h"
 
 // Start of user code  : Additional imports for DroneSweep
 // End of user code
@@ -38,13 +39,14 @@ class DroneSweep {
 
 	// Required Interfaces
 	          ItfEnvironmentInterface *rItfEnvironmentSweep;
+	          ItfManagerInterface *rItfManagerSweep;
 
 // Start of user code  : Properties of DroneSweep
 protected:
     wect2 assignedZone;
 
 private:
-    bool goesUp = true;
+    bool goesUp = false;
     bool leftToRight = true;
     bool topToBottom = false;
     long heightCount = 0;
@@ -60,10 +62,10 @@ private:
 	        void initialize();
 	       void end();
 
-	       void doStep(int nStep);
-
-
-              // Start of user code  : Additional methods
+	       void doStep(int nStep) ;
+	
+	
+// Start of user code  : Additional methods
 private:
               vect2 SetNextPosition();
     bool GoesOutOfBounds(vect2& point);
@@ -76,6 +78,7 @@ public:
 	     void setObjposition(vect2 arg) ;
 
 	    void setrItfEnvironmentSweep(ItfEnvironmentInterface *arItfEnvironmentSweep);
+	    void setrItfManagerSweep(ItfManagerInterface *arItfManagerSweep);
 	// +++++++++++++ Access for ID parameter +++++++++++++
 	    long getID();
 	

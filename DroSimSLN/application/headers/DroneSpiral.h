@@ -16,6 +16,7 @@ class compDroneSpiral;
 #include "ItfEnvironmentInterface.h"
 #include "vect2.h"
 #include "wect2.h"
+#include "ItfManagerInterface.h"
 
 // Start of user code  : Additional imports for DroneSpiral
 // End of user code
@@ -42,6 +43,7 @@ class DroneSpiral {
 
 	// Required Interfaces
 	          ItfEnvironmentInterface *rItfEnvironmentSpiral;
+	          ItfManagerInterface *rItfManagerSpiral;
 
 // Start of user code  : Properties of DroneSpiral
 private:
@@ -62,9 +64,9 @@ private:
 	       void end();
 
 	       void doStep(int nStep) ;
-
-
-              // Start of user code  : Additional methods
+	
+	
+// Start of user code  : Additional methods
 private:
               vect2 SetNextPosition();
 	void SetCircle();
@@ -78,6 +80,7 @@ public:
 	     void setObjposition(vect2 arg) ;
 
 	    void setrItfEnvironmentSpiral(ItfEnvironmentInterface *arItfEnvironmentSpiral);
+	    void setrItfManagerSpiral(ItfManagerInterface *arItfManagerSpiral);
 	// +++++++++++++ Access for ID parameter +++++++++++++
 	    long getID();
 	

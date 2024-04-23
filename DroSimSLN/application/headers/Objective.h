@@ -44,9 +44,9 @@ class Objective {
 	       void end();
 
 	       void doStep(int nStep) ;
-
-
-              // Start of user code  : Additional methods
+	
+	
+// Start of user code  : Additional methods
 	void lateinitialize();
 // End of user code
 	

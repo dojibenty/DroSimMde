@@ -17,6 +17,7 @@
 DroneSpiral::DroneSpiral(compDroneSpiral *container)	{
 		myContainer = container;
 		rItfEnvironmentSpiral = 0;
+		rItfManagerSpiral = 0;
 // Start of user code  : Implementation of constructor method
 
     // End of user code
@@ -40,7 +41,6 @@ void DroneSpiral::end() {
 void DroneSpiral::doStep(int nStep) {
 // Start of user code  : Implementation of doStep method
 	// Calculate the Drone's next position
-	if (wander <= 0) SetCircle();
 	position = SetNextPosition();
 	if (!isInZone)
 		if (vect2::distance(position,zoneStartPoint) <= movementTolerance) {
@@ -48,10 +48,11 @@ void DroneSpiral::doStep(int nStep) {
 			isInZone = true;
 		}
 			
-	cout << "SPIRAL-" << ID << ": " << position.toString() << '\n';
+	//cout << "SPIRAL-" << ID << ": " << position.toString() << '\n';
 	
-	// TODO si objectif proche : fin de la simulation 
-	//if (vect2::distance(position,objposition) <= visionRadius)
+	if (vect2::distance(position,objposition) <= visionRadius
+		&& objposition.getX() > 0)
+		rItfManagerSpiral->signalObjectiveFound(ID);
 	
 	// End of user code
 	}
@@ -83,7 +84,7 @@ vect2 DroneSpiral::SetNextPosition()
 		auto IntermediatePoint = vect2(
 			currentCircleCenter.getX() + ((DistX / nbCirclePoints) * currentSpiralIncrementFactor),
 			currentCircleCenter.getY() + ((DistY / nbCirclePoints) * currentSpiralIncrementFactor));
-
+		
 		if (!concentricCircles) currentSpiralIncrementFactor += spiralIncrementFactor / nbCirclePoints;
 		else if (currentCirclePointID == nbCirclePoints) currentSpiralIncrementFactor += spiralIncrementFactor;
 		
@@ -93,16 +94,12 @@ vect2 DroneSpiral::SetNextPosition()
 		{
 			// Go back at the center of the circle
 			direction = currentCircleCenter - position;
-			nextPosition = currentCircleCenter;
 			wander = wanderSteps + 1;
 		}
-		else
-		{
-			direction = IntermediatePoint - position;
-			nextPosition = IntermediatePoint;
-		}
+		else direction = IntermediatePoint - position;
 		
 		direction.normalize();
+		nextPosition = position + direction * speed;
 	}
 
 	return nextPosition;
@@ -134,16 +131,15 @@ vect2 DroneSpiral::GetRandomDirection()
 	
 	do
 	{
-		auto NewMoveDirection = vect2(
+		direction = vect2(
 			direction.getX() + Manager::rand_range(-1.0f,1.0f),
 			direction.getY() + Manager::rand_range(-1.0f,1.0f));
-		NewMoveDirection.normalize();
-		direction = NewMoveDirection;
+		direction.normalize();
 		nextPosition = position + direction * speed;
 	}
 	while (GoesOutOfBounds(nextPosition));
 
-	wander--;
+	if (--wander == 0) SetCircle(); 
 	return nextPosition;
 }
 
@@ -162,6 +158,9 @@ void DroneSpiral::setObjposition(vect2 arg) {
 
 void DroneSpiral::setrItfEnvironmentSpiral(ItfEnvironmentInterface *arItfEnvironmentSpiral) {
 		rItfEnvironmentSpiral = arItfEnvironmentSpiral;
+	}
+void DroneSpiral::setrItfManagerSpiral(ItfManagerInterface *arItfManagerSpiral) {
+		rItfManagerSpiral = arItfManagerSpiral;
 	}
 	// +++++++++++++ Access for ID parameter +++++++++++++
 long DroneSpiral::getID() {

@@ -47,7 +47,7 @@ void Objective::doStep(int nStep) {
 
 	objposition = position;
 
-	cout << "OBJECTIVE: " << position.toString() << '\n';
+	//cout << "OBJECTIVE: " << position.toString() << '\n';
 // End of user code
 	}
 	
@@ -58,7 +58,7 @@ void Objective::lateinitialize() {
 	const double posX = Manager::rand_range(envLimits.getX() / 2, envLimits.getX());
 	const double posY = Manager::rand_range(0, envLimits.getY());
 
-	setPosition(vect2(posX,posY));
+	position = vect2(posX,posY);
 	YLimit = envLimits.getY();
 }
 // End of user code

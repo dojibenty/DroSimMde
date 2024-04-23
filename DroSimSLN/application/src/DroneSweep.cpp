@@ -15,6 +15,7 @@
 DroneSweep::DroneSweep(compDroneSweep *container)	{
 		myContainer = container;
 		rItfEnvironmentSweep = 0;
+		rItfManagerSweep = 0;
 // Start of user code  : Implementation of constructor method
     // End of user code
 	}
@@ -42,10 +43,12 @@ void DroneSweep::doStep(int nStep) {
 			position = zoneStartPoint;
 			isInZone = true;
 		}
-	cout << "SWEEP-" << ID << ": " << position.toString() << '\n';
 	
-	// TODO si objectif proche : fin de la simulation
-	// if (vect2::distance(position,objposition) <= visionRadius)
+	//cout << "SWEEP-" << ID << ": " << position.toString() << '\n';
+	
+	if (vect2::distance(position,objposition) <= visionRadius
+		&& objposition.getX() > 0)
+		rItfManagerSweep->signalObjectiveFound(ID);
 	
     // End of user code
 	}
@@ -54,6 +57,8 @@ void DroneSweep::doStep(int nStep) {
 // Start of user code  : Additional methods
 void DroneSweep::lateinitialize() {
 	assignedZone = rItfEnvironmentSweep->getAssignedZone(ID);
+	leftYBound = assignedZone.getV1().getY();
+	sweepLength = assignedZone.getV2().getY() - leftYBound;
 	zoneStartPoint = vect2(assignedZone.getV2().getX(), assignedZone.getV1().getY());
 	direction = zoneStartPoint;
 	direction.normalize();
@@ -61,15 +66,15 @@ void DroneSweep::lateinitialize() {
 
 vect2 DroneSweep::SetNextPosition() {
     if (goesUp && position.getX() >= sweepHeight * heightCount) {
-        direction = vect2(1.0,0);
-        if (!leftToRight) direction.switchSignX();
+        direction = vect2(0,1.0);
+        if (!leftToRight) direction.switchSignY();
         goesUp = false;
         leftToRight = !leftToRight;
     }
     else if (position.getY() - speed < leftYBound
         || position.getY() + speed > sweepLength + leftYBound) {
-        direction = vect2(0,1.0);
-        if (topToBottom) direction.switchSignY();
+        direction = vect2(1.0,0);
+        if (topToBottom) direction.switchSignX();
         if (!goesUp) heightCount++;
         goesUp = true;
     }
@@ -107,6 +112,9 @@ void DroneSweep::setObjposition(vect2 arg) {
 
 void DroneSweep::setrItfEnvironmentSweep(ItfEnvironmentInterface *arItfEnvironmentSweep) {
 		rItfEnvironmentSweep = arItfEnvironmentSweep;
+	}
+void DroneSweep::setrItfManagerSweep(ItfManagerInterface *arItfManagerSweep) {
+		rItfManagerSweep = arItfManagerSweep;
 	}
 	// +++++++++++++ Access for ID parameter +++++++++++++
 long DroneSweep::getID() {

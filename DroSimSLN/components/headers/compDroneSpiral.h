@@ -19,6 +19,7 @@ class DroneSpiral;
 #include "ItfEnvironmentInterface.h"
 #include "vect2.h"
 #include "wect2.h"
+#include "ItfManagerInterface.h"
 
 class compDroneSpiral : public LeafComponent {
 
@@ -47,6 +48,7 @@ void lateinitialize();
 void end();
 	
 	     void setrItfEnvironmentSpiral(ItfEnvironmentInterface *arItfEnvironmentSpiral);
+	     void setrItfManagerSpiral(ItfManagerInterface *arItfManagerSpiral);
 	     DroneSpiral *getAppli() ;
 	// +++++++++++++ Access for ID parameter +++++++++++++
 	     long getID();

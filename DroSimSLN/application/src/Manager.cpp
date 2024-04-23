@@ -40,6 +40,16 @@ void Manager::doStep(int nStep) {
 // End of user code
 	}
 	
+	// +++++++++++++ Methods of the pItfManager interface +++++++++++++
+void Manager::signalObjectiveFound(long droneID){
+// Start of user code  : Implementation of method signalObjectiveFound
+	if (!isObjectiveFound) {
+		cout << "Objective found by drone " << droneID << '\n';
+		isObjectiveFound = true;
+	}
+// End of user code
+	}
+
 	
 // Start of user code  : Additional methods
 double Manager::rand_range(double min, double max) {
@@ -48,12 +58,12 @@ double Manager::rand_range(double min, double max) {
 // End of user code
 	
 
-	// +++++++++++++ Access for simSpeed parameter +++++++++++++
-double Manager::getSimSpeed() {
-		return simSpeed;
+	// +++++++++++++ Access for expectedEndTime parameter +++++++++++++
+double Manager::getExpectedEndTime() {
+		return expectedEndTime;
 	}
 	
-void Manager::setSimSpeed(double arg) {
-		simSpeed = arg;
+void Manager::setExpectedEndTime(double arg) {
+		expectedEndTime = arg;
 	}
 

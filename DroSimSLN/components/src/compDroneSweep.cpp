@@ -53,6 +53,9 @@ void compDroneSweep::end() {
 void compDroneSweep::setrItfEnvironmentSweep(ItfEnvironmentInterface *arItfEnvironmentSweep) {
 		appli->setrItfEnvironmentSweep(arItfEnvironmentSweep);
 	}
+void compDroneSweep::setrItfManagerSweep(ItfManagerInterface *arItfManagerSweep) {
+		appli->setrItfManagerSweep(arItfManagerSweep);
+	}
 DroneSweep *compDroneSweep::getAppli() {
 		return appli;
 	}

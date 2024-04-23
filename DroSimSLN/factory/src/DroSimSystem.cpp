@@ -41,7 +41,9 @@ DroSimSystem::DroSimSystem() {
 	leafComponents.push_back(instAEnvironment);
 	instADroneSweep->setAObjective(instAObjective);
 	instADroneSpiral->setAObjective(instAObjective);
+	instADroneSweep->setrItfManagerSweep(instAManager->getAppli());
 	instADroneSweep->setrItfEnvironmentSweep(instAEnvironment->getAppli());
+	instADroneSpiral->setrItfManagerSpiral(instAManager->getAppli());
 	instADroneSpiral->setrItfEnvironmentSpiral(instAEnvironment->getAppli());
 	instAObjective->setrItfEnvironmentObj(instAEnvironment->getAppli());
 	}
@@ -64,13 +66,13 @@ void DroSimSystem::initialize() {
 	instADroneSpiral->setPosition(vect2(0,0));
 	instADroneSpiral->setDirection(vect2(1.0,0));
 	instADroneSpiral->setSpiralIncrementFactor(3);
-	instADroneSpiral->setWanderSteps(2);
+	instADroneSpiral->setWanderSteps(5);
 	instADroneSpiral->setMovementTolerance(10);
 	//instADroneSpiral->setFrequency(0.0);
 	instAObjective->setSpeed(10.0);
 	instAObjective->setPosition(vect2(0,0));
 	//instAObjective->setFrequency(0.0);
-	instAManager->setSimSpeed(1.0);
+	instAManager->setExpectedEndTime(60000.0);
 	//instAManager->setFrequency(0.0);
 	instAEnvironment->setEnvSize(vect2(9000.0,8000.0));
 	instAEnvironment->setMaxInlineZones(3);
