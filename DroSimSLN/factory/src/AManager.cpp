@@ -8,14 +8,7 @@
 #include "AManager.h"
 #include "Manager.h"
 
-AManager::AManager(double aFrequency)	: compManager(aFrequency){
-		
-}
-AManager::~AManager()	{
-		
-}
+AManager::AManager(double aFrequency) : compManager(aFrequency) {}
+AManager::~AManager() {}
 
-void AManager::readInputs() {
-}
-
-
+void AManager::readInputs() {}

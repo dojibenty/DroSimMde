@@ -12,14 +12,13 @@
 #include "DroSimSystem.h"
 
 
-class ScenarLog : public Scenario{
+class ScenarLog : public Scenario {
+protected :
+    DroSimSystem* application;
 
-	protected :
-              DroSimSystem *application;
-	
-	public :
-        ScenarLog(RootComponent *aRoot);
-        virtual ~ScenarLog();
-	    void eventSimulation() override;
+public :
+    ScenarLog(RootComponent* aRoot);
+    virtual ~ScenarLog();
+    void eventSimulation() override;
 };
 #endif /* ScenarLog_H_ */

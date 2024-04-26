@@ -60,7 +60,7 @@ vect2 vect2::operator/(const double arg) const {
 }
 
 void vect2::normalize() {
-    const double mag = sqrt(x*x + y*y);
+    const double mag = sqrt(x * x + y * y);
     if (mag != 0.0) *this = *this / mag;
 }
 

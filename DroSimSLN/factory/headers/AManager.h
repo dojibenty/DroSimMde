@@ -11,14 +11,12 @@
 #include "compManager.h"
 
 class AManager : public compManager {
-	protected :
 
-	public :
-
-            AManager(double aFrequency);
-            virtual ~AManager();
+public :
+    AManager(double aFrequency);
+    virtual ~AManager();
 
 
-	        void readInputs()  override;
+    void readInputs() override;
 };
 #endif /*  AManager_H_ */

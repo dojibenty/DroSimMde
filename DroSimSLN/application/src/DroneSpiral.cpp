@@ -14,240 +14,233 @@
 // End of user code
 
 
-DroneSpiral::DroneSpiral(compDroneSpiral *container)	{
-		myContainer = container;
-		rItfEnvironmentSpiral = 0;
-		rItfManagerSpiral = 0;
-// Start of user code  : Implementation of constructor method
+DroneSpiral::DroneSpiral(compDroneSpiral* container) {
+    myContainer = container;
+    rItfGeoDataSpiral = 0;
+    rItfWindForceSpiral = 0;
+    rItfManageSimSpiral = 0;
+    rItfSimDataSpiral = 0;
+    // Start of user code  : Implementation of constructor method
 
     // End of user code
-	}
-DroneSpiral::~DroneSpiral(){
-// Start of user code  : Implementation of destructor method
+}
+
+DroneSpiral::~DroneSpiral() {
+    // Start of user code  : Implementation of destructor method
 
     // End of user code
-	}
+}
+
 void DroneSpiral::initialize() {
-// Start of user code  : Implementation of initialize method
+    // Start of user code  : Implementation of initialize method
+    assignedZone = rItfGeoDataSpiral->grabAssignedZone(droneID);
+    zoneStartPoint = (assignedZone.getV1() + assignedZone.getV2()) / 2;
+    direction = zoneStartPoint;
+    direction.normalize();
+    movementTolerance = rItfSimDataSpiral->grabPositionCorrection();
     // End of user code
-	}
+}
 
 void DroneSpiral::end() {
-// Start of user code  : Implementation of end method
+    // Start of user code  : Implementation of end method
 
     // End of user code
-	}
+}
 
 void DroneSpiral::doStep(int nStep) {
-// Start of user code  : Implementation of doStep method
-	// Calculate the Drone's next position
-	position = SetNextPosition();
-	if (!isInZone)
-		if (vect2::distance(position,zoneStartPoint) <= movementTolerance) {
-			position = zoneStartPoint;
-			isInZone = true;
-		}
-			
-	//cout << "SPIRAL-" << ID << ": " << position.toString() << '\n';
-	
-	if (vect2::distance(position,objposition) <= visionRadius
-		&& objposition.getX() > 0)
-		rItfManagerSpiral->signalObjectiveFound(ID);
-	
-	// End of user code
-	}
-	
-	
+    // Start of user code  : Implementation of doStep method
+    // Calculate the Drone's next position
+    position = SetNextPosition();
+    if (!isInZone)
+        if (vect2::distance(position, zoneStartPoint) <= movementTolerance) {
+            position = zoneStartPoint;
+            isInZone = true;
+        }
+
+    cout << "SPIRAL-" << droneID << ": " << position.toString() << '\n';
+
+    if (vect2::distance(position, objposition) <= visionRadius
+        && objposition.getX() > 0)
+        rItfManageSimSpiral->signalObjectiveFound(droneID);
+
+    // End of user code
+}
+
+
 // Start of user code  : Additional methods
-void DroneSpiral::lateinitialize() {
-	assignedZone = rItfEnvironmentSpiral->getAssignedZone(ID);
-	zoneStartPoint = (assignedZone.getV1() + assignedZone.getV2()) / 2;
-	direction = zoneStartPoint;
-	direction.normalize();
+vect2 DroneSpiral::SetNextPosition() {
+    vect2 nextPosition;
+
+    if (!isInZone) nextPosition = position + direction * speedConstraint;
+    else if (wander > 0) nextPosition = GetRandomDirection();
+    else // Making spiral
+    {
+        currentCirclePointID = currentCirclePointID % nbCirclePoints + 1;
+        vect2 CurrentCirclePoint = circlePoints[currentCirclePointID - 1];
+
+        double DistX = CurrentCirclePoint.getX() - currentCircleCenter.getX();
+        double DistY = CurrentCirclePoint.getY() - currentCircleCenter.getY();
+
+        // Pick an intermediate point placed between the current circle center and the current circle point selected
+        auto IntermediatePoint = vect2(
+            currentCircleCenter.getX() + ((DistX / nbCirclePoints) * currentSpiralIncrementFactor),
+            currentCircleCenter.getY() + ((DistY / nbCirclePoints) * currentSpiralIncrementFactor));
+
+        if (!concentricCircles) currentSpiralIncrementFactor += spiralIncrementFactor / nbCirclePoints;
+        else if (currentCirclePointID == nbCirclePoints) currentSpiralIncrementFactor += spiralIncrementFactor;
+
+        // Can be translated as "if the current intermediate point is equal or is greater than the selected circle point"
+        if (currentSpiralIncrementFactor >= nbCirclePoints
+            || GoesOutOfBounds(IntermediatePoint)) {
+            // Go back at the center of the circle
+            direction = currentCircleCenter - position;
+            wander = wanderSteps + 1;
+        }
+        else direction = IntermediatePoint - position;
+
+        direction.normalize();
+        nextPosition = position + direction * speedConstraint;
+    }
+
+    return nextPosition;
 }
 
-vect2 DroneSpiral::SetNextPosition()
-{
-	vect2 nextPosition;
+void DroneSpiral::SetCircle() {
+    circlePoints.clear();
 
-	if (!isInZone) nextPosition = position + direction * speed;
-	else if (wander > 0) nextPosition = GetRandomDirection();
-	else // Making spiral
-	{
-		currentCirclePointID = currentCirclePointID % nbCirclePoints + 1;
-		vect2 CurrentCirclePoint = circlePoints[currentCirclePointID - 1];
+    const double AngleStep = 2.0 * PI / nbCirclePoints;
 
-		double DistX = CurrentCirclePoint.getX() - currentCircleCenter.getX();
-		double DistY = CurrentCirclePoint.getY() - currentCircleCenter.getY();
+    for (int i = 0; i < nbCirclePoints; ++i) {
+        double Angle = i * AngleStep;
+        vect2 Point(
+            spiralRadius * cos(Angle),
+            spiralRadius * sin(Angle));
+        Point = Point + position;
+        circlePoints.push_back(Point);
+    }
 
-		// Pick an intermediate point placed between the current circle center and the current circle point selected
-		auto IntermediatePoint = vect2(
-			currentCircleCenter.getX() + ((DistX / nbCirclePoints) * currentSpiralIncrementFactor),
-			currentCircleCenter.getY() + ((DistY / nbCirclePoints) * currentSpiralIncrementFactor));
-		
-		if (!concentricCircles) currentSpiralIncrementFactor += spiralIncrementFactor / nbCirclePoints;
-		else if (currentCirclePointID == nbCirclePoints) currentSpiralIncrementFactor += spiralIncrementFactor;
-		
-		// Can be translated as "if the current intermediate point is equal or is greater than the selected circle point"
-		if (currentSpiralIncrementFactor >= nbCirclePoints
-			|| GoesOutOfBounds(IntermediatePoint))
-		{
-			// Go back at the center of the circle
-			direction = currentCircleCenter - position;
-			wander = wanderSteps + 1;
-		}
-		else direction = IntermediatePoint - position;
-		
-		direction.normalize();
-		nextPosition = position + direction * speed;
-	}
-
-	return nextPosition;
+    currentCircleCenter = position;
+    currentSpiralIncrementFactor = 1;
 }
 
-void DroneSpiral::SetCircle()
-{
-	circlePoints.clear();
-	
-	const double AngleStep = 2.0 * PI / nbCirclePoints;
-	
-	for (int i = 0; i < nbCirclePoints; ++i)
-	{
-		double Angle = i * AngleStep;
-		vect2 Point(
-			spiralRadius * cos(Angle),
-			spiralRadius * sin(Angle));
-		Point = Point + position;
-		circlePoints.push_back(Point);
-	}
-	
-	currentCircleCenter = position;
-	currentSpiralIncrementFactor = 1;
-}
+vect2 DroneSpiral::GetRandomDirection() {
+    vect2 nextPosition;
 
-vect2 DroneSpiral::GetRandomDirection()
-{
-	vect2 nextPosition;
-	
-	do
-	{
-		direction = vect2(
-			direction.getX() + Manager::rand_range(-1.0f,1.0f),
-			direction.getY() + Manager::rand_range(-1.0f,1.0f));
-		direction.normalize();
-		nextPosition = position + direction * speed;
-	}
-	while (GoesOutOfBounds(nextPosition));
+    do {
+        direction = vect2(
+            direction.getX() + Manager::rand_range(-1.0f, 1.0f),
+            direction.getY() + Manager::rand_range(-1.0f, 1.0f));
+        direction.normalize();
+        nextPosition = position + direction * speedConstraint;
+    }
+    while (GoesOutOfBounds(nextPosition));
 
-	if (--wander == 0) SetCircle(); 
-	return nextPosition;
+    if (--wander == 0) SetCircle();
+    return nextPosition;
 }
 
 bool DroneSpiral::GoesOutOfBounds(vect2 point) {
-	return point.getX() < assignedZone.getV2().getX()
-		|| point.getY() < assignedZone.getV1().getY()
-		|| point.getX() > assignedZone.getV1().getX()
-		|| point.getY() > assignedZone.getV2().getY();
+    return point.getX() < assignedZone.getV2().getX()
+        || point.getY() < assignedZone.getV1().getY()
+        || point.getX() > assignedZone.getV1().getX()
+        || point.getY() > assignedZone.getV2().getY();
 }
+
 // End of user code
-	
+
 
 void DroneSpiral::setObjposition(vect2 arg) {
-		objposition = arg;
-	}
+    objposition = arg;
+}
 
-void DroneSpiral::setrItfEnvironmentSpiral(ItfEnvironmentInterface *arItfEnvironmentSpiral) {
-		rItfEnvironmentSpiral = arItfEnvironmentSpiral;
-	}
-void DroneSpiral::setrItfManagerSpiral(ItfManagerInterface *arItfManagerSpiral) {
-		rItfManagerSpiral = arItfManagerSpiral;
-	}
-	// +++++++++++++ Access for ID parameter +++++++++++++
-long DroneSpiral::getID() {
-		return ID;
-	}
-	
-void DroneSpiral::setID(long arg) {
-		ID = arg;
-	}
-	// +++++++++++++ Access for speed parameter +++++++++++++
-double DroneSpiral::getSpeed() {
-		return speed;
-	}
-	
-void DroneSpiral::setSpeed(double arg) {
-		speed = arg;
-	}
-	// +++++++++++++ Access for position parameter +++++++++++++
-vect2 DroneSpiral::getPosition() {
-		return position;
-	}
-	
-void DroneSpiral::setPosition(vect2 arg) {
-		position = arg;
-	}
-	// +++++++++++++ Access for direction parameter +++++++++++++
-vect2 DroneSpiral::getDirection() {
-		return direction;
-	}
-	
-void DroneSpiral::setDirection(vect2 arg) {
-		direction = arg;
-	}
-	// +++++++++++++ Access for visionRadius parameter +++++++++++++
+vect2 DroneSpiral::getSpiralposition() {
+    return spiralposition;
+}
+
+void DroneSpiral::setrItfGeoDataSpiral(ItfGeoDataInterface* arItfGeoDataSpiral) {
+    rItfGeoDataSpiral = arItfGeoDataSpiral;
+}
+
+void DroneSpiral::setrItfWindForceSpiral(ItfWindForceInterface* arItfWindForceSpiral) {
+    rItfWindForceSpiral = arItfWindForceSpiral;
+}
+
+void DroneSpiral::setrItfManageSimSpiral(ItfManageSimInterface* arItfManageSimSpiral) {
+    rItfManageSimSpiral = arItfManageSimSpiral;
+}
+
+void DroneSpiral::setrItfSimDataSpiral(ItfSimDataInterface* arItfSimDataSpiral) {
+    rItfSimDataSpiral = arItfSimDataSpiral;
+}
+
+// +++++++++++++ Access for speedConstraint parameter +++++++++++++
+double DroneSpiral::getSpeedConstraint() {
+    return speedConstraint;
+}
+
+void DroneSpiral::setSpeedConstraint(double arg) {
+    speedConstraint = arg;
+}
+
+// +++++++++++++ Access for visionRadius parameter +++++++++++++
 double DroneSpiral::getVisionRadius() {
-		return visionRadius;
-	}
-	
-void DroneSpiral::setVisionRadius(double arg) {
-		visionRadius = arg;
-	}
-	// +++++++++++++ Access for spiralRadius parameter +++++++++++++
-double DroneSpiral::getSpiralRadius() {
-		return spiralRadius;
-	}
-	
-void DroneSpiral::setSpiralRadius(double arg) {
-		spiralRadius = arg;
-	}
-	// +++++++++++++ Access for concentricCircles parameter +++++++++++++
-bool DroneSpiral::getConcentricCircles() {
-		return concentricCircles;
-	}
-	
-void DroneSpiral::setConcentricCircles(bool arg) {
-		concentricCircles = arg;
-	}
-	// +++++++++++++ Access for nbCirclePoints parameter +++++++++++++
-long DroneSpiral::getNbCirclePoints() {
-		return nbCirclePoints;
-	}
-	
-void DroneSpiral::setNbCirclePoints(long arg) {
-		nbCirclePoints = arg;
-	}
-	// +++++++++++++ Access for spiralIncrementFactor parameter +++++++++++++
-double DroneSpiral::getSpiralIncrementFactor() {
-		return spiralIncrementFactor;
-	}
-	
-void DroneSpiral::setSpiralIncrementFactor(double arg) {
-		spiralIncrementFactor = arg;
-	}
-	// +++++++++++++ Access for wanderSteps parameter +++++++++++++
-long DroneSpiral::getWanderSteps() {
-		return wanderSteps;
-	}
-	
-void DroneSpiral::setWanderSteps(long arg) {
-		wanderSteps = arg;
-	}
-	// +++++++++++++ Access for movementTolerance parameter +++++++++++++
-double DroneSpiral::getMovementTolerance() {
-		return movementTolerance;
-	}
-	
-void DroneSpiral::setMovementTolerance(double arg) {
-		movementTolerance = arg;
-	}
+    return visionRadius;
+}
 
+void DroneSpiral::setVisionRadius(double arg) {
+    visionRadius = arg;
+}
+
+// +++++++++++++ Access for spiralRadius parameter +++++++++++++
+double DroneSpiral::getSpiralRadius() {
+    return spiralRadius;
+}
+
+void DroneSpiral::setSpiralRadius(double arg) {
+    spiralRadius = arg;
+}
+
+// +++++++++++++ Access for concentricCircles parameter +++++++++++++
+bool DroneSpiral::getConcentricCircles() {
+    return concentricCircles;
+}
+
+void DroneSpiral::setConcentricCircles(bool arg) {
+    concentricCircles = arg;
+}
+
+// +++++++++++++ Access for nbCirclePoints parameter +++++++++++++
+long DroneSpiral::getNbCirclePoints() {
+    return nbCirclePoints;
+}
+
+void DroneSpiral::setNbCirclePoints(long arg) {
+    nbCirclePoints = arg;
+}
+
+// +++++++++++++ Access for spiralIncrementFactor parameter +++++++++++++
+double DroneSpiral::getSpiralIncrementFactor() {
+    return spiralIncrementFactor;
+}
+
+void DroneSpiral::setSpiralIncrementFactor(double arg) {
+    spiralIncrementFactor = arg;
+}
+
+// +++++++++++++ Access for wanderSteps parameter +++++++++++++
+long DroneSpiral::getWanderSteps() {
+    return wanderSteps;
+}
+
+void DroneSpiral::setWanderSteps(long arg) {
+    wanderSteps = arg;
+}
+
+// +++++++++++++ Access for batteryCapacity parameter +++++++++++++
+double DroneSpiral::getBatteryCapacity() {
+    return batteryCapacity;
+}
+
+void DroneSpiral::setBatteryCapacity(double arg) {
+    batteryCapacity = arg;
+}

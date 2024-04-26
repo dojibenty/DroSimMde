@@ -4,22 +4,22 @@
 
 class LeafComponent : public TimeableObject {
 protected :
-	int delayMax;
-	bool isActive;
+    int delayMax;
+    bool isActive;
 
 public :
-	LeafComponent(double aFrequency);
-	virtual ~LeafComponent()=0;
-	virtual void doStep(int nStep) override;
+    LeafComponent(double aFrequency);
+    virtual ~LeafComponent() = 0;
+    virtual void doStep(int nStep) override;
 
-	bool getIsActive();
+    bool getIsActive();
 
-	int getDelayMax();
+    int getDelayMax();
 
-	void setDelayMax(int delayMax);
-	
-	bool start();
-	
-	bool stop();
+    void setDelayMax(int delayMax);
+
+    bool start();
+
+    bool stop();
 };
 #endif /* LEAFCOMPONENT_H_ */

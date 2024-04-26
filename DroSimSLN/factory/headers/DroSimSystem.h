@@ -12,43 +12,41 @@
 //#include "LeafComponent.h"
 #include "RootComponent.h"
 
-#include "ADroneSweep.h"
-#include "vect2.h"
-#include "vect2.h"
-#include "ADroneSpiral.h"
-#include "vect2.h"
-#include "vect2.h"
-#include "AObjective.h"
-#include "vect2.h"
+#include "ASimulation.h"
+#include "AWind.h"
 #include "AManager.h"
-#include "AEnvironment.h"
-#include "vect2.h"
+#include "AGeoZone.h"
+#include "AObjective.h"
+#include "ADroneSweep.h"
+#include "ADroneSpiral.h"
 // Start of user code  : Additional imports for DroSimSystem
 // End of user code
 
 class DroSimSystem : public RootComponent {
+    // generated pointers on child leafComponents
+protected :
+    ASimulation* instASimulation;
+    AWind* instAWind;
+    AManager* instAManager;
+    AGeoZone* instAGeoZone;
+    AObjective* instAObjective;
+    ADroneSweep* instADroneSweep;
+    ADroneSpiral* instADroneSpiral;
 
-// generated pointers on child leafComponents
-	protected :
-              ADroneSweep *instADroneSweep;
-              ADroneSpiral *instADroneSpiral;
-              AObjective *instAObjective;
-              AManager *instAManager;
-              AEnvironment *instAEnvironment;
+public :
+    DroSimSystem();
+    virtual ~DroSimSystem();
+    // generated getters of child leafComponents
+    ASimulation* get_ASimulation();
+    AWind* get_AWind();
+    AManager* get_AManager();
+    AGeoZone* get_AGeoZone();
+    AObjective* get_AObjective();
+    ADroneSweep* get_ADroneSweep();
+    ADroneSpiral* get_ADroneSpiral();
 
+    void initialize();
 
-     public :
-       DroSimSystem();
-       virtual ~DroSimSystem();
-// generated getters of child leafComponents
-       ADroneSweep *get_ADroneSweep();
-       ADroneSpiral *get_ADroneSpiral();
-       AObjective *get_AObjective();
-       AManager *get_AManager();
-       AEnvironment *get_AEnvironment();
-
-      void initialize() ;
-
-      void end() ;
+    void end();
 };
 #endif /*  DroSimSystem_H_ */

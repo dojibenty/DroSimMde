@@ -7,60 +7,52 @@
 
 #include "compManager.h"
 #include "Manager.h"
-compManager::compManager(double aFrequency) : LeafComponent( aFrequency) {
-		appli = new Manager( this);
-		delay = 0;
-		delayMax = 0;
-		newValue = false;
-		isActive = true;
-	}
-compManager::~compManager()	{}
+
+compManager::compManager(double aFrequency) : LeafComponent(aFrequency) {
+    appli = new Manager(this);
+    delay = 0;
+    delayMax = 0;
+    newValue = false;
+    isActive = true;
+}
+
+compManager::~compManager() {}
 
 void compManager::doOneStep() {
-		if (newValue) {
-			delay++;
-			if (delay == delayMax) {
-			}
-		}
-	}
+    if (newValue) {
+        delay++;
+        if (delay == delayMax) {}
+    }
+}
 
-void compManager::doStep(int nStep) {	
-		if (newValue) {
-		}
-		readInputs();
-		appli->doStep(nStep);
-		if (delayMax == 0) {
-			newValue = false;
-		} else {
-			newValue = true;
-			delay = 0;
-		}
-	}
+void compManager::doStep(int nStep) {
+    if (newValue) {}
+    readInputs();
+    appli->doStep(nStep);
+    if (delayMax == 0) {
+        newValue = false;
+    }
+    else {
+        newValue = true;
+        delay = 0;
+    }
+}
 
-void compManager::readInputs() {
-	}
+void compManager::readInputs() {}
+
 void compManager::initialize() {
-		appli->initialize();
-	}
+    appli->initialize();
+}
 
 void compManager::end() {
-		appli->end();
-	}
-	
-	// +++++++++++++ Methods of the pItfManager interface +++++++++++++
-void compManager::signalObjectiveFound(long droneID){
-		 appli->signalObjectiveFound(droneID);
-	}
+    appli->end();
+}
 
-Manager *compManager::getAppli() {
-		return appli;
-	}
-	// +++++++++++++ Access for expectedEndTime parameter +++++++++++++
-double compManager::getExpectedEndTime() {
-		return appli->getExpectedEndTime();
-	}
-	
-void compManager::setExpectedEndTime(double arg) {
-		appli->setExpectedEndTime(arg);
-	}
+// +++++++++++++ Methods of the pItfManageSimulation interface +++++++++++++
+void compManager::signalObjectiveFound(long droneID) {
+    appli->signalObjectiveFound(droneID);
+}
 
+Manager* compManager::getAppli() {
+    return appli;
+}

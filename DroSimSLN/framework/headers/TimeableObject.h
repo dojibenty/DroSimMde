@@ -11,12 +11,13 @@
 
 class TimeableObject {
 protected :
-	double frequency;
+    double frequency;
+
 public:
-	TimeableObject(double freq);
-	virtual ~TimeableObject()=0;
-	double getFrequency();
-	void setFrequency( double freq);
-	virtual void doStep(int nStep);
+    TimeableObject(double freq);
+    virtual ~TimeableObject() =0;
+    double getFrequency();
+    void setFrequency(double freq);
+    virtual void doStep(int nStep);
 };
 #endif /* TIMEABLEOBJECT_H_ */

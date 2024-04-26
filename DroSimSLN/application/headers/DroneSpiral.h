@@ -8,122 +8,116 @@
 #define DroneSpiral_H_
 #include "Clock.h"
 class compDroneSpiral;
-	// Inputs
-#include "vect2.h"
-#include "vect2.h"
+// Inputs
 #include "vect2.h"
 
-#include "ItfEnvironmentInterface.h"
-#include "vect2.h"
+#include "ItfGeoDataInterface.h"
 #include "wect2.h"
-#include "ItfManagerInterface.h"
+#include "ItfWindForceInterface.h"
+#include "ItfManageSimInterface.h"
+#include "ItfSimDataInterface.h"
 
 // Start of user code  : Additional imports for DroneSpiral
 // End of user code
 
 class DroneSpiral {
+protected :
+    compDroneSpiral* myContainer;
 
-	protected :
-              compDroneSpiral *myContainer;
+    // Inputs
+    vect2 objposition;
+    // Outputs
+    vect2 spiralposition;
+    // Parameters
+    double speedConstraint;
+    double visionRadius;
+    double spiralRadius;
+    bool concentricCircles;
+    long nbCirclePoints;
+    double spiralIncrementFactor;
+    long wanderSteps;
+    double batteryCapacity;
 
-	// Inputs
-	          vect2 objposition;
-	// Parameters
-	          long ID;
-	          double speed;
-	          vect2 position;
-	          vect2 direction;
-	          double visionRadius;
-	          double spiralRadius;
-	          bool concentricCircles;
-	          long nbCirclePoints;
-	          double spiralIncrementFactor;
-	          long wanderSteps;
-	          double movementTolerance;
+    // Required Interfaces
+    ItfGeoDataInterface* rItfGeoDataSpiral;
+    ItfWindForceInterface* rItfWindForceSpiral;
+    ItfManageSimInterface* rItfManageSimSpiral;
+    ItfSimDataInterface* rItfSimDataSpiral;
 
-	// Required Interfaces
-	          ItfEnvironmentInterface *rItfEnvironmentSpiral;
-	          ItfManagerInterface *rItfManagerSpiral;
-
-// Start of user code  : Properties of DroneSpiral
+    // Start of user code  : Properties of DroneSpiral
 private:
-	bool isInZone = false;
-	vect2 zoneStartPoint;
-	wect2 assignedZone;
-	int wander = 1;
-	std::vector<vect2> circlePoints;
-	int currentCirclePointID;
-	vect2 currentCircleCenter;
-	double currentSpiralIncrementFactor;
-// End of user code
+    int droneID = 1;
+    vect2 position;
+    vect2 direction;
+    double movementTolerance;
+    bool isInZone = false;
+    vect2 zoneStartPoint;
+    wect2 assignedZone;
+    int wander = 1;
+    std::vector<vect2> circlePoints;
+    int currentCirclePointID;
+    vect2 currentCircleCenter;
+    double currentSpiralIncrementFactor;
+    // End of user code
 
-	public :
-            DroneSpiral(compDroneSpiral *container);
-            ~DroneSpiral();
-	        void initialize();
-	       void end();
+public :
+    DroneSpiral(compDroneSpiral* container);
+    ~DroneSpiral();
+    void initialize();
+    void end();
 
-	       void doStep(int nStep) ;
-	
-	
-// Start of user code  : Additional methods
+    void doStep(int nStep);
+
+
+    // Start of user code  : Additional methods
 private:
-              vect2 SetNextPosition();
-	void SetCircle();
-              vect2 GetRandomDirection();
-	bool GoesOutOfBounds(vect2 point);
+    vect2 SetNextPosition();
+    void SetCircle();
+    vect2 GetRandomDirection();
+    bool GoesOutOfBounds(vect2 point);
+
 public:
-	void lateinitialize();
-              // End of user code
-	
+    // End of user code
 
-	     void setObjposition(vect2 arg) ;
 
-	    void setrItfEnvironmentSpiral(ItfEnvironmentInterface *arItfEnvironmentSpiral);
-	    void setrItfManagerSpiral(ItfManagerInterface *arItfManagerSpiral);
-	// +++++++++++++ Access for ID parameter +++++++++++++
-	    long getID();
-	
-	    void setID(long arg);
-	// +++++++++++++ Access for speed parameter +++++++++++++
-	    double getSpeed();
-	
-	    void setSpeed(double arg);
-	// +++++++++++++ Access for position parameter +++++++++++++
-	    vect2 getPosition();
-	
-	    void setPosition(vect2 arg);
-	// +++++++++++++ Access for direction parameter +++++++++++++
-	    vect2 getDirection();
-	
-	    void setDirection(vect2 arg);
-	// +++++++++++++ Access for visionRadius parameter +++++++++++++
-	    double getVisionRadius();
-	
-	    void setVisionRadius(double arg);
-	// +++++++++++++ Access for spiralRadius parameter +++++++++++++
-	    double getSpiralRadius();
-	
-	    void setSpiralRadius(double arg);
-	// +++++++++++++ Access for concentricCircles parameter +++++++++++++
-	    bool getConcentricCircles();
-	
-	    void setConcentricCircles(bool arg);
-	// +++++++++++++ Access for nbCirclePoints parameter +++++++++++++
-	    long getNbCirclePoints();
-	
-	    void setNbCirclePoints(long arg);
-	// +++++++++++++ Access for spiralIncrementFactor parameter +++++++++++++
-	    double getSpiralIncrementFactor();
-	
-	    void setSpiralIncrementFactor(double arg);
-	// +++++++++++++ Access for wanderSteps parameter +++++++++++++
-	    long getWanderSteps();
-	
-	    void setWanderSteps(long arg);
-	// +++++++++++++ Access for movementTolerance parameter +++++++++++++
-	    double getMovementTolerance();
-	
-	    void setMovementTolerance(double arg);
+    void setObjposition(vect2 arg);
+
+    vect2 getSpiralposition();
+    void setrItfGeoDataSpiral(ItfGeoDataInterface* arItfGeoDataSpiral);
+    void setrItfWindForceSpiral(ItfWindForceInterface* arItfWindForceSpiral);
+    void setrItfManageSimSpiral(ItfManageSimInterface* arItfManageSimSpiral);
+    void setrItfSimDataSpiral(ItfSimDataInterface* arItfSimDataSpiral);
+    // +++++++++++++ Access for speedConstraint parameter +++++++++++++
+    double getSpeedConstraint();
+
+    void setSpeedConstraint(double arg);
+    // +++++++++++++ Access for visionRadius parameter +++++++++++++
+    double getVisionRadius();
+
+    void setVisionRadius(double arg);
+    // +++++++++++++ Access for spiralRadius parameter +++++++++++++
+    double getSpiralRadius();
+
+    void setSpiralRadius(double arg);
+    // +++++++++++++ Access for concentricCircles parameter +++++++++++++
+    bool getConcentricCircles();
+
+    void setConcentricCircles(bool arg);
+    // +++++++++++++ Access for nbCirclePoints parameter +++++++++++++
+    long getNbCirclePoints();
+
+    void setNbCirclePoints(long arg);
+    // +++++++++++++ Access for spiralIncrementFactor parameter +++++++++++++
+    double getSpiralIncrementFactor();
+
+    void setSpiralIncrementFactor(double arg);
+    // +++++++++++++ Access for wanderSteps parameter +++++++++++++
+    long getWanderSteps();
+
+    void setWanderSteps(long arg);
+    // +++++++++++++ Access for batteryCapacity parameter +++++++++++++
+    double getBatteryCapacity();
+
+    void setBatteryCapacity(double arg);
 };
 #endif /*  DroneSpiral_H_ */

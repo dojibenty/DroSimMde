@@ -9,46 +9,34 @@
 #include "Clock.h"
 class compManager;
 
-#include "ItfManagerInterface.h"
+#include "ItfManageSimInterface.h"
 
 // Start of user code  : Additional imports for Manager
-#include <vector>
-#include "wect2.h"
 // End of user code
 
-class Manager  : public ItfManagerInterface {
-
-	protected :
-              compManager *myContainer;
-
-	// Parameters
-	          double expectedEndTime;
+class Manager : public ItfManageSimInterface {
+protected :
+    compManager* myContainer;
 
 
-// Start of user code  : Properties of Manager
-	bool isObjectiveFound = false;
-// End of user code
+    // Start of user code  : Properties of Manager
+    bool isObjectiveFound = false;
+    // End of user code
 
-	public :
-            Manager(compManager *container);
-            ~Manager();
-	        void initialize();
-	       void end();
+public :
+    Manager(compManager* container);
+    ~Manager();
+    void initialize();
+    void end();
 
-	       void doStep(int nStep) ;
-	
-	// +++++++++++++ Methods of the pItfManager interface +++++++++++++
-	       void signalObjectiveFound(long droneID);
+    void doStep(int nStep);
 
-	
-// Start of user code  : Additional methods
-	static double rand_range(double min, double max);
-// End of user code
-	
+    // +++++++++++++ Methods of the pItfManageSimulation interface +++++++++++++
+    void signalObjectiveFound(long droneID);
 
-	// +++++++++++++ Access for expectedEndTime parameter +++++++++++++
-	    double getExpectedEndTime();
-	
-	    void setExpectedEndTime(double arg);
+
+    // Start of user code  : Additional methods
+    static double rand_range(double min, double max);
+    // End of user code
 };
 #endif /*  Manager_H_ */

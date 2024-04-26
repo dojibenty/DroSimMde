@@ -11,39 +11,32 @@
 #include "LeafComponent.h"
 class Manager;
 
+#include "ItfManageSimInterface.h"
+
+class compManager : public LeafComponent, public ItfManageSimInterface {
+protected :
+    /*pyp : inutile
+    */
+
+    bool newValue;
+    int delay;
 
 
-#include "ItfManagerInterface.h"
+    Manager* appli;
 
-class compManager : public LeafComponent  , public ItfManagerInterface {
+public :
+    compManager(double aFrequency);
+    virtual ~compManager();
+    void doOneStep();
+    void doStep(int nStep);
 
-	protected :
-/*pyp : inutile
-*/
+    virtual void readInputs();
+    void initialize();
+    void end();
 
-	 bool newValue;
-	 int delay;
+    // +++++++++++++ Methods of the pItfManageSimulation interface +++++++++++++
+    void signalObjectiveFound(long droneID);
 
-
-	Manager *appli;
-
-	public :
-           compManager(double aFrequency);
-           virtual ~compManager();
-	       void doOneStep();
-	       void doStep(int nStep);
-
-	       virtual void readInputs() ;
-	       void initialize();
-	       void end();
-	
-	// +++++++++++++ Methods of the pItfManager interface +++++++++++++
-	      void signalObjectiveFound(long droneID);
-
-	     Manager *getAppli() ;
-	// +++++++++++++ Access for expectedEndTime parameter +++++++++++++
-	     double getExpectedEndTime();
-	
-	     void setExpectedEndTime(double arg);
+    Manager* getAppli();
 };
 #endif /* compManager_H_ */

@@ -12,71 +12,59 @@
 class DroneSweep;
 
 #include "vect2.h"
-#include "vect2.h"
-#include "vect2.h"
 
-
-#include "ItfEnvironmentInterface.h"
-#include "vect2.h"
-#include "wect2.h"
-#include "ItfManagerInterface.h"
+#include "ItfGeoDataInterface.h"
+#include "ItfWindForceInterface.h"
+#include "ItfManageSimInterface.h"
+#include "ItfSimDataInterface.h"
 
 class compDroneSweep : public LeafComponent {
+protected :
+    /*pyp : inutile
+        //inputs source
+         LeafComponent ObjpositionSourceComponent;
+         String portNameObjposition;
+    */
+    vect2 oldSweepposition;
+    vect2 newSweepposition;
 
-	protected :
-/*pyp : inutile
-	//inputs source
-	 LeafComponent ObjpositionSourceComponent;
-	 String portNameObjposition;
-*/
-
-	 bool newValue;
-	 int delay;
+    bool newValue;
+    int delay;
 
 
-	DroneSweep *appli;
+    DroneSweep* appli;
 
-	public :
-           compDroneSweep(double aFrequency);
-           virtual ~compDroneSweep();
-	       void doOneStep();
-	       void doStep(int nStep);
+public :
+    compDroneSweep(double aFrequency);
+    virtual ~compDroneSweep();
+    void doOneStep();
+    void doStep(int nStep);
 
-	       virtual void readInputs() ;
-	       void initialize();
-void lateinitialize();
-void end();
-	
-	     void setrItfEnvironmentSweep(ItfEnvironmentInterface *arItfEnvironmentSweep);
-	     void setrItfManagerSweep(ItfManagerInterface *arItfManagerSweep);
-	     DroneSweep *getAppli() ;
-	// +++++++++++++ Access for ID parameter +++++++++++++
-	     long getID();
-	
-	     void setID(long arg);
-	// +++++++++++++ Access for speed parameter +++++++++++++
-	     double getSpeed();
-	
-	     void setSpeed(double arg);
-	// +++++++++++++ Access for position parameter +++++++++++++
-	     vect2 getPosition();
-	
-	     void setPosition(vect2 arg);
-	// +++++++++++++ Access for direction parameter +++++++++++++
-	     vect2 getDirection();
-	
-	     void setDirection(vect2 arg);
-	// +++++++++++++ Access for visionRadius parameter +++++++++++++
-	     double getVisionRadius();
-	
-	     void setVisionRadius(double arg);
-	// +++++++++++++ Access for sweepHeight parameter +++++++++++++
-	     double getSweepHeight();
-	
-	     void setSweepHeight(double arg);
-	// +++++++++++++ Access for movementTolerance parameter +++++++++++++
-	     double getMovementTolerance();
-	
-	     void setMovementTolerance(double arg);
+    virtual void readInputs();
+    void initialize();
+    void end();
+
+    vect2 getSweepposition();
+    void setrItfGeoDataSweep(ItfGeoDataInterface* arItfGeoDataSweep);
+    void setrItfWindForceSweep(ItfWindForceInterface* arItfWindForceSweep);
+    void setrItfManageSimSweep(ItfManageSimInterface* arItfManageSimSweep);
+    void setrItfSimDataSweep(ItfSimDataInterface* arItfSimDataSweep);
+    DroneSweep* getAppli();
+    // +++++++++++++ Access for speedConstraint parameter +++++++++++++
+    double getSpeedConstraint();
+
+    void setSpeedConstraint(double arg);
+    // +++++++++++++ Access for visionRadius parameter +++++++++++++
+    double getVisionRadius();
+
+    void setVisionRadius(double arg);
+    // +++++++++++++ Access for sweepHeight parameter +++++++++++++
+    double getSweepHeight();
+
+    void setSweepHeight(double arg);
+    // +++++++++++++ Access for batteryCapacity parameter +++++++++++++
+    double getBatteryCapacity();
+
+    void setBatteryCapacity(double arg);
 };
 #endif /* compDroneSweep_H_ */

@@ -11,59 +11,51 @@
 // End of user code
 
 
-Manager::Manager(compManager *container)	{
-		myContainer = container;
-// Start of user code  : Implementation of constructor method
+Manager::Manager(compManager* container) {
+    myContainer = container;
+    // Start of user code  : Implementation of constructor method
 
-// End of user code
-	}
-Manager::~Manager(){
-// Start of user code  : Implementation of destructor method
+    // End of user code
+}
 
-// End of user code
-	}
+Manager::~Manager() {
+    // Start of user code  : Implementation of destructor method
+
+    // End of user code
+}
+
 void Manager::initialize() {
-// Start of user code  : Implementation of initialize method
-	
-// End of user code
-	}
+    // Start of user code  : Implementation of initialize method
+
+    // End of user code
+}
 
 void Manager::end() {
-// Start of user code  : Implementation of end method
+    // Start of user code  : Implementation of end method
 
-// End of user code
-	}
+    // End of user code
+}
 
 void Manager::doStep(int nStep) {
-// Start of user code  : Implementation of doStep method
-		// to implement
-// End of user code
-	}
-	
-	// +++++++++++++ Methods of the pItfManager interface +++++++++++++
-void Manager::signalObjectiveFound(long droneID){
-// Start of user code  : Implementation of method signalObjectiveFound
-	if (!isObjectiveFound) {
-		cout << "Objective found by drone " << droneID << '\n';
-		isObjectiveFound = true;
-	}
-// End of user code
-	}
+    // Start of user code  : Implementation of doStep method
+    // to implement
+    // End of user code
+}
 
-	
+// +++++++++++++ Methods of the pItfManageSimulation interface +++++++++++++
+void Manager::signalObjectiveFound(long droneID) {
+    // Start of user code  : Implementation of method signalObjectiveFound
+    if (!isObjectiveFound) {
+        cout << "Objective found by drone " << droneID << '\n';
+        isObjectiveFound = true;
+    }
+    // End of user code
+}
+
+
 // Start of user code  : Additional methods
 double Manager::rand_range(double min, double max) {
-	return min + (rand() / (RAND_MAX + 1.0) * (max - min + 1));
+    return min + (rand() / (RAND_MAX + 1.0) * (max - min + 1));
 }
+
 // End of user code
-	
-
-	// +++++++++++++ Access for expectedEndTime parameter +++++++++++++
-double Manager::getExpectedEndTime() {
-		return expectedEndTime;
-	}
-	
-void Manager::setExpectedEndTime(double arg) {
-		expectedEndTime = arg;
-	}
-

@@ -7,6 +7,7 @@
 
 //#include "DroSimSystem.h"
 #include "ScenarLog.h"
+#include "myPositionsLogLogObservationComponent.h"
 // Start of user code  : Additional imports for testDroSim
 // End of user code
 
@@ -19,24 +20,37 @@
 
 //import cares.framework.JsonSeries;
 //import cares.framework.LogComponent;
+#include <string>
+
 #include "DroSimSystem.h"
 #include "ScenarLog.h"
+//#include "PositionsLogLogObservationComponent.h"
 // Start of user code  : Additional imports for testDroSim
 // End of user code
 
 int main() {
-		DroSimSystem *root = new DroSimSystem();
-		for(int i = 0; i < 5; i++){
-        	//pyp : configuration des switches et autres actions
-			root->initialize();
-			//pyp : run des observations
-			ScenarLog *simulatedScenario = new ScenarLog(root);
-			simulatedScenario->setTime(0,100000);
-			simulatedScenario->startSimulation();
-			root->end();
-        	simulatedScenario->end();
-        }
-// Start of user code  : Additional code main for testDroSim
-// End of user code
-	}
+    DroSimSystem* root = new DroSimSystem();
+    for (int i = 0; i < 5; i++) {
+        //pyp : configuration des switches et autres actions
+        root->initialize();
+        //pyp : run des observations
+        ScenarLog* simulatedScenario = new ScenarLog(root);
+        string si = to_string(i);
+        string fileName = "PositionsLog";
+        string completeFileName = fileName + si;
+        myPositionsLogLogObservationComponent* PositionsLogLogObservationComponent = new
+            myPositionsLogLogObservationComponent(completeFileName, 1.0);
+        PositionsLogLogObservationComponent->setObjective(root->get_AObjective()->getAppli());
+        PositionsLogLogObservationComponent->setDroneSpiral(root->get_ADroneSpiral()->getAppli());
+        PositionsLogLogObservationComponent->setDroneSweep(root->get_ADroneSweep()->getAppli());
+        simulatedScenario->push(PositionsLogLogObservationComponent);
 
+
+        simulatedScenario->setTime(0, 600000);
+        simulatedScenario->startSimulation();
+        root->end();
+        simulatedScenario->end();
+    }
+    // Start of user code  : Additional code main for testDroSim
+    // End of user code
+}

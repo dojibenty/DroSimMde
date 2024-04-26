@@ -8,24 +8,22 @@
 #include "TimeableObject.h"
 
 TimeableObject::TimeableObject(double aFrequency) {
-	if (aFrequency <= 0) {
-		frequency = 1;
-	} else {
-		frequency = aFrequency;
-	}
+    if (aFrequency <= 0) {
+        frequency = 1;
+    }
+    else {
+        frequency = aFrequency;
+    }
 }
 
-TimeableObject::~TimeableObject() {
-}
+TimeableObject::~TimeableObject() {}
 
 double TimeableObject::getFrequency() {
-	return frequency;
+    return frequency;
 }
 
-void TimeableObject::setFrequency( double freq) {
-	frequency = freq;
+void TimeableObject::setFrequency(double freq) {
+    frequency = freq;
 }
-void TimeableObject::doStep(int nStep){}
 
-
-
+void TimeableObject::doStep(int nStep) {}
