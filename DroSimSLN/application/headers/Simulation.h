@@ -14,44 +14,45 @@ class compSimulation;
 // Start of user code  : Additional imports for Simulation
 // End of user code
 
-class Simulation : public ItfSimDataInterface {
-protected :
-    compSimulation* myContainer;
+class Simulation  : public ItfSimDataInterface {
 
-    // Parameters
-    double expectedEndTime;
-    double positionCorrection;
+	protected :
+              compSimulation *myContainer;
+
+	// Parameters
+	          double expectedEndTime;
+	          double positionCorrection;
 
 
-    // Start of user code  : Properties of Simulation
+// Start of user code  : Properties of Simulation
     // End of user code
 
-public :
-    Simulation(compSimulation* container);
-    ~Simulation();
-    void initialize();
-    void end();
+	public :
+            Simulation(compSimulation *container);
+            ~Simulation();
+	        void initialize();
+	       void end();
 
-    void doStep(int nStep);
+	       void doStep(int nStep) ;
+	
+	// +++++++++++++ Methods of the pItfSimData interface +++++++++++++
+	       double grabExpectedEndTime();
 
-    // +++++++++++++ Methods of the pItfSimData interface +++++++++++++
-    double grabExpectedEndTime();
+	       double grabPositionCorrection();
 
-    double grabPositionCorrection();
-
-
-    // Start of user code  : Additional methods
+	
+// Start of user code  : Additional methods
 
     // End of user code
+	
 
-
-    // +++++++++++++ Access for expectedEndTime parameter +++++++++++++
-    double getExpectedEndTime();
-
-    void setExpectedEndTime(double arg);
-    // +++++++++++++ Access for positionCorrection parameter +++++++++++++
-    double getPositionCorrection();
-
-    void setPositionCorrection(double arg);
+	// +++++++++++++ Access for expectedEndTime parameter +++++++++++++
+	    double getExpectedEndTime();
+	
+	    void setExpectedEndTime(double arg);
+	// +++++++++++++ Access for positionCorrection parameter +++++++++++++
+	    double getPositionCorrection();
+	
+	    void setPositionCorrection(double arg);
 };
 #endif /*  Simulation_H_ */

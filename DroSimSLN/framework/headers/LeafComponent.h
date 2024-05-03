@@ -9,8 +9,8 @@ protected :
 
 public :
     LeafComponent(double aFrequency);
-    virtual ~LeafComponent() = 0;
-    virtual void doStep(int nStep) override;
+    ~LeafComponent() override = 0;
+    void doStep(int nStep) override;
 
     bool getIsActive();
 

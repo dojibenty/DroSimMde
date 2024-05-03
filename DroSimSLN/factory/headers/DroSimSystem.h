@@ -14,7 +14,7 @@
 
 #include "ASimulation.h"
 #include "AWind.h"
-#include "AManager.h"
+#include "AUser.h"
 #include "AGeoZone.h"
 #include "AObjective.h"
 #include "ADroneSweep.h"
@@ -27,7 +27,7 @@ class DroSimSystem : public RootComponent {
 protected :
     ASimulation* instASimulation;
     AWind* instAWind;
-    AManager* instAManager;
+    AUser* instAUser;
     AGeoZone* instAGeoZone;
     AObjective* instAObjective;
     ADroneSweep* instADroneSweep;
@@ -39,7 +39,7 @@ public :
     // generated getters of child leafComponents
     ASimulation* get_ASimulation();
     AWind* get_AWind();
-    AManager* get_AManager();
+    AUser* get_AUser();
     AGeoZone* get_AGeoZone();
     AObjective* get_AObjective();
     ADroneSweep* get_ADroneSweep();

@@ -12,8 +12,8 @@ using namespace std;
 #include "vect2.h"
 
 class ItfWindForceInterface {
-public :
-    virtual double grabForce() = 0;
-    virtual vect2 grabDirection() = 0;
+	public :
+           virtual double grabForce() = 0;
+           virtual vect2 grabDirection() = 0;
 };
 #endif /* ItfWindForceInterface_H_ */

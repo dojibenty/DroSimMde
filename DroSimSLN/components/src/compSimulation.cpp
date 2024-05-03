@@ -7,74 +7,72 @@
 
 #include "compSimulation.h"
 #include "Simulation.h"
-
-compSimulation::compSimulation(double aFrequency) : LeafComponent(aFrequency) {
-    appli = new Simulation(this);
-    delay = 0;
-    delayMax = 0;
-    newValue = false;
-    isActive = true;
-}
-
-compSimulation::~compSimulation() {}
+compSimulation::compSimulation(double aFrequency) : LeafComponent( aFrequency) {
+		appli = new Simulation( this);
+		delay = 0;
+		delayMax = 0;
+		newValue = false;
+		isActive = true;
+	}
+compSimulation::~compSimulation()	{}
 
 void compSimulation::doOneStep() {
-    if (newValue) {
-        delay++;
-        if (delay == delayMax) {}
-    }
-}
+		if (newValue) {
+			delay++;
+			if (delay == delayMax) {
+			}
+		}
+	}
 
-void compSimulation::doStep(int nStep) {
-    if (newValue) {}
-    readInputs();
-    appli->doStep(nStep);
-    if (delayMax == 0) {
-        newValue = false;
-    }
-    else {
-        newValue = true;
-        delay = 0;
-    }
-}
+void compSimulation::doStep(int nStep) {	
+		if (newValue) {
+		}
+		readInputs();
+		appli->doStep(nStep);
+		if (delayMax == 0) {
+			newValue = false;
+		} else {
+			newValue = true;
+			delay = 0;
+		}
+	}
 
-void compSimulation::readInputs() {}
-
+void compSimulation::readInputs() {
+	}
 void compSimulation::initialize() {
-    appli->initialize();
-}
+		appli->initialize();
+	}
 
 void compSimulation::end() {
-    appli->end();
-}
+		appli->end();
+	}
+	
+	// +++++++++++++ Methods of the pItfSimData interface +++++++++++++
+double compSimulation::grabExpectedEndTime(){
+		return appli->grabExpectedEndTime();
+	}
 
-// +++++++++++++ Methods of the pItfSimData interface +++++++++++++
-double compSimulation::grabExpectedEndTime() {
-    return appli->grabExpectedEndTime();
-}
+double compSimulation::grabPositionCorrection(){
+		return appli->grabPositionCorrection();
+	}
 
-double compSimulation::grabPositionCorrection() {
-    return appli->grabPositionCorrection();
-}
-
-Simulation* compSimulation::getAppli() {
-    return appli;
-}
-
-// +++++++++++++ Access for expectedEndTime parameter +++++++++++++
+Simulation *compSimulation::getAppli() {
+		return appli;
+	}
+	// +++++++++++++ Access for expectedEndTime parameter +++++++++++++
 double compSimulation::getExpectedEndTime() {
-    return appli->getExpectedEndTime();
-}
-
+		return appli->getExpectedEndTime();
+	}
+	
 void compSimulation::setExpectedEndTime(double arg) {
-    appli->setExpectedEndTime(arg);
-}
-
-// +++++++++++++ Access for positionCorrection parameter +++++++++++++
+		appli->setExpectedEndTime(arg);
+	}
+	// +++++++++++++ Access for positionCorrection parameter +++++++++++++
 double compSimulation::getPositionCorrection() {
-    return appli->getPositionCorrection();
-}
-
+		return appli->getPositionCorrection();
+	}
+	
 void compSimulation::setPositionCorrection(double arg) {
-    appli->setPositionCorrection(arg);
-}
+		appli->setPositionCorrection(arg);
+	}
+

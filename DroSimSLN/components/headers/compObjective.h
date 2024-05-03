@@ -12,42 +12,47 @@
 class Objective;
 
 #include "vect2.h"
+#include "vect2.h"
+
 
 #include "ItfGeoDataInterface.h"
+#include "vect2.h"
+#include "wect2.h"
 
 class compObjective : public LeafComponent {
-protected :
-    /*pyp : inutile
-    */
-    vect2 oldObjposition;
-    vect2 newObjposition;
 
-    bool newValue;
-    int delay;
+	protected :
+/*pyp : inutile
+*/
+	 vect2 oldObjposition;
+	 vect2 newObjposition;
+
+	 bool newValue;
+	 int delay;
 
 
-    Objective* appli;
+	Objective *appli;
 
-public :
-    compObjective(double aFrequency);
-    virtual ~compObjective();
-    void doOneStep();
-    void doStep(int nStep);
+	public :
+           compObjective(double aFrequency);
+           virtual ~compObjective();
+	       void doOneStep();
+	       void doStep(int nStep);
 
-    virtual void readInputs();
-    void initialize();
-    void end();
-
-    vect2 getObjposition();
-    void setrItfGeoDataObj(ItfGeoDataInterface* arItfGeoDataObj);
-    Objective* getAppli();
-    // +++++++++++++ Access for speedConstraint parameter +++++++++++++
-    double getSpeedConstraint();
-
-    void setSpeedConstraint(double arg);
-    // +++++++++++++ Access for position parameter +++++++++++++
-    vect2 getPosition();
-
-    void setPosition(vect2 arg);
+	       virtual void readInputs() ;
+	       void initialize();
+	       void end();
+	
+	     vect2 getObjposition();
+	     void setrItfGeoDataObj(ItfGeoDataInterface *arItfGeoDataObj);
+	     Objective *getAppli() ;
+	// +++++++++++++ Access for speedConstraint parameter +++++++++++++
+	     double getSpeedConstraint();
+	
+	     void setSpeedConstraint(double arg);
+	// +++++++++++++ Access for position parameter +++++++++++++
+	     vect2 getPosition();
+	
+	     void setPosition(vect2 arg);
 };
 #endif /* compObjective_H_ */

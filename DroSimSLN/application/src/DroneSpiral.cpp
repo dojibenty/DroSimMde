@@ -9,7 +9,7 @@
 #include "compDroneSpiral.h"
 // Start of user code  : Additional imports for DroneSpiral
 #include <iostream>
-#include "Manager.h"
+#include "User.h"
 #define PI 3.14159265358979323846
 // End of user code
 
@@ -38,6 +38,7 @@ void DroneSpiral::initialize() {
     direction = zoneStartPoint;
     direction.normalize();
     movementTolerance = rItfSimDataSpiral->grabPositionCorrection();
+    batteryConsumption = 2 * pow(speedConstraint, 2) / 3600.0;
     // End of user code
 }
 
@@ -56,6 +57,8 @@ void DroneSpiral::doStep(int nStep) {
             position = zoneStartPoint;
             isInZone = true;
         }
+
+    spiralposition = position;
 
     cout << "SPIRAL-" << droneID << ": " << position.toString() << '\n';
 
@@ -116,7 +119,7 @@ void DroneSpiral::SetCircle() {
             spiralRadius * cos(Angle),
             spiralRadius * sin(Angle));
         Point = Point + position;
-        circlePoints.push_back(Point);
+        circlePoints.emplace_back(Point);
     }
 
     currentCircleCenter = position;
@@ -128,8 +131,8 @@ vect2 DroneSpiral::GetRandomDirection() {
 
     do {
         direction = vect2(
-            direction.getX() + Manager::rand_range(-1.0f, 1.0f),
-            direction.getY() + Manager::rand_range(-1.0f, 1.0f));
+            direction.getX() + User::rand_range(-1.0f, 1.0f),
+            direction.getY() + User::rand_range(-1.0f, 1.0f));
         direction.normalize();
         nextPosition = position + direction * speedConstraint;
     }
@@ -243,4 +246,13 @@ double DroneSpiral::getBatteryCapacity() {
 
 void DroneSpiral::setBatteryCapacity(double arg) {
     batteryCapacity = arg;
+}
+
+// +++++++++++++ Access for numberOf parameter +++++++++++++
+long DroneSpiral::getNumberOf() {
+    return numberOf;
+}
+
+void DroneSpiral::setNumberOf(long arg) {
+    numberOf = arg;
 }

@@ -11,8 +11,8 @@
 using namespace std;
 
 class ItfSimDataInterface {
-public :
-    virtual double grabExpectedEndTime() = 0;
-    virtual double grabPositionCorrection() = 0;
+	public :
+           virtual double grabExpectedEndTime() = 0;
+           virtual double grabPositionCorrection() = 0;
 };
 #endif /* ItfSimDataInterface_H_ */

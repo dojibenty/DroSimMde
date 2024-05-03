@@ -55,6 +55,10 @@ void Scenario::startSimulation() {
             if (((c->getCurrentMS() % periods.at(i)) == 0) && lc->getIsActive()) {
                 lc->doStep(lc->getDelayMax());
             }
+            // TODO si tout stop alors fin
+            // cond arret local : collision, batterie
+            // conditions arret globale : trouve, probleme
+            // format condition : (temps,raison,drone)
         }
         //pyp : run des observations
         j = getCsvLogs().size();

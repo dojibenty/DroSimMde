@@ -16,7 +16,7 @@ private :
 
 public :
     LogComponent(string filename, double aFrequency);
-    virtual ~LogComponent() = 0;
+    ~LogComponent() override = 0;
     string filePath(string filename);
     void open();
     void WriteFirstLine();

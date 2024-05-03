@@ -25,17 +25,15 @@ protected :
          LeafComponent ObjpositionSourceComponent;
          String portNameObjposition;
     */
-    vect2 oldSweepposition;
-    vect2 newSweepposition;
+    vector<DroneSweep*> appli;
+    vector<vect2> oldSweepposition;
+    vector<vect2> newSweepposition;
 
     bool newValue;
     int delay;
 
-
-    DroneSweep* appli;
-
 public :
-    compDroneSweep(double aFrequency);
+    compDroneSweep(double aFrequency, long numberOf);
     virtual ~compDroneSweep();
     void doOneStep();
     void doStep(int nStep);
@@ -44,12 +42,12 @@ public :
     void initialize();
     void end();
 
-    vect2 getSweepposition();
+    vector<vect2> getSweepposition();
     void setrItfGeoDataSweep(ItfGeoDataInterface* arItfGeoDataSweep);
     void setrItfWindForceSweep(ItfWindForceInterface* arItfWindForceSweep);
     void setrItfManageSimSweep(ItfManageSimInterface* arItfManageSimSweep);
     void setrItfSimDataSweep(ItfSimDataInterface* arItfSimDataSweep);
-    DroneSweep* getAppli();
+    vector<DroneSweep*> getAppli();
     // +++++++++++++ Access for speedConstraint parameter +++++++++++++
     double getSpeedConstraint();
 
@@ -66,5 +64,9 @@ public :
     double getBatteryCapacity();
 
     void setBatteryCapacity(double arg);
+    // +++++++++++++ Access for numberOf parameter +++++++++++++
+    long getNumberOf();
+
+    void setNumberOf(long arg);
 };
 #endif /* compDroneSweep_H_ */

@@ -7,83 +7,80 @@
 
 #include "compGeoZone.h"
 #include "GeoZone.h"
-
-compGeoZone::compGeoZone(double aFrequency) : LeafComponent(aFrequency) {
-    appli = new GeoZone(this);
-    delay = 0;
-    delayMax = 0;
-    newValue = false;
-    isActive = true;
-}
-
-compGeoZone::~compGeoZone() {}
+compGeoZone::compGeoZone(double aFrequency) : LeafComponent( aFrequency) {
+		appli = new GeoZone( this);
+		delay = 0;
+		delayMax = 0;
+		newValue = false;
+		isActive = true;
+	}
+compGeoZone::~compGeoZone()	{}
 
 void compGeoZone::doOneStep() {
-    if (newValue) {
-        delay++;
-        if (delay == delayMax) {}
-    }
-}
+		if (newValue) {
+			delay++;
+			if (delay == delayMax) {
+			}
+		}
+	}
 
-void compGeoZone::doStep(int nStep) {
-    if (newValue) {}
-    readInputs();
-    appli->doStep(nStep);
-    if (delayMax == 0) {
-        newValue = false;
-    }
-    else {
-        newValue = true;
-        delay = 0;
-    }
-}
+void compGeoZone::doStep(int nStep) {	
+		if (newValue) {
+		}
+		readInputs();
+		appli->doStep(nStep);
+		if (delayMax == 0) {
+			newValue = false;
+		} else {
+			newValue = true;
+			delay = 0;
+		}
+	}
 
-void compGeoZone::readInputs() {}
-
+void compGeoZone::readInputs() {
+	}
 void compGeoZone::initialize() {
-    appli->initialize();
-}
+		appli->initialize();
+	}
 
 void compGeoZone::end() {
-    appli->end();
-}
+		appli->end();
+	}
+	
+	// +++++++++++++ Methods of the pItfGeoData interface +++++++++++++
+vect2 compGeoZone::grabEnvLimits(){
+		return appli->grabEnvLimits();
+	}
 
-// +++++++++++++ Methods of the pItfGeoData interface +++++++++++++
-vect2 compGeoZone::grabEnvLimits() {
-    return appli->grabEnvLimits();
-}
+wect2 compGeoZone::grabAssignedZone(long droneID){
+		return appli->grabAssignedZone(droneID);
+	}
 
-wect2 compGeoZone::grabAssignedZone(long droneID) {
-    return appli->grabAssignedZone(droneID);
-}
-
-GeoZone* compGeoZone::getAppli() {
-    return appli;
-}
-
-// +++++++++++++ Access for envSize parameter +++++++++++++
+GeoZone *compGeoZone::getAppli() {
+		return appli;
+	}
+	// +++++++++++++ Access for envSize parameter +++++++++++++
 vect2 compGeoZone::getEnvSize() {
-    return appli->getEnvSize();
-}
-
+		return appli->getEnvSize();
+	}
+	
 void compGeoZone::setEnvSize(vect2 arg) {
-    appli->setEnvSize(arg);
-}
-
-// +++++++++++++ Access for maxInlineZones parameter +++++++++++++
+		appli->setEnvSize(arg);
+	}
+	// +++++++++++++ Access for maxInlineZones parameter +++++++++++++
 long compGeoZone::getMaxInlineZones() {
-    return appli->getMaxInlineZones();
-}
-
+		return appli->getMaxInlineZones();
+	}
+	
 void compGeoZone::setMaxInlineZones(long arg) {
-    appli->setMaxInlineZones(arg);
-}
-
-// +++++++++++++ Access for droneCount parameter +++++++++++++
+		appli->setMaxInlineZones(arg);
+	}
+// +++++++++++++ Access for maxInlineZones parameter +++++++++++++
 long compGeoZone::getDroneCount() {
-    return appli->getDroneCount();
+	return appli->getDroneCount();
+}
+	
+void compGeoZone::setDroneCount(long arg) {
+	appli->setDroneCount(arg);
 }
 
-void compGeoZone::setDroneCount(long arg) {
-    appli->setDroneCount(arg);
-}

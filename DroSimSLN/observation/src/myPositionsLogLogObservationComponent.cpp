@@ -10,70 +10,64 @@
 #include <string>
 using namespace std;
 
-myPositionsLogLogObservationComponent::myPositionsLogLogObservationComponent(string filename, double aFrequency):
-    LogComponent(filename, aFrequency) {
-    try {
+myPositionsLogLogObservationComponent::myPositionsLogLogObservationComponent(string filename, double aFrequency): LogComponent( filename, aFrequency){
+	try{
         WriteFirstLine();
-    }
-    catch (exception& e) { cerr << "myPositionsLogLogObservationComponent : " << e.what() << endl; }
+	}
+	catch (exception &e) {cerr << "myPositionsLogLogObservationComponent : " << e.what() << endl;}
 }
-
-myPositionsLogLogObservationComponent::~myPositionsLogLogObservationComponent() {}
+myPositionsLogLogObservationComponent::~myPositionsLogLogObservationComponent(){}
 
 void myPositionsLogLogObservationComponent::readInputs() {
     instObjposition = theObjective->getObjposition();
-    instSpiralposition = theDroneSpiral->getSpiralposition();
-    instSweepposition = theDroneSweep->getSweepposition();
-}
+	instSweepposition.clear();
+	for (DroneSweep* obj : theDroneSweep)
+		instSweepposition.push_back(obj->getSweepposition());
+	}
 
 void myPositionsLogLogObservationComponent::WriteFirstLine() {
     string s = "time(ms)";
-    s = s + ";" + "X.x;Y.y";
-    s = s + ";" + "X.x;Y.y";
-    s = s + ";" + "X.x;Y.y";
-    writeNames(s);
-    endLine();
-}
+        s = s + ";" + "X.x;Y.y";
+        s = s + ";" + "X.x;Y.y";
+		writeNames( s);
+		endLine();
+	}
 
-void myPositionsLogLogObservationComponent::setObjective(Objective* myObjective) {
-    theObjective = myObjective;
-}
-
-void myPositionsLogLogObservationComponent::setDroneSpiral(DroneSpiral* myDroneSpiral) {
-    theDroneSpiral = myDroneSpiral;
-}
-
-void myPositionsLogLogObservationComponent::setDroneSweep(DroneSweep* myDroneSweep) {
-    theDroneSweep = myDroneSweep;
-}
+void myPositionsLogLogObservationComponent::setObjective(Objective *myObjective) {
+		theObjective = myObjective;
+	}
+void myPositionsLogLogObservationComponent::setDroneSweep(vector<DroneSweep*> myDroneSweep) {
+		theDroneSweep = myDroneSweep;
+	}
 
 void myPositionsLogLogObservationComponent::doStep(int nStep) {
-    Clock* c = Clock::getInstance();
-    readInputs();
-    //int i = 0;
+	Clock *c = Clock::getInstance();
+	readInputs();
+	//int i = 0;
     long t = c->getCurrentMS();
-    string s = to_string(t) + ";";
-    try {
-        s = s + to_string(instObjposition.getX()) + ";";
-        s = s + to_string(instObjposition.getY()) + ";";
-    }
-    catch (exception& e) { cerr << e.what() << endl; }
+    string s = "time:" + to_string( t) + ';' + '\n';
+		try{
+			s += "OBJECTIVE:\n";
+			s += to_string(instObjposition.getX()) + ';';
+			s += to_string(instObjposition.getY()) + ';';
+			s += '\n';
+		}
+		catch (exception &e) {cerr << e.what() << endl;}
 
-    try {
-        s = s + to_string(instSpiralposition.getX()) + ";";
-        s = s + to_string(instSpiralposition.getY()) + ";";
-    }
-    catch (exception& e) { cerr << e.what() << endl; }
+		try{
+			for (vect2 pos : instSweepposition) {
+				s += "DRONESWEEP:\n";
+				s += to_string(pos.getX()) + ';';
+				s += to_string(pos.getY()) + ';';
+				s += '\n';
+			}
+		}
+		catch (exception &e) {cerr << e.what() << endl;}
 
-    try {
-        s = s + to_string(instSweepposition.getX()) + ";";
-        s = s + to_string(instSweepposition.getY()) + ";";
+		//on retire le dernier ";" separateur
+		//s = s.substring(0, s.length() - 1);
+        cout << "mySwimmerPositionLogObservationComponent::doStep : " << '\n' << s << endl;
+		writeNames( s);
+		endLine();
     }
-    catch (exception& e) { cerr << e.what() << endl; }
 
-    //on retire le dernier ";" separateur
-    //s = s.substring(0, s.length() - 1);
-    cout << "mySwimmerPositionLogObservationComponent::doStep : " << s << endl;
-    writeNames(s);
-    endLine();
-}

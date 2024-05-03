@@ -11,7 +11,7 @@
 using namespace std;
 
 class ItfManageSimInterface {
-public :
-    virtual void signalObjectiveFound(long droneID) = 0;
+	public :
+           virtual void signalObjectiveFound(long droneID) = 0;
 };
 #endif /* ItfManageSimInterface_H_ */

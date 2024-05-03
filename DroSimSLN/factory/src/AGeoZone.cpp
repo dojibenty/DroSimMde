@@ -8,7 +8,14 @@
 #include "AGeoZone.h"
 #include "GeoZone.h"
 
-AGeoZone::AGeoZone(double aFrequency) : compGeoZone(aFrequency) {}
-AGeoZone::~AGeoZone() {}
+AGeoZone::AGeoZone(double aFrequency)	: compGeoZone(aFrequency){
+		
+}
+AGeoZone::~AGeoZone()	{
+		
+}
 
-void AGeoZone::readInputs() {}
+void AGeoZone::readInputs() {
+}
+
+

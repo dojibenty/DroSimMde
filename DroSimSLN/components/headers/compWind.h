@@ -13,42 +13,45 @@ class Wind;
 
 #include "vect2.h"
 
+
 #include "ItfWindForceInterface.h"
+#include "vect2.h"
 
-class compWind : public LeafComponent, public ItfWindForceInterface {
-protected :
-    /*pyp : inutile
-    */
+class compWind : public LeafComponent  , public ItfWindForceInterface {
 
-    bool newValue;
-    int delay;
+	protected :
+/*pyp : inutile
+*/
+
+	 bool newValue;
+	 int delay;
 
 
-    Wind* appli;
+	Wind *appli;
 
-public :
-    compWind(double aFrequency);
-    virtual ~compWind();
-    void doOneStep();
-    void doStep(int nStep);
+	public :
+           compWind(double aFrequency);
+           virtual ~compWind();
+	       void doOneStep();
+	       void doStep(int nStep);
 
-    virtual void readInputs();
-    void initialize();
-    void end();
+	       virtual void readInputs() ;
+	       void initialize();
+	       void end();
+	
+	// +++++++++++++ Methods of the pItfWindForce interface +++++++++++++
+	      double grabForce();
 
-    // +++++++++++++ Methods of the pItfWindForce interface +++++++++++++
-    double grabForce();
+	      vect2 grabDirection();
 
-    vect2 grabDirection();
-
-    Wind* getAppli();
-    // +++++++++++++ Access for force parameter +++++++++++++
-    double getForce();
-
-    void setForce(double arg);
-    // +++++++++++++ Access for direction parameter +++++++++++++
-    vect2 getDirection();
-
-    void setDirection(vect2 arg);
+	     Wind *getAppli() ;
+	// +++++++++++++ Access for force parameter +++++++++++++
+	     double getForce();
+	
+	     void setForce(double arg);
+	// +++++++++++++ Access for direction parameter +++++++++++++
+	     vect2 getDirection();
+	
+	     void setDirection(vect2 arg);
 };
 #endif /* compWind_H_ */

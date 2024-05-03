@@ -13,15 +13,16 @@
 class AObjective;
 
 class ADroneSpiral : public compDroneSpiral {
-protected :
-    AObjective* attAObjective;
+	protected :
+              AObjective *attAObjective;
 
-public :
-    ADroneSpiral(double aFrequency);
-    virtual ~ADroneSpiral();
+	public :
 
-    void setAObjective(AObjective* pAObjective);
+            ADroneSpiral(double aFrequency);
+            virtual ~ADroneSpiral();
 
-    void readInputs() override;
+	        void setAObjective(AObjective *pAObjective);
+
+	        void readInputs()  override;
 };
 #endif /*  ADroneSpiral_H_ */

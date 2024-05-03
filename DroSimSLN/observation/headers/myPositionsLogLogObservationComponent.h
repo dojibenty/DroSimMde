@@ -7,12 +7,9 @@
 #ifndef myPositionsLogLogObservationComponent_H_
 #define myPositionsLogLogObservationComponent_H_
 
-#include "Clock.h"
 #include "LogComponent.h"
-#include <fstream>
 using namespace std;
 #include "Objective.h"
-#include "DroneSpiral.h"
 #include "DroneSweep.h"
 #include "Vect2.h"
 
@@ -20,12 +17,10 @@ class myPositionsLogLogObservationComponent : public LogComponent {
     //pyp : LeafComponent qui genere les donnees sur le port (OutputPort) 
 protected :
     Objective* theObjective;
-    DroneSpiral* theDroneSpiral;
-    DroneSweep* theDroneSweep;
+    vector<DroneSweep*> theDroneSweep;
     //pyp : variables permettant de recuperer les donnees lues
     vect2 instObjposition;
-    vect2 instSpiralposition;
-    vect2 instSweepposition;
+    vector<vect2> instSweepposition;
 
 private :
     bool first = true;
@@ -37,8 +32,7 @@ public :
     void WriteFirstLine();
 
     void setObjective(Objective* myObjective);
-    void setDroneSpiral(DroneSpiral* myDroneSpiral);
-    void setDroneSweep(DroneSweep* myDroneSweep);
+    void setDroneSweep(vector<DroneSweep*> myDroneSweep);
     void doStep(int nStep);
 };
 #endif /* myPositionsLogLogObservationComponent */

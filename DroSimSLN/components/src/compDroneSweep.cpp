@@ -8,14 +8,17 @@
 #include "compDroneSweep.h"
 #include "DroneSweep.h"
 
-compDroneSweep::compDroneSweep(double aFrequency) : LeafComponent(aFrequency) {
-    appli = new DroneSweep(this);
+compDroneSweep::compDroneSweep(double aFrequency, long numberOf) : LeafComponent(aFrequency) {
+    for (int i = 0; i < numberOf; i++) {
+        auto obj = new DroneSweep(this, i);
+        appli.emplace_back(obj);
+        oldSweepposition.push_back(obj->getSweepposition());
+        newSweepposition.push_back(obj->getSweepposition());
+    }
     delay = 0;
     delayMax = 0;
     newValue = false;
     isActive = true;
-    oldSweepposition = appli->getSweepposition();
-    newSweepposition = appli->getSweepposition();
 }
 
 compDroneSweep::~compDroneSweep() {}
@@ -36,8 +39,11 @@ void compDroneSweep::doStep(int nStep) {
         newValue = false;
     }
     readInputs();
-    appli->doStep(nStep);
-    newSweepposition = appli->getSweepposition();
+    int numberOf = getNumberOf();
+    for (int i = 0; i < numberOf; i++) {
+        appli[i]->doStep(nStep);
+        newSweepposition[i] = appli[i]->getSweepposition();
+    }
     if (delayMax == 0) {
         oldSweepposition = newSweepposition;
         newValue = false;
@@ -51,69 +57,90 @@ void compDroneSweep::doStep(int nStep) {
 void compDroneSweep::readInputs() {}
 
 void compDroneSweep::initialize() {
-    appli->initialize();
+    for (DroneSweep* obj : appli)
+        obj->initialize();
 }
 
 void compDroneSweep::end() {
-    appli->end();
+    for (DroneSweep* obj : appli)
+        obj->end();
 }
 
-vect2 compDroneSweep::getSweepposition() {
+vector<vect2> compDroneSweep::getSweepposition() {
     return oldSweepposition;
 }
 
 void compDroneSweep::setrItfGeoDataSweep(ItfGeoDataInterface* arItfGeoDataSweep) {
-    appli->setrItfGeoDataSweep(arItfGeoDataSweep);
+    for (DroneSweep* obj : appli)
+        obj->setrItfGeoDataSweep(arItfGeoDataSweep);
 }
 
 void compDroneSweep::setrItfWindForceSweep(ItfWindForceInterface* arItfWindForceSweep) {
-    appli->setrItfWindForceSweep(arItfWindForceSweep);
+    for (DroneSweep* obj : appli)
+        obj->setrItfWindForceSweep(arItfWindForceSweep);
 }
 
 void compDroneSweep::setrItfManageSimSweep(ItfManageSimInterface* arItfManageSimSweep) {
-    appli->setrItfManageSimSweep(arItfManageSimSweep);
+    cout << arItfManageSimSweep << '\n';
+    for (DroneSweep* obj : appli)
+        obj->setrItfManageSimSweep(arItfManageSimSweep);
 }
 
 void compDroneSweep::setrItfSimDataSweep(ItfSimDataInterface* arItfSimDataSweep) {
-    appli->setrItfSimDataSweep(arItfSimDataSweep);
+    for (DroneSweep* obj : appli)
+        obj->setrItfSimDataSweep(arItfSimDataSweep);
 }
 
-DroneSweep* compDroneSweep::getAppli() {
+vector<DroneSweep*> compDroneSweep::getAppli() {
     return appli;
 }
 
 // +++++++++++++ Access for speedConstraint parameter +++++++++++++
 double compDroneSweep::getSpeedConstraint() {
-    return appli->getSpeedConstraint();
+    return appli[0]->getSpeedConstraint();
 }
 
 void compDroneSweep::setSpeedConstraint(double arg) {
-    appli->setSpeedConstraint(arg);
+    for (DroneSweep* obj : appli)
+        obj->setSpeedConstraint(arg);
 }
 
 // +++++++++++++ Access for visionRadius parameter +++++++++++++
 double compDroneSweep::getVisionRadius() {
-    return appli->getVisionRadius();
+    return appli[0]->getVisionRadius();
 }
 
 void compDroneSweep::setVisionRadius(double arg) {
-    appli->setVisionRadius(arg);
+    for (DroneSweep* obj : appli)
+        obj->setVisionRadius(arg);
 }
 
 // +++++++++++++ Access for sweepHeight parameter +++++++++++++
 double compDroneSweep::getSweepHeight() {
-    return appli->getSweepHeight();
+    return appli[0]->getSweepHeight();
 }
 
 void compDroneSweep::setSweepHeight(double arg) {
-    appli->setSweepHeight(arg);
+    for (DroneSweep* obj : appli)
+        obj->setSweepHeight(arg);
 }
 
 // +++++++++++++ Access for batteryCapacity parameter +++++++++++++
 double compDroneSweep::getBatteryCapacity() {
-    return appli->getBatteryCapacity();
+    return appli[0]->getBatteryCapacity();
 }
 
 void compDroneSweep::setBatteryCapacity(double arg) {
-    appli->setBatteryCapacity(arg);
+    for (DroneSweep* obj : appli)
+        obj->setBatteryCapacity(arg);
+}
+
+// +++++++++++++ Access for numberOf parameter +++++++++++++
+long compDroneSweep::getNumberOf() {
+    return appli[0]->getNumberOf();
+}
+
+void compDroneSweep::setNumberOf(long arg) {
+    for (DroneSweep* obj : appli)
+        obj->setNumberOf(arg);
 }

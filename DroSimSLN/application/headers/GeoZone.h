@@ -6,7 +6,6 @@
  */
 #ifndef GeoZone_H_
 #define GeoZone_H_
-#include "Clock.h"
 class compGeoZone;
 #include "vect2.h"
 
@@ -23,12 +22,12 @@ protected :
     // Parameters
     vect2 envSize;
     long maxInlineZones;
-    long droneCount;
 
 
     // Start of user code  : Properties of GeoZone
 private:
-    std::vector<wect2> Zones;
+    vector<wect2> Zones;
+    int droneCount;
     // End of user code
 
 public :
@@ -50,6 +49,10 @@ private:
     std::vector<wect2> CreateZones();
 
 public:
+    // +++++++++++++ Access for droneCount attribute +++++++++++++
+    long getDroneCount();
+
+    void setDroneCount(long arg);
     // End of user code
 
 
@@ -61,9 +64,5 @@ public:
     long getMaxInlineZones();
 
     void setMaxInlineZones(long arg);
-    // +++++++++++++ Access for droneCount parameter +++++++++++++
-    long getDroneCount();
-
-    void setDroneCount(long arg);
 };
 #endif /*  GeoZone_H_ */

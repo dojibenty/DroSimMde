@@ -6,15 +6,13 @@
  */
 #include "ScenarLog.h"
 #include "Clock.h"
-
-ScenarLog::ScenarLog(RootComponent* aRoot) : Scenario(aRoot) {
-    root = aRoot;
-    application = (DroSimSystem*)aRoot;
+ScenarLog::ScenarLog(RootComponent *aRoot) : Scenario( aRoot) {
+		root = aRoot;
+        application = (DroSimSystem *) aRoot;
+	}
+ScenarLog::~ScenarLog() {}	
+void ScenarLog::eventSimulation() {		 
+	Clock *c = Clock::getInstance();
+	//long currentTime = c->getCurrentMS();
 }
 
-ScenarLog::~ScenarLog() {}
-
-void ScenarLog::eventSimulation() {
-    Clock* c = Clock::getInstance();
-    //long currentTime = c->getCurrentMS();
-}

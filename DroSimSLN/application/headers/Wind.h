@@ -11,48 +11,50 @@ class compWind;
 #include "vect2.h"
 
 #include "ItfWindForceInterface.h"
+#include "vect2.h"
 
 // Start of user code  : Additional imports for Wind
 // End of user code
 
-class Wind : public ItfWindForceInterface {
-protected :
-    compWind* myContainer;
+class Wind  : public ItfWindForceInterface {
 
-    // Parameters
-    double force;
-    vect2 direction;
+	protected :
+              compWind *myContainer;
+
+	// Parameters
+	          double force;
+	          vect2 direction;
 
 
-    // Start of user code  : Properties of Wind
+// Start of user code  : Properties of Wind
     // End of user code
 
-public :
-    Wind(compWind* container);
-    ~Wind();
-    void initialize();
-    void end();
+	public :
+            Wind(compWind *container);
+            ~Wind();
+	        void initialize();
+	       void end();
 
-    void doStep(int nStep);
+	       void doStep(int nStep) ;
+	
+	// +++++++++++++ Methods of the pItfWindForce interface +++++++++++++
+	       double grabForce();
 
-    // +++++++++++++ Methods of the pItfWindForce interface +++++++++++++
-    double grabForce();
+	       vect2 grabDirection();
 
-    vect2 grabDirection();
-
-
-    // Start of user code  : Additional methods
+	
+// Start of user code  : Additional methods
 
     // End of user code
+	
 
-
-    // +++++++++++++ Access for force parameter +++++++++++++
-    double getForce();
-
-    void setForce(double arg);
-    // +++++++++++++ Access for direction parameter +++++++++++++
-    vect2 getDirection();
-
-    void setDirection(vect2 arg);
+	// +++++++++++++ Access for force parameter +++++++++++++
+	    double getForce();
+	
+	    void setForce(double arg);
+	// +++++++++++++ Access for direction parameter +++++++++++++
+	    vect2 getDirection();
+	
+	    void setDirection(vect2 arg);
 };
 #endif /*  Wind_H_ */

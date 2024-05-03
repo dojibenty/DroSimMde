@@ -26,6 +26,7 @@ GeoZone::~GeoZone() {
 
 void GeoZone::initialize() {
     // Start of user code  : Implementation of initialize method
+    cout << droneCount << '\n';
     Zones = CreateZones();
     // End of user code
 }
@@ -57,18 +58,16 @@ wect2 GeoZone::grabAssignedZone(long droneID) {
 
 
 // Start of user code  : Additional methods
-std::vector<wect2> GeoZone::CreateZones() {
-    int NumDrones = droneCount;
+vector<wect2> GeoZone::CreateZones() {
+    const int FilledLines = (int)floor((float)droneCount / (float)maxInlineZones);
+    const int TotalLines = (int)ceil((float)droneCount / (float)maxInlineZones);
+    const int ZonesLastLine = droneCount - FilledLines * maxInlineZones;
 
-    int FilledLines = (int)floor((float)NumDrones / (float)maxInlineZones);
-    int TotalLines = (int)ceil((float)NumDrones / (float)maxInlineZones);
-    int ZonesLastLine = NumDrones - FilledLines * maxInlineZones;
-
-    std::vector<std::vector<wect2>> Zones;
+    vector<vector<wect2>> LocalZones;
 
     // Filled lines
     for (int line = 0; line < FilledLines; line++) {
-        std::vector<wect2> Line;
+        vector<wect2> Line;
         for (int zone = 0; zone < maxInlineZones; zone++) {
             wect2 Zone;
 
@@ -86,12 +85,12 @@ std::vector<wect2> GeoZone::CreateZones() {
 
             Line.push_back(Zone);
         }
-        Zones.push_back(Line);
+        LocalZones.push_back(Line);
     }
 
     // Last line if excess zones
     if (ZonesLastLine != 0) {
-        std::vector<wect2> Line;
+        vector<wect2> Line;
         for (int zone = 0; zone < ZonesLastLine; zone++) {
             wect2 Zone;
 
@@ -109,18 +108,26 @@ std::vector<wect2> GeoZone::CreateZones() {
 
             Line.push_back(Zone);
         }
-        Zones.push_back(Line);
+        LocalZones.push_back(Line);
     }
 
-    std::vector<wect2> ZonesList;
+    vector<wect2> ZonesList;
 
-    for (const auto& line : Zones)
+    for (const auto& line : LocalZones)
         for (const wect2& zone : line)
             ZonesList.push_back(zone);
 
     return ZonesList;
 }
 
+// +++++++++++++ Access for droneCount attribute +++++++++++++
+long GeoZone::getDroneCount() {
+    return droneCount;
+}
+
+void GeoZone::setDroneCount(long arg) {
+    droneCount = arg;
+}
 // End of user code
 
 
@@ -140,13 +147,4 @@ long GeoZone::getMaxInlineZones() {
 
 void GeoZone::setMaxInlineZones(long arg) {
     maxInlineZones = arg;
-}
-
-// +++++++++++++ Access for droneCount parameter +++++++++++++
-long GeoZone::getDroneCount() {
-    return droneCount;
-}
-
-void GeoZone::setDroneCount(long arg) {
-    droneCount = arg;
 }

@@ -59,6 +59,10 @@ vect2 vect2::operator/(const double arg) const {
     return {x / arg, y / arg};
 }
 
+bool vect2::operator==(const vect2& vect2) const {
+    return {x == vect2.x && y == vect2.y};
+}
+
 void vect2::normalize() {
     const double mag = sqrt(x * x + y * y);
     if (mag != 0.0) *this = *this / mag;

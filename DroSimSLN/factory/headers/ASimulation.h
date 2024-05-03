@@ -11,12 +11,14 @@
 #include "compSimulation.h"
 
 class ASimulation : public compSimulation {
-    
-public :
-    ASimulation(double aFrequency);
-    virtual ~ASimulation();
+	protected :
+
+	public :
+
+            ASimulation(double aFrequency);
+            virtual ~ASimulation();
 
 
-    void readInputs() override;
+	        void readInputs()  override;
 };
 #endif /*  ASimulation_H_ */

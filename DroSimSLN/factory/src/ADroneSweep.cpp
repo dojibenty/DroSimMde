@@ -8,13 +8,19 @@
 #include "ADroneSweep.h"
 #include "DroneSweep.h"
 
-ADroneSweep::ADroneSweep(double aFrequency) : compDroneSweep(aFrequency) {}
-ADroneSweep::~ADroneSweep() {}
-
-void ADroneSweep::setAObjective(AObjective* pAObjective) {
-    attAObjective = pAObjective;
+ADroneSweep::ADroneSweep(double aFrequency, long numberOf)	: compDroneSweep(aFrequency, numberOf){
+		
+}
+ADroneSweep::~ADroneSweep()	{
+		
+}
+void ADroneSweep::setAObjective(AObjective *pAObjective) {
+		attAObjective = pAObjective;
 }
 
 void ADroneSweep::readInputs() {
-    appli->setObjposition(attAObjective->getObjposition());
+	for (DroneSweep* obj : appli)
+		obj->setObjposition(attAObjective->getObjposition());
 }
+
+

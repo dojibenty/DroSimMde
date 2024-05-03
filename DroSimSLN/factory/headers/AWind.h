@@ -11,12 +11,14 @@
 #include "compWind.h"
 
 class AWind : public compWind {
+	protected :
 
-public :
-    AWind(double aFrequency);
-    virtual ~AWind();
+	public :
+
+            AWind(double aFrequency);
+            virtual ~AWind();
 
 
-    void readInputs() override;
+	        void readInputs()  override;
 };
 #endif /*  AWind_H_ */

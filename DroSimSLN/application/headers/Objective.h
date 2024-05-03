@@ -19,45 +19,46 @@ class compObjective;
 // End of user code
 
 class Objective {
-protected :
-    compObjective* myContainer;
 
-    // Outputs
-    vect2 objposition;
-    // Parameters
-    double speedConstraint;
-    vect2 position;
+	protected :
+              compObjective *myContainer;
 
-    // Required Interfaces
-    ItfGeoDataInterface* rItfGeoDataObj;
+	// Outputs
+	          vect2 objposition;
+	// Parameters
+	          double speedConstraint;
+	          vect2 position;
 
-    // Start of user code  : Properties of Objective
+	// Required Interfaces
+	          ItfGeoDataInterface *rItfGeoDataObj;
+
+// Start of user code  : Properties of Objective
     vect2 direction;
     double YLimit;
     // End of user code
 
-public :
-    Objective(compObjective* container);
-    ~Objective();
-    void initialize();
-    void end();
+	public :
+            Objective(compObjective *container);
+            ~Objective();
+	        void initialize();
+	       void end();
 
-    void doStep(int nStep);
-
-
-    // Start of user code  : Additional methods
+	       void doStep(int nStep) ;
+	
+	
+// Start of user code  : Additional methods
     // End of user code
+	
 
-
-    vect2 getObjposition();
-    void setrItfGeoDataObj(ItfGeoDataInterface* arItfGeoDataObj);
-    // +++++++++++++ Access for speedConstraint parameter +++++++++++++
-    double getSpeedConstraint();
-
-    void setSpeedConstraint(double arg);
-    // +++++++++++++ Access for position parameter +++++++++++++
-    vect2 getPosition();
-
-    void setPosition(vect2 arg);
+	    vect2 getObjposition();
+	    void setrItfGeoDataObj(ItfGeoDataInterface *arItfGeoDataObj);
+	// +++++++++++++ Access for speedConstraint parameter +++++++++++++
+	    double getSpeedConstraint();
+	
+	    void setSpeedConstraint(double arg);
+	// +++++++++++++ Access for position parameter +++++++++++++
+	    vect2 getPosition();
+	
+	    void setPosition(vect2 arg);
 };
 #endif /*  Objective_H_ */

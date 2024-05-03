@@ -13,15 +13,16 @@
 class AObjective;
 
 class ADroneSweep : public compDroneSweep {
-protected :
-    AObjective* attAObjective;
+	protected :
+              AObjective *attAObjective;
 
-public :
-    ADroneSweep(double aFrequency);
-    virtual ~ADroneSweep();
+	public :
 
-    void setAObjective(AObjective* pAObjective);
+            ADroneSweep(double aFrequency, long numberOf);
+            virtual ~ADroneSweep();
 
-    void readInputs() override;
+	        void setAObjective(AObjective *pAObjective);
+
+	        void readInputs()  override;
 };
 #endif /*  ADroneSweep_H_ */

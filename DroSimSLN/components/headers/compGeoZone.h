@@ -13,47 +13,48 @@ class GeoZone;
 
 #include "vect2.h"
 
+
 #include "ItfGeoDataInterface.h"
+#include "vect2.h"
 #include "wect2.h"
 
-class compGeoZone : public LeafComponent, public ItfGeoDataInterface {
-protected :
-    /*pyp : inutile
-    */
+class compGeoZone : public LeafComponent  , public ItfGeoDataInterface {
 
-    bool newValue;
-    int delay;
+	protected :
+/*pyp : inutile
+*/
+
+	 bool newValue;
+	 int delay;
 
 
-    GeoZone* appli;
+	GeoZone *appli;
 
-public :
-    compGeoZone(double aFrequency);
-    virtual ~compGeoZone();
-    void doOneStep();
-    void doStep(int nStep);
+	public :
+           compGeoZone(double aFrequency);
+           virtual ~compGeoZone();
+	       void doOneStep();
+	       void doStep(int nStep);
 
-    virtual void readInputs();
-    void initialize();
-    void end();
+	       virtual void readInputs() ;
+	       void initialize();
+	       void end();
+	
+	// +++++++++++++ Methods of the pItfGeoData interface +++++++++++++
+	      vect2 grabEnvLimits();
 
-    // +++++++++++++ Methods of the pItfGeoData interface +++++++++++++
-    vect2 grabEnvLimits();
+	      wect2 grabAssignedZone(long droneID);
 
-    wect2 grabAssignedZone(long droneID);
-
-    GeoZone* getAppli();
-    // +++++++++++++ Access for envSize parameter +++++++++++++
-    vect2 getEnvSize();
-
-    void setEnvSize(vect2 arg);
-    // +++++++++++++ Access for maxInlineZones parameter +++++++++++++
-    long getMaxInlineZones();
-
-    void setMaxInlineZones(long arg);
-    // +++++++++++++ Access for droneCount parameter +++++++++++++
-    long getDroneCount();
-
-    void setDroneCount(long arg);
+	     GeoZone *getAppli() ;
+	// +++++++++++++ Access for envSize parameter +++++++++++++
+	     vect2 getEnvSize();
+	
+	     void setEnvSize(vect2 arg);
+	// +++++++++++++ Access for maxInlineZones parameter +++++++++++++
+	     long getMaxInlineZones();
+	
+	     void setMaxInlineZones(long arg);
+long getDroneCount();
+void setDroneCount(long arg);
 };
 #endif /* compGeoZone_H_ */

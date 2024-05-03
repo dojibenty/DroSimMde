@@ -11,70 +11,68 @@
 // End of user code
 
 
-Wind::Wind(compWind* container) {
-    myContainer = container;
-    // Start of user code  : Implementation of constructor method
+Wind::Wind(compWind *container)	{
+		myContainer = container;
+// Start of user code  : Implementation of constructor method
 
     // End of user code
-}
-
-Wind::~Wind() {
-    // Start of user code  : Implementation of destructor method
+	}
+Wind::~Wind(){
+// Start of user code  : Implementation of destructor method
 
     // End of user code
-}
-
+	}
 void Wind::initialize() {
-    // Start of user code  : Implementation of initialize method
+// Start of user code  : Implementation of initialize method
 
     // End of user code
-}
+	}
 
 void Wind::end() {
-    // Start of user code  : Implementation of end method
+// Start of user code  : Implementation of end method
 
     // End of user code
-}
+	}
 
 void Wind::doStep(int nStep) {
-    // Start of user code  : Implementation of doStep method
+// Start of user code  : Implementation of doStep method
     // to implement
     // End of user code
-}
-
-// +++++++++++++ Methods of the pItfWindForce interface +++++++++++++
-double Wind::grabForce() {
-    // Start of user code  : Implementation of method grabForce
+	}
+	
+	// +++++++++++++ Methods of the pItfWindForce interface +++++++++++++
+double Wind::grabForce(){
+// Start of user code  : Implementation of method grabForce
     return force;
     // End of user code
-}
+	}
 
-vect2 Wind::grabDirection() {
-    // Start of user code  : Implementation of method grabDirection
+vect2 Wind::grabDirection(){
+// Start of user code  : Implementation of method grabDirection
     return direction;
     // End of user code
-}
+	}
 
-
+	
 // Start of user code  : Additional methods
 
 // End of user code
+	
 
-
-// +++++++++++++ Access for force parameter +++++++++++++
+	// +++++++++++++ Access for force parameter +++++++++++++
 double Wind::getForce() {
-    return force;
-}
-
+		return force;
+	}
+	
 void Wind::setForce(double arg) {
-    force = arg;
-}
-
-// +++++++++++++ Access for direction parameter +++++++++++++
+		force = arg;
+	}
+	// +++++++++++++ Access for direction parameter +++++++++++++
 vect2 Wind::getDirection() {
-    return direction;
-}
-
+		return direction;
+	}
+	
 void Wind::setDirection(vect2 arg) {
-    direction = arg;
-}
+		direction = arg;
+	}
+

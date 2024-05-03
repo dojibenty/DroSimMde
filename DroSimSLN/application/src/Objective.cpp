@@ -8,7 +8,7 @@
 #include "Objective.h"
 #include "compObjective.h"
 // Start of user code  : Additional imports for Objective
-#include "Manager.h"
+#include "User.h"
 // End of user code
 
 
@@ -30,10 +30,10 @@ void Objective::initialize() {
     // Start of user code  : Implementation of initialize method
     direction = vect2(0, 1.0);
     vect2 envLimits = rItfGeoDataObj->grabEnvLimits();
-    const double posX = Manager::rand_range(envLimits.getX() / 2, envLimits.getX());
-    const double posY = Manager::rand_range(0, envLimits.getY());
+    const double posX = User::rand_range(envLimits.getX() / 2, envLimits.getX());
+    const double posY = User::rand_range(0, envLimits.getY());
 
-    position = vect2(posX, posY);
+    objposition = position = vect2(posX, posY);
     YLimit = envLimits.getY();
     // End of user code
 }
@@ -54,8 +54,6 @@ void Objective::doStep(int nStep) {
     else direction.switchSignY();
 
     objposition = position;
-
-    //cout << "OBJECTIVE: " << position.toString() << '\n';
     // End of user code
 }
 

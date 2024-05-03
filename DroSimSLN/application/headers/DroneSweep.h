@@ -6,7 +6,6 @@
  */
 #ifndef DroneSweep_H_
 #define DroneSweep_H_
-#include "Clock.h"
 class compDroneSweep;
 // Inputs
 #include "vect2.h"
@@ -33,6 +32,7 @@ protected :
     double visionRadius;
     double sweepHeight;
     double batteryCapacity;
+    long numberOf;
 
     // Required Interfaces
     ItfGeoDataInterface* rItfGeoDataSweep;
@@ -45,22 +45,25 @@ protected:
     wect2 assignedZone;
 
 private:
-    int droneID = 0;
+    int droneID;
     vect2 position;
     vect2 direction;
+    double batteryConsumption;
+    double battery;
     double movementTolerance;
-    bool goesUp = false;
-    bool leftToRight = true;
+    bool goesVertical = true;
+    bool leftToRight = false;
     bool topToBottom = false;
-    long heightCount = 0;
+    long heightCount = 1;
     double sweepLength;
     double leftYBound;
     bool isInZone = false;
     vect2 zoneStartPoint;
+    vector<string> log;
     // End of user code
 
 public :
-    DroneSweep(compDroneSweep* container);
+    DroneSweep(compDroneSweep* container, int ID);
     ~DroneSweep();
     void initialize();
     void end();
@@ -101,5 +104,9 @@ public:
     double getBatteryCapacity();
 
     void setBatteryCapacity(double arg);
+    // +++++++++++++ Access for numberOf parameter +++++++++++++
+    long getNumberOf();
+
+    void setNumberOf(long arg);
 };
 #endif /*  DroneSweep_H_ */

@@ -7,14 +7,13 @@
 
 #ifndef ItfGeoDataInterface_H_
 #define ItfGeoDataInterface_H_
-#include <iostream>
 using namespace std;
 #include "vect2.h"
 #include "wect2.h"
 
 class ItfGeoDataInterface {
-public :
-    virtual vect2 grabEnvLimits() = 0;
-    virtual wect2 grabAssignedZone(long droneID) = 0;
+	public :
+           virtual vect2 grabEnvLimits() = 0;
+           virtual wect2 grabAssignedZone(long droneID) = 0;
 };
 #endif /* ItfGeoDataInterface_H_ */

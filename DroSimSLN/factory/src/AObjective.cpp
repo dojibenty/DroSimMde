@@ -8,7 +8,14 @@
 #include "AObjective.h"
 #include "Objective.h"
 
-AObjective::AObjective(double aFrequency) : compObjective(aFrequency) {}
-AObjective::~AObjective() {}
+AObjective::AObjective(double aFrequency)	: compObjective(aFrequency){
+		
+}
+AObjective::~AObjective()	{
+		
+}
 
-void AObjective::readInputs() {}
+void AObjective::readInputs() {
+}
+
+
