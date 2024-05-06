@@ -34,10 +34,16 @@ DroneSpiral::~DroneSpiral() {
 void DroneSpiral::initialize() {
     // Start of user code  : Implementation of initialize method
     assignedZone = rItfGeoDataSpiral->grabAssignedZone(droneID);
-    zoneStartPoint = (assignedZone.getV1() + assignedZone.getV2()) / 2;
+
+    const auto bottomLeftPoint = vect2(assignedZone.getV2().getX(), assignedZone.getV1().getY());
+    zoneStartPoint = bottomLeftPoint + startingPoint * bottomLeftPoint;
+    
     direction = zoneStartPoint;
     direction.normalize();
+    
     movementTolerance = rItfSimDataSpiral->grabPositionCorrection();
+
+    battery = batteryCapacity;
     batteryConsumption = 2 * pow(speedConstraint, 2) / 3600.0;
     // End of user code
 }
@@ -255,4 +261,12 @@ long DroneSpiral::getNumberOf() {
 
 void DroneSpiral::setNumberOf(long arg) {
     numberOf = arg;
+}
+// +++++++++++++ Access for startingPoint parameter +++++++++++++
+vect2 DroneSpiral::getStartingPoint() {
+    return startingPoint;
+}
+
+void DroneSpiral::setStartingPoint(vect2 arg) {
+    startingPoint = arg;
 }

@@ -33,6 +33,7 @@ protected :
     double sweepHeight;
     double batteryCapacity;
     long numberOf;
+    vect2 startingPoint;
 
     // Required Interfaces
     ItfGeoDataInterface* rItfGeoDataSweep;
@@ -59,7 +60,6 @@ private:
     double leftYBound;
     bool isInZone = false;
     vect2 zoneStartPoint;
-    vector<string> log;
     // End of user code
 
 public :
@@ -108,5 +108,9 @@ public:
     long getNumberOf();
 
     void setNumberOf(long arg);
+    // +++++++++++++ Access for startingPoint parameter +++++++++++++
+    vect2 getStartingPoint();
+
+    void setStartingPoint(vect2 arg);
 };
 #endif /*  DroneSweep_H_ */

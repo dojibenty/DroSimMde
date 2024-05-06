@@ -22,6 +22,7 @@ protected :
     // Parameters
     vect2 envSize;
     long maxInlineZones;
+    vect2 bottomLeftPoint;
 
 
     // Start of user code  : Properties of GeoZone
@@ -39,14 +40,14 @@ public :
     void doStep(int nStep);
 
     // +++++++++++++ Methods of the pItfGeoData interface +++++++++++++
-    vect2 grabEnvLimits();
+    vect2 grabEnvLimits() override;
 
-    wect2 grabAssignedZone(long droneID);
+    wect2 grabAssignedZone(long droneID) override;
 
-
+    
     // Start of user code  : Additional methods
 private:
-    std::vector<wect2> CreateZones();
+    vector<wect2> CreateZones();
 
 public:
     // +++++++++++++ Access for droneCount attribute +++++++++++++
@@ -64,5 +65,9 @@ public:
     long getMaxInlineZones();
 
     void setMaxInlineZones(long arg);
+    // +++++++++++++ Access for bottomLeftPoint parameter +++++++++++++
+    vect2 getBottomLeftPoint();
+
+    void setBottomLeftPoint(vect2 arg);
 };
 #endif /*  GeoZone_H_ */

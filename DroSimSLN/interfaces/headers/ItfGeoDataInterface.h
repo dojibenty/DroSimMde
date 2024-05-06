@@ -12,8 +12,8 @@ using namespace std;
 #include "wect2.h"
 
 class ItfGeoDataInterface {
-	public :
-           virtual vect2 grabEnvLimits() = 0;
-           virtual wect2 grabAssignedZone(long droneID) = 0;
+public :
+    virtual vect2 grabEnvLimits() = 0;
+    virtual wect2 grabAssignedZone(long droneID) = 0;
 };
 #endif /* ItfGeoDataInterface_H_ */

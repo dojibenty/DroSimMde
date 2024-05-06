@@ -228,6 +228,9 @@
         <ClInclude Include="types\headers\vect2.h"/>
         <ClInclude Include="types\headers\wect2.h"/>
     </ItemGroup>
+    <ItemGroup>
+      <Content Include="notes.txt" />
+    </ItemGroup>
     <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets"/>
     <ImportGroup Label="ExtensionTargets">
     </ImportGroup>

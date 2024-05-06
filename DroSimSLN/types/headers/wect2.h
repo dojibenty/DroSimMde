@@ -8,8 +8,6 @@
 #ifndef wect2_H_
 #define wect2_H_
 
-#include <vector>
-#include <iostream>
 using namespace std;
 // Start of user code  : Additional imports for wect2
 #include "vect2.h"
@@ -31,8 +29,9 @@ public :
     vect2 getV2();
 
     void setV2(vect2 varv2);
+    
     // Start of user code  : Additional methods
-
+    wect2 operator+(const vect2& arg) const;
     // End of user code
 };
 #endif /* wect2_H_ */

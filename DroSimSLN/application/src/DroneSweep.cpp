@@ -8,80 +8,84 @@
 #include "DroneSweep.h"
 #include "compDroneSweep.h"
 // Start of user code  : Additional imports for DroneSweep
-#include <iostream>
 #include <sstream>
-#include <string>
+#define M_PER_DEG 111000
 // End of user code
 
 
-DroneSweep::DroneSweep(compDroneSweep *container, int ID)	{
-		myContainer = container;
-		droneID = ID;
-		rItfGeoDataSweep = 0;
-		rItfWindForceSweep = 0;
-		rItfManageSimSweep = 0;
-		rItfSimDataSweep = 0;
-// Start of user code  : Implementation of constructor method
+DroneSweep::DroneSweep(compDroneSweep* container, int ID) {
+    myContainer = container;
+    droneID = ID;
+    rItfGeoDataSweep = 0;
+    rItfWindForceSweep = 0;
+    rItfManageSimSweep = 0;
+    rItfSimDataSweep = 0;
+    // Start of user code  : Implementation of constructor method
     // End of user code
-	}
-DroneSweep::~DroneSweep(){
-// Start of user code  : Implementation of destructor method
+}
+
+DroneSweep::~DroneSweep() {
+    // Start of user code  : Implementation of destructor method
 
     // End of user code
-	}
+}
+
 void DroneSweep::initialize() {
-// Start of user code  : Implementation of initialize method
+    // Start of user code  : Implementation of initialize method
+    
     assignedZone = rItfGeoDataSweep->grabAssignedZone(droneID);
+    
     leftYBound = assignedZone.getV1().getY();
     sweepLength = assignedZone.getV2().getY() - leftYBound;
-    zoneStartPoint = vect2(assignedZone.getV2().getX(), assignedZone.getV1().getY());
+
+    const auto bottomLeftPoint = vect2(assignedZone.getV2().getX(), assignedZone.getV1().getY());
+    zoneStartPoint = bottomLeftPoint + startingPoint * bottomLeftPoint;
+    
     direction = zoneStartPoint;
     direction.normalize();
+    
     movementTolerance = rItfSimDataSweep->grabPositionCorrection();
-	battery = batteryCapacity;
-    batteryConsumption = 2*pow(speedConstraint,2)/3600.0;
+    
+    battery = batteryCapacity;
+    batteryConsumption = 2 * pow(speedConstraint, 2) / 3600.0;
     // End of user code
-	}
+}
 
 void DroneSweep::end() {
-// Start of user code  : Implementation of end method
-    for (string s : log)
-        cout << s << '\n';
-    log.clear();
+    // Start of user code  : Implementation of end method
     // End of user code
-	}
+}
 
 void DroneSweep::doStep(int nStep) {
-// Start of user code  : Implementation of doStep method
+    // Start of user code  : Implementation of doStep method
     // Movement
-    position = SetNextPosition();
+    
     if (!isInZone)
         if (vect2::distance(position, zoneStartPoint) <= movementTolerance) {
             position = zoneStartPoint;
             isInZone = true;
         }
 
+    position = SetNextPosition();
     sweepposition = position;
-    
-    //log.emplace_back(position.toString());
-    //log.emplace_back(to_string(batteryCapacity));
 
     // Objective detection
     if (vect2::distance(position, objposition) <= visionRadius
         && objposition.getX() > 0) {
         rItfManageSimSweep->signalObjectiveFound(droneID);
-        log.emplace_back("Objective found");
         end();
     }
 
     // Battery
     if ((batteryCapacity -= batteryConsumption) <= 0) end();
     // End of user code
-	}
-	
-	
+}
+
+
 // Start of user code  : Additional methods
 vect2 DroneSweep::SetNextPosition() {
+    if (!isInZone) return { position + direction * speedConstraint };
+    
     const double targetHeight = sweepHeight * heightCount;
     if (goesVertical &&
         (!topToBottom && position.getX() >= targetHeight) || (topToBottom && position.getX() <= targetHeight)) {
@@ -124,67 +128,83 @@ bool DroneSweep::GoesOutOfBounds(vect2& point) {
 void DroneSweep::setAssignedZone(wect2 zone) {
     assignedZone = zone;
 }
-
 // End of user code
-	
+
 
 void DroneSweep::setObjposition(vect2 arg) {
-		objposition = arg;
-	}
+    objposition = arg;
+}
 
 vect2 DroneSweep::getSweepposition() {
-		return sweepposition;
-	}
-void DroneSweep::setrItfGeoDataSweep(ItfGeoDataInterface *arItfGeoDataSweep) {
-		rItfGeoDataSweep = arItfGeoDataSweep;
-	}
-void DroneSweep::setrItfWindForceSweep(ItfWindForceInterface *arItfWindForceSweep) {
-		rItfWindForceSweep = arItfWindForceSweep;
-	}
-void DroneSweep::setrItfManageSimSweep(ItfManageSimInterface *arItfManageSimSweep) {
-		rItfManageSimSweep = arItfManageSimSweep;
-	}
-void DroneSweep::setrItfSimDataSweep(ItfSimDataInterface *arItfSimDataSweep) {
-		rItfSimDataSweep = arItfSimDataSweep;
-	}
-	// +++++++++++++ Access for speedConstraint parameter +++++++++++++
-double DroneSweep::getSpeedConstraint() {
-		return speedConstraint;
-	}
-	
-void DroneSweep::setSpeedConstraint(double arg) {
-		speedConstraint = arg;
-	}
-	// +++++++++++++ Access for visionRadius parameter +++++++++++++
-double DroneSweep::getVisionRadius() {
-		return visionRadius;
-	}
-	
-void DroneSweep::setVisionRadius(double arg) {
-		visionRadius = arg;
-	}
-	// +++++++++++++ Access for sweepHeight parameter +++++++++++++
-double DroneSweep::getSweepHeight() {
-		return sweepHeight;
-	}
-	
-void DroneSweep::setSweepHeight(double arg) {
-		sweepHeight = arg;
-	}
-	// +++++++++++++ Access for batteryCapacity parameter +++++++++++++
-double DroneSweep::getBatteryCapacity() {
-		return batteryCapacity;
-	}
-	
-void DroneSweep::setBatteryCapacity(double arg) {
-		batteryCapacity = arg;
-	}
-	// +++++++++++++ Access for numberOf parameter +++++++++++++
-long DroneSweep::getNumberOf() {
-		return numberOf;
-	}
-	
-void DroneSweep::setNumberOf(long arg) {
-		numberOf = arg;
-	}
+    return sweepposition;
+}
 
+void DroneSweep::setrItfGeoDataSweep(ItfGeoDataInterface* arItfGeoDataSweep) {
+    rItfGeoDataSweep = arItfGeoDataSweep;
+}
+
+void DroneSweep::setrItfWindForceSweep(ItfWindForceInterface* arItfWindForceSweep) {
+    rItfWindForceSweep = arItfWindForceSweep;
+}
+
+void DroneSweep::setrItfManageSimSweep(ItfManageSimInterface* arItfManageSimSweep) {
+    rItfManageSimSweep = arItfManageSimSweep;
+}
+
+void DroneSweep::setrItfSimDataSweep(ItfSimDataInterface* arItfSimDataSweep) {
+    rItfSimDataSweep = arItfSimDataSweep;
+}
+
+// +++++++++++++ Access for speedConstraint parameter +++++++++++++
+double DroneSweep::getSpeedConstraint() {
+    return speedConstraint;
+}
+
+void DroneSweep::setSpeedConstraint(double arg) {
+    speedConstraint = arg;
+}
+
+// +++++++++++++ Access for visionRadius parameter +++++++++++++
+double DroneSweep::getVisionRadius() {
+    return visionRadius;
+}
+
+void DroneSweep::setVisionRadius(double arg) {
+    visionRadius = arg;
+}
+
+// +++++++++++++ Access for sweepHeight parameter +++++++++++++
+double DroneSweep::getSweepHeight() {
+    return sweepHeight;
+}
+
+void DroneSweep::setSweepHeight(double arg) {
+    sweepHeight = arg;
+}
+
+// +++++++++++++ Access for batteryCapacity parameter +++++++++++++
+double DroneSweep::getBatteryCapacity() {
+    return batteryCapacity;
+}
+
+void DroneSweep::setBatteryCapacity(double arg) {
+    batteryCapacity = arg;
+}
+
+// +++++++++++++ Access for numberOf parameter +++++++++++++
+long DroneSweep::getNumberOf() {
+    return numberOf;
+}
+
+void DroneSweep::setNumberOf(long arg) {
+    numberOf = arg;
+}
+
+// +++++++++++++ Access for startingPoint parameter +++++++++++++
+vect2 DroneSweep::getStartingPoint() {
+    return startingPoint;
+}
+
+void DroneSweep::setStartingPoint(vect2 arg) {
+    startingPoint = arg;
+}

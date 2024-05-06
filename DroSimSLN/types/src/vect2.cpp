@@ -51,6 +51,10 @@ vect2 vect2::operator*(const double arg) const {
     return {x * arg, y * arg};
 }
 
+vect2 vect2::operator*(const vect2& vect2) const {
+    return {x * vect2.x, y * vect2.y};
+}
+
 vect2 vect2::operator-(const vect2& vect2) const {
     return {x - vect2.x, y - vect2.y};
 }

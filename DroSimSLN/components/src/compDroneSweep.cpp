@@ -144,3 +144,13 @@ void compDroneSweep::setNumberOf(long arg) {
     for (DroneSweep* obj : appli)
         obj->setNumberOf(arg);
 }
+
+// +++++++++++++ Access for startingPoint parameter +++++++++++++
+vect2 compDroneSweep::getStartingPoint() {
+    return appli[0]->getStartingPoint();
+}
+
+void compDroneSweep::setStartingPoint(vect2 arg) {
+    for (DroneSweep* obj : appli)
+        obj->setStartingPoint(arg);
+}

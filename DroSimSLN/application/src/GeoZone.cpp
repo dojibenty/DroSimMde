@@ -46,7 +46,7 @@ void GeoZone::doStep(int nStep) {
 // +++++++++++++ Methods of the pItfGeoData interface +++++++++++++
 vect2 GeoZone::grabEnvLimits() {
     // Start of user code  : Implementation of method grabEnvLimits
-    return envSize;
+    return envSize /*+ bottomLeftPoint*/;
     // End of user code
 }
 
@@ -115,7 +115,7 @@ vector<wect2> GeoZone::CreateZones() {
 
     for (const auto& line : LocalZones)
         for (const wect2& zone : line)
-            ZonesList.push_back(zone);
+            ZonesList.push_back(zone /*+ bottomLeftPoint*/);
 
     return ZonesList;
 }
@@ -147,4 +147,13 @@ long GeoZone::getMaxInlineZones() {
 
 void GeoZone::setMaxInlineZones(long arg) {
     maxInlineZones = arg;
+}
+
+// +++++++++++++ Access for bottomLeftPoint parameter +++++++++++++
+vect2 GeoZone::getBottomLeftPoint() {
+    return bottomLeftPoint;
+}
+
+void GeoZone::setBottomLeftPoint(vect2 arg) {
+    bottomLeftPoint = arg;
 }

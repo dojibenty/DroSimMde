@@ -12,85 +12,83 @@
 class DroneSpiral;
 
 #include "vect2.h"
-#include "vect2.h"
-
 
 #include "ItfGeoDataInterface.h"
-#include "vect2.h"
-#include "wect2.h"
 #include "ItfWindForceInterface.h"
-#include "vect2.h"
 #include "ItfManageSimInterface.h"
 #include "ItfSimDataInterface.h"
 
 class compDroneSpiral : public LeafComponent {
+protected :
+    /*pyp : inutile
+        //inputs source
+         LeafComponent ObjpositionSourceComponent;
+         String portNameObjposition;
+    */
+    vect2 oldSpiralposition;
+    vect2 newSpiralposition;
 
-	protected :
-/*pyp : inutile
-	//inputs source
-	 LeafComponent ObjpositionSourceComponent;
-	 String portNameObjposition;
-*/
-	 vect2 oldSpiralposition;
-	 vect2 newSpiralposition;
-
-	 bool newValue;
-	 int delay;
+    bool newValue;
+    int delay;
 
 
-	DroneSpiral *appli;
+    DroneSpiral* appli;
 
-	public :
-           compDroneSpiral(double aFrequency);
-           virtual ~compDroneSpiral();
-	       void doOneStep();
-	       void doStep(int nStep);
+public :
+    compDroneSpiral(double aFrequency);
+    virtual ~compDroneSpiral();
+    void doOneStep();
+    void doStep(int nStep);
 
-	       virtual void readInputs() ;
-	       void initialize();
-	       void end();
-	
-	     vect2 getSpiralposition();
-	     void setrItfGeoDataSpiral(ItfGeoDataInterface *arItfGeoDataSpiral);
-	     void setrItfWindForceSpiral(ItfWindForceInterface *arItfWindForceSpiral);
-	     void setrItfManageSimSpiral(ItfManageSimInterface *arItfManageSimSpiral);
-	     void setrItfSimDataSpiral(ItfSimDataInterface *arItfSimDataSpiral);
-	     DroneSpiral *getAppli() ;
-	// +++++++++++++ Access for speedConstraint parameter +++++++++++++
-	     double getSpeedConstraint();
-	
-	     void setSpeedConstraint(double arg);
-	// +++++++++++++ Access for visionRadius parameter +++++++++++++
-	     double getVisionRadius();
-	
-	     void setVisionRadius(double arg);
-	// +++++++++++++ Access for spiralRadius parameter +++++++++++++
-	     double getSpiralRadius();
-	
-	     void setSpiralRadius(double arg);
-	// +++++++++++++ Access for concentricCircles parameter +++++++++++++
-	     bool getConcentricCircles();
-	
-	     void setConcentricCircles(bool arg);
-	// +++++++++++++ Access for nbCirclePoints parameter +++++++++++++
-	     long getNbCirclePoints();
-	
-	     void setNbCirclePoints(long arg);
-	// +++++++++++++ Access for spiralIncrementFactor parameter +++++++++++++
-	     double getSpiralIncrementFactor();
-	
-	     void setSpiralIncrementFactor(double arg);
-	// +++++++++++++ Access for wanderSteps parameter +++++++++++++
-	     long getWanderSteps();
-	
-	     void setWanderSteps(long arg);
-	// +++++++++++++ Access for batteryCapacity parameter +++++++++++++
-	     double getBatteryCapacity();
-	
-	     void setBatteryCapacity(double arg);
-	// +++++++++++++ Access for numberOf parameter +++++++++++++
-	     long getNumberOf();
-	
-	     void setNumberOf(long arg);
+    virtual void readInputs();
+    void initialize();
+    void end();
+
+    vect2 getSpiralposition();
+    void setrItfGeoDataSpiral(ItfGeoDataInterface* arItfGeoDataSpiral);
+    void setrItfWindForceSpiral(ItfWindForceInterface* arItfWindForceSpiral);
+    void setrItfManageSimSpiral(ItfManageSimInterface* arItfManageSimSpiral);
+    void setrItfSimDataSpiral(ItfSimDataInterface* arItfSimDataSpiral);
+    DroneSpiral* getAppli();
+    // +++++++++++++ Access for speedConstraint parameter +++++++++++++
+    double getSpeedConstraint();
+
+    void setSpeedConstraint(double arg);
+    // +++++++++++++ Access for visionRadius parameter +++++++++++++
+    double getVisionRadius();
+
+    void setVisionRadius(double arg);
+    // +++++++++++++ Access for spiralRadius parameter +++++++++++++
+    double getSpiralRadius();
+
+    void setSpiralRadius(double arg);
+    // +++++++++++++ Access for concentricCircles parameter +++++++++++++
+    bool getConcentricCircles();
+
+    void setConcentricCircles(bool arg);
+    // +++++++++++++ Access for nbCirclePoints parameter +++++++++++++
+    long getNbCirclePoints();
+
+    void setNbCirclePoints(long arg);
+    // +++++++++++++ Access for spiralIncrementFactor parameter +++++++++++++
+    double getSpiralIncrementFactor();
+
+    void setSpiralIncrementFactor(double arg);
+    // +++++++++++++ Access for wanderSteps parameter +++++++++++++
+    long getWanderSteps();
+
+    void setWanderSteps(long arg);
+    // +++++++++++++ Access for batteryCapacity parameter +++++++++++++
+    double getBatteryCapacity();
+
+    void setBatteryCapacity(double arg);
+    // +++++++++++++ Access for numberOf parameter +++++++++++++
+    long getNumberOf();
+
+    void setNumberOf(long arg);
+    // +++++++++++++ Access for startingPoint parameter +++++++++++++
+    vect2 getStartingPoint();
+
+    void setStartingPoint(vect2 arg);
 };
 #endif /* compDroneSpiral_H_ */

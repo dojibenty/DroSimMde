@@ -1,0 +1,11 @@
+﻿vect2 GeoZone::calculateCartesianCoords(vect2& initialPoint, vect2& dir, const double dist) {
+    const double distDegLat = dist / M_PER_DEG;
+    const double distDegLong = dist / M_PER_DEG;
+    const double angleRadians = atan2(dir.getX(), dir.getY());
+
+    const double movementLat = distDegLat * cos(angleRadians);
+    const double movementLong = distDegLong * sin(angleRadians);
+
+    return { initialPoint.getX() + movementLat, initialPoint.getY() + movementLong };
+}
+

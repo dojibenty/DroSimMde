@@ -68,5 +68,9 @@ public :
     long getNumberOf();
 
     void setNumberOf(long arg);
+    // +++++++++++++ Access for startingPoint parameter +++++++++++++
+    vect2 getStartingPoint();
+
+    void setStartingPoint(vect2 arg);
 };
 #endif /* compDroneSweep_H_ */

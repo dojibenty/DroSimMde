@@ -74,6 +74,7 @@ void DroSimSystem::initialize() {
 	//instAUser->setFrequency(0.0);
 	instAGeoZone->setEnvSize(vect2(10.0,12.0));
 	instAGeoZone->setMaxInlineZones(3);
+	instAGeoZone->setBottomLeftPoint(vect2(45.0,-5.0));
 	//instAGeoZone->setFrequency(0.0);
 	instAObjective->setSpeedConstraint(0.0);
 	instAObjective->setPosition(vect2(0,0));
@@ -83,6 +84,7 @@ void DroSimSystem::initialize() {
 	instADroneSweep->setSweepHeight(2.0);
 	instADroneSweep->setBatteryCapacity(200.0);
 	instADroneSweep->setNumberOf(3);
+	instADroneSweep->setStartingPoint(vect2(0.0,0.0));
 	//instADroneSweep->setFrequency(1.0);
 	instADroneSpiral->setSpeedConstraint(20.0);
 	instADroneSpiral->setVisionRadius(100.0);
@@ -93,6 +95,7 @@ void DroSimSystem::initialize() {
 	instADroneSpiral->setWanderSteps(5);
 	instADroneSpiral->setBatteryCapacity(900.0);
 	instADroneSpiral->setNumberOf(0);
+	instADroneSpiral->setStartingPoint(vect2(0.5,0.5));
 	//instADroneSpiral->setFrequency(2.0);
 
 	instAGeoZone->setDroneCount(3 + 0);

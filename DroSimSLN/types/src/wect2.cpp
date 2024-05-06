@@ -34,5 +34,7 @@ void wect2::setV2(vect2 varv2) {
 }
 
 // Start of user code  : Additional methods
-
+wect2 wect2::operator+(const vect2& arg) const {
+    return { v1 + arg, v2 + arg };
+} 
 // End of user code

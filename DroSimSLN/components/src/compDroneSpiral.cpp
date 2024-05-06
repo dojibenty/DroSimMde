@@ -7,142 +7,168 @@
 
 #include "compDroneSpiral.h"
 #include "DroneSpiral.h"
-compDroneSpiral::compDroneSpiral(double aFrequency) : LeafComponent( aFrequency) {
-		appli = new DroneSpiral( this);
-		delay = 0;
-		delayMax = 0;
-		newValue = false;
-		isActive = true;
-		oldSpiralposition = appli->getSpiralposition();
-		newSpiralposition = appli->getSpiralposition();
-	}
-compDroneSpiral::~compDroneSpiral()	{}
+
+compDroneSpiral::compDroneSpiral(double aFrequency) : LeafComponent(aFrequency) {
+    appli = new DroneSpiral(this);
+    delay = 0;
+    delayMax = 0;
+    newValue = false;
+    isActive = true;
+    oldSpiralposition = appli->getSpiralposition();
+    newSpiralposition = appli->getSpiralposition();
+}
+
+compDroneSpiral::~compDroneSpiral() {}
 
 void compDroneSpiral::doOneStep() {
-		if (newValue) {
-			delay++;
-			if (delay == delayMax) {
-					oldSpiralposition = newSpiralposition;
-					newValue = false;
-			}
-		}
-	}
+    if (newValue) {
+        delay++;
+        if (delay == delayMax) {
+            oldSpiralposition = newSpiralposition;
+            newValue = false;
+        }
+    }
+}
 
-void compDroneSpiral::doStep(int nStep) {	
-		if (newValue) {
-			oldSpiralposition = newSpiralposition;
-			newValue = false;
-		}
-		readInputs();
-		appli->doStep(nStep);
-		newSpiralposition = appli->getSpiralposition();
-		if (delayMax == 0) {
-			oldSpiralposition = newSpiralposition;
-			newValue = false;
-		} else {
-			newValue = true;
-			delay = 0;
-		}
-	}
+void compDroneSpiral::doStep(int nStep) {
+    if (newValue) {
+        oldSpiralposition = newSpiralposition;
+        newValue = false;
+    }
+    readInputs();
+    appli->doStep(nStep);
+    newSpiralposition = appli->getSpiralposition();
+    if (delayMax == 0) {
+        oldSpiralposition = newSpiralposition;
+        newValue = false;
+    }
+    else {
+        newValue = true;
+        delay = 0;
+    }
+}
 
-void compDroneSpiral::readInputs() {
-	}
+void compDroneSpiral::readInputs() {}
+
 void compDroneSpiral::initialize() {
-		appli->initialize();
-	}
+    appli->initialize();
+}
 
 void compDroneSpiral::end() {
-		appli->end();
-	}
-	
+    appli->end();
+}
+
 vect2 compDroneSpiral::getSpiralposition() {
-		return oldSpiralposition;
-	}
-void compDroneSpiral::setrItfGeoDataSpiral(ItfGeoDataInterface *arItfGeoDataSpiral) {
-		appli->setrItfGeoDataSpiral(arItfGeoDataSpiral);
-	}
-void compDroneSpiral::setrItfWindForceSpiral(ItfWindForceInterface *arItfWindForceSpiral) {
-		appli->setrItfWindForceSpiral(arItfWindForceSpiral);
-	}
-void compDroneSpiral::setrItfManageSimSpiral(ItfManageSimInterface *arItfManageSimSpiral) {
-		appli->setrItfManageSimSpiral(arItfManageSimSpiral);
-	}
-void compDroneSpiral::setrItfSimDataSpiral(ItfSimDataInterface *arItfSimDataSpiral) {
-		appli->setrItfSimDataSpiral(arItfSimDataSpiral);
-	}
-DroneSpiral *compDroneSpiral::getAppli() {
-		return appli;
-	}
-	// +++++++++++++ Access for speedConstraint parameter +++++++++++++
+    return oldSpiralposition;
+}
+
+void compDroneSpiral::setrItfGeoDataSpiral(ItfGeoDataInterface* arItfGeoDataSpiral) {
+    appli->setrItfGeoDataSpiral(arItfGeoDataSpiral);
+}
+
+void compDroneSpiral::setrItfWindForceSpiral(ItfWindForceInterface* arItfWindForceSpiral) {
+    appli->setrItfWindForceSpiral(arItfWindForceSpiral);
+}
+
+void compDroneSpiral::setrItfManageSimSpiral(ItfManageSimInterface* arItfManageSimSpiral) {
+    appli->setrItfManageSimSpiral(arItfManageSimSpiral);
+}
+
+void compDroneSpiral::setrItfSimDataSpiral(ItfSimDataInterface* arItfSimDataSpiral) {
+    appli->setrItfSimDataSpiral(arItfSimDataSpiral);
+}
+
+DroneSpiral* compDroneSpiral::getAppli() {
+    return appli;
+}
+
+// +++++++++++++ Access for speedConstraint parameter +++++++++++++
 double compDroneSpiral::getSpeedConstraint() {
-		return appli->getSpeedConstraint();
-	}
-	
+    return appli->getSpeedConstraint();
+}
+
 void compDroneSpiral::setSpeedConstraint(double arg) {
-		appli->setSpeedConstraint(arg);
-	}
-	// +++++++++++++ Access for visionRadius parameter +++++++++++++
+    appli->setSpeedConstraint(arg);
+}
+
+// +++++++++++++ Access for visionRadius parameter +++++++++++++
 double compDroneSpiral::getVisionRadius() {
-		return appli->getVisionRadius();
-	}
-	
+    return appli->getVisionRadius();
+}
+
 void compDroneSpiral::setVisionRadius(double arg) {
-		appli->setVisionRadius(arg);
-	}
-	// +++++++++++++ Access for spiralRadius parameter +++++++++++++
+    appli->setVisionRadius(arg);
+}
+
+// +++++++++++++ Access for spiralRadius parameter +++++++++++++
 double compDroneSpiral::getSpiralRadius() {
-		return appli->getSpiralRadius();
-	}
-	
+    return appli->getSpiralRadius();
+}
+
 void compDroneSpiral::setSpiralRadius(double arg) {
-		appli->setSpiralRadius(arg);
-	}
-	// +++++++++++++ Access for concentricCircles parameter +++++++++++++
+    appli->setSpiralRadius(arg);
+}
+
+// +++++++++++++ Access for concentricCircles parameter +++++++++++++
 bool compDroneSpiral::getConcentricCircles() {
-		return appli->getConcentricCircles();
-	}
-	
+    return appli->getConcentricCircles();
+}
+
 void compDroneSpiral::setConcentricCircles(bool arg) {
-		appli->setConcentricCircles(arg);
-	}
-	// +++++++++++++ Access for nbCirclePoints parameter +++++++++++++
+    appli->setConcentricCircles(arg);
+}
+
+// +++++++++++++ Access for nbCirclePoints parameter +++++++++++++
 long compDroneSpiral::getNbCirclePoints() {
-		return appli->getNbCirclePoints();
-	}
-	
+    return appli->getNbCirclePoints();
+}
+
 void compDroneSpiral::setNbCirclePoints(long arg) {
-		appli->setNbCirclePoints(arg);
-	}
-	// +++++++++++++ Access for spiralIncrementFactor parameter +++++++++++++
+    appli->setNbCirclePoints(arg);
+}
+
+// +++++++++++++ Access for spiralIncrementFactor parameter +++++++++++++
 double compDroneSpiral::getSpiralIncrementFactor() {
-		return appli->getSpiralIncrementFactor();
-	}
-	
+    return appli->getSpiralIncrementFactor();
+}
+
 void compDroneSpiral::setSpiralIncrementFactor(double arg) {
-		appli->setSpiralIncrementFactor(arg);
-	}
-	// +++++++++++++ Access for wanderSteps parameter +++++++++++++
+    appli->setSpiralIncrementFactor(arg);
+}
+
+// +++++++++++++ Access for wanderSteps parameter +++++++++++++
 long compDroneSpiral::getWanderSteps() {
-		return appli->getWanderSteps();
-	}
-	
+    return appli->getWanderSteps();
+}
+
 void compDroneSpiral::setWanderSteps(long arg) {
-		appli->setWanderSteps(arg);
-	}
-	// +++++++++++++ Access for batteryCapacity parameter +++++++++++++
+    appli->setWanderSteps(arg);
+}
+
+// +++++++++++++ Access for batteryCapacity parameter +++++++++++++
 double compDroneSpiral::getBatteryCapacity() {
-		return appli->getBatteryCapacity();
-	}
-	
+    return appli->getBatteryCapacity();
+}
+
 void compDroneSpiral::setBatteryCapacity(double arg) {
-		appli->setBatteryCapacity(arg);
-	}
-	// +++++++++++++ Access for numberOf parameter +++++++++++++
+    appli->setBatteryCapacity(arg);
+}
+
+// +++++++++++++ Access for numberOf parameter +++++++++++++
 long compDroneSpiral::getNumberOf() {
-		return appli->getNumberOf();
-	}
-	
+    return appli->getNumberOf();
+}
+
 void compDroneSpiral::setNumberOf(long arg) {
-		appli->setNumberOf(arg);
-	}
+    appli->setNumberOf(arg);
+}
+
+// +++++++++++++ Access for startingPoint parameter +++++++++++++
+vect2 compDroneSpiral::getStartingPoint() {
+    return appli->getStartingPoint();
+}
+
+void compDroneSpiral::setStartingPoint(vect2 arg) {
+    appli->setStartingPoint(arg);
+}
 

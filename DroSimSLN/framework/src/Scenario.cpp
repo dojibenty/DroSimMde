@@ -56,7 +56,7 @@ void Scenario::startSimulation() {
                 lc->doStep(lc->getDelayMax());
             }
             // TODO si tout stop alors fin
-            // cond arret local : collision, batterie
+            // cond arret locale : collision, batterie
             // conditions arret globale : trouve, probleme
             // format condition : (temps,raison,drone)
         }
