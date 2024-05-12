@@ -6,7 +6,6 @@
  */
 #ifndef Simulation_H_
 #define Simulation_H_
-#include "Clock.h"
 class compSimulation;
 
 #include "ItfSimDataInterface.h"
@@ -14,45 +13,43 @@ class compSimulation;
 // Start of user code  : Additional imports for Simulation
 // End of user code
 
-class Simulation  : public ItfSimDataInterface {
+class Simulation : public ItfSimDataInterface {
+protected :
+    compSimulation* myContainer;
 
-	protected :
-              compSimulation *myContainer;
-
-	// Parameters
-	          double expectedEndTime;
-	          double positionCorrection;
+    // Parameters
+    double expectedEndTime;
+    double positionCorrection;
 
 
-// Start of user code  : Properties of Simulation
+    // Start of user code  : Properties of Simulation
     // End of user code
 
-	public :
-            Simulation(compSimulation *container);
-            ~Simulation();
-	        void initialize();
-	       void end();
+public :
+    Simulation(compSimulation* container);
+    ~Simulation();
+    void initialize();
+    void end();
 
-	       void doStep(int nStep) ;
-	
-	// +++++++++++++ Methods of the pItfSimData interface +++++++++++++
-	       double grabExpectedEndTime();
+    int doStep(int nStep);
 
-	       double grabPositionCorrection();
+    // +++++++++++++ Methods of the pItfSimData interface +++++++++++++
+    double grabExpectedEndTime();
 
-	
-// Start of user code  : Additional methods
+    double grabPositionCorrection();
 
+
+    // Start of user code  : Additional methods
     // End of user code
-	
 
-	// +++++++++++++ Access for expectedEndTime parameter +++++++++++++
-	    double getExpectedEndTime();
-	
-	    void setExpectedEndTime(double arg);
-	// +++++++++++++ Access for positionCorrection parameter +++++++++++++
-	    double getPositionCorrection();
-	
-	    void setPositionCorrection(double arg);
+
+    // +++++++++++++ Access for expectedEndTime parameter +++++++++++++
+    double getExpectedEndTime();
+
+    void setExpectedEndTime(double arg);
+    // +++++++++++++ Access for positionCorrection parameter +++++++++++++
+    double getPositionCorrection();
+
+    void setPositionCorrection(double arg);
 };
 #endif /*  Simulation_H_ */

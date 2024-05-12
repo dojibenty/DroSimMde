@@ -14,33 +14,29 @@ class compUser;
 // Start of user code  : Additional imports for User
 // End of user code
 
-class User  : public ItfManageSimInterface {
-
-	protected :
-              compUser *myContainer;
-
+class User : public ItfManageSimInterface {
+protected :
+    compUser* myContainer;
 
 
-// Start of user code  : Properties of User
+    // Start of user code  : Properties of User
     bool isObjectiveFound = false;
     // End of user code
 
-	public :
-            User(compUser *container);
-            ~User();
-	        void initialize();
-	       void end();
+public :
+    User(compUser* container);
+    ~User();
+    void initialize();
+    void end();
 
-	       void doStep(int nStep) ;
-	
-	// +++++++++++++ Methods of the pItfManageSimulation interface +++++++++++++
-	       void signalObjectiveFound(long droneID);
+    int doStep(int nStep);
 
-	
-// Start of user code  : Additional methods
+    // +++++++++++++ Methods of the pItfManageSimulation interface +++++++++++++
+    void signalObjectiveFound(long droneID);
+
+
+    // Start of user code  : Additional methods
     static double rand_range(double min, double max);
     // End of user code
-	
-
 };
 #endif /*  User_H_ */

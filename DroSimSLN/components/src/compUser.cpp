@@ -25,10 +25,10 @@ void compUser::doOneStep() {
     }
 }
 
-void compUser::doStep(int nStep) {
+int compUser::doStep(int nStep) {
     if (newValue) {}
     readInputs();
-    appli->doStep(nStep);
+    const int returnCode = appli->doStep(nStep);
     if (delayMax == 0) {
         newValue = false;
     }
@@ -36,6 +36,7 @@ void compUser::doStep(int nStep) {
         newValue = true;
         delay = 0;
     }
+    return returnCode;
 }
 
 void compUser::readInputs() {}

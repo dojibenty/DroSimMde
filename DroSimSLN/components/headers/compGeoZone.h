@@ -24,18 +24,21 @@ protected :
     bool newValue;
     int delay;
 
-
+    string name = "GeoZone";
+    
     GeoZone* appli;
 
 public :
     compGeoZone(double aFrequency);
     virtual ~compGeoZone();
     void doOneStep();
-    void doStep(int nStep);
+    int doStep(int nStep);
 
     virtual void readInputs();
     void initialize();
     void end();
+
+    string getName() { return name; }
 
     // +++++++++++++ Methods of the pItfGeoData interface +++++++++++++
     vect2 grabEnvLimits();

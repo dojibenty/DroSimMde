@@ -8,6 +8,7 @@
 #ifndef compDroneSweep_H_
 #define compDroneSweep_H_
 
+#include "DroneSweep.h"
 #include "LeafComponent.h"
 class DroneSweep;
 
@@ -26,8 +27,11 @@ protected :
          String portNameObjposition;
     */
     vector<DroneSweep*> appli;
+    vector<int> terminated;
     vector<vect2> oldSweepposition;
     vector<vect2> newSweepposition;
+
+    string name = "DroneSweep"; 
 
     bool newValue;
     int delay;
@@ -36,7 +40,7 @@ public :
     compDroneSweep(double aFrequency, long numberOf);
     virtual ~compDroneSweep();
     void doOneStep();
-    void doStep(int nStep);
+    int doStep(int nStep);
 
     virtual void readInputs();
     void initialize();
@@ -48,10 +52,18 @@ public :
     void setrItfManageSimSweep(ItfManageSimInterface* arItfManageSimSweep);
     void setrItfSimDataSweep(ItfSimDataInterface* arItfSimDataSweep);
     vector<DroneSweep*> getAppli();
-    // +++++++++++++ Access for speedConstraint parameter +++++++++++++
-    double getSpeedConstraint();
+    
+    string getName() { return name; }
+    double getSpeed() { return appli[0]->getSpeed(); }
+    void setSpeed(double arg) { for (DroneSweep* obj : appli) obj->setSpeed(arg); }
+    // +++++++++++++ Access for minSpeed parameter +++++++++++++
+    double getMinSpeed();
 
-    void setSpeedConstraint(double arg);
+    void setMinSpeed(double arg);
+    // +++++++++++++ Access for minSpeed parameter +++++++++++++
+    double getMaxSpeed();
+
+    void setMaxSpeed(double arg);
     // +++++++++++++ Access for visionRadius parameter +++++++++++++
     double getVisionRadius();
 

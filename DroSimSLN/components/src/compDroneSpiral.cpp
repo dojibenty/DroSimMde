@@ -30,13 +30,13 @@ void compDroneSpiral::doOneStep() {
     }
 }
 
-void compDroneSpiral::doStep(int nStep) {
+int compDroneSpiral::doStep(int nStep) {
     if (newValue) {
         oldSpiralposition = newSpiralposition;
         newValue = false;
     }
     readInputs();
-    appli->doStep(nStep);
+    const int returnCode = appli->doStep(nStep);
     newSpiralposition = appli->getSpiralposition();
     if (delayMax == 0) {
         oldSpiralposition = newSpiralposition;
@@ -46,6 +46,7 @@ void compDroneSpiral::doStep(int nStep) {
         newValue = true;
         delay = 0;
     }
+    return returnCode;
 }
 
 void compDroneSpiral::readInputs() {}
@@ -82,13 +83,22 @@ DroneSpiral* compDroneSpiral::getAppli() {
     return appli;
 }
 
-// +++++++++++++ Access for speedConstraint parameter +++++++++++++
-double compDroneSpiral::getSpeedConstraint() {
-    return appli->getSpeedConstraint();
+// +++++++++++++ Access for minSpeed parameter +++++++++++++
+double compDroneSpiral::getMinSpeed() {
+    return appli->getMinSpeed();
 }
 
-void compDroneSpiral::setSpeedConstraint(double arg) {
-    appli->setSpeedConstraint(arg);
+void compDroneSpiral::setMinSpeed(double arg) {
+    appli->setMinSpeed(arg);
+}
+
+// +++++++++++++ Access for minSpeed parameter +++++++++++++
+double compDroneSpiral::getMaxSpeed() {
+    return appli->getMaxSpeed();
+}
+
+void compDroneSpiral::setMaxSpeed(double arg) {
+    appli->setMaxSpeed(arg);   
 }
 
 // +++++++++++++ Access for visionRadius parameter +++++++++++++

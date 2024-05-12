@@ -26,4 +26,4 @@ void TimeableObject::setFrequency(double freq) {
     frequency = freq;
 }
 
-void TimeableObject::doStep(int nStep) {}
+int TimeableObject::doStep(int nStep) { return 0; }

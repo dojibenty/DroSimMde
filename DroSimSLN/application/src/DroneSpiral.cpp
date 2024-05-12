@@ -44,7 +44,7 @@ void DroneSpiral::initialize() {
     movementTolerance = rItfSimDataSpiral->grabPositionCorrection();
 
     battery = batteryCapacity;
-    batteryConsumption = 2 * pow(speedConstraint, 2) / 3600.0;
+    batteryConsumption = 2 * pow(speed, 2) / 3600.0;
     // End of user code
 }
 
@@ -54,7 +54,7 @@ void DroneSpiral::end() {
     // End of user code
 }
 
-void DroneSpiral::doStep(int nStep) {
+int DroneSpiral::doStep(int nStep) {
     // Start of user code  : Implementation of doStep method
     // Calculate the Drone's next position
     position = SetNextPosition();
@@ -66,12 +66,11 @@ void DroneSpiral::doStep(int nStep) {
 
     spiralposition = position;
 
-    cout << "SPIRAL-" << droneID << ": " << position.toString() << '\n';
-
     if (vect2::distance(position, objposition) <= visionRadius
         && objposition.getX() > 0)
-        rItfManageSimSpiral->signalObjectiveFound(droneID);
+        return 1;
 
+    return 0;
     // End of user code
 }
 
@@ -80,7 +79,7 @@ void DroneSpiral::doStep(int nStep) {
 vect2 DroneSpiral::SetNextPosition() {
     vect2 nextPosition;
 
-    if (!isInZone) nextPosition = position + direction * speedConstraint;
+    if (!isInZone) nextPosition = position + direction * speed;
     else if (wander > 0) nextPosition = GetRandomDirection();
     else // Making spiral
     {
@@ -108,7 +107,7 @@ vect2 DroneSpiral::SetNextPosition() {
         else direction = IntermediatePoint - position;
 
         direction.normalize();
-        nextPosition = position + direction * speedConstraint;
+        nextPosition = position + direction * speed;
     }
 
     return nextPosition;
@@ -140,7 +139,7 @@ vect2 DroneSpiral::GetRandomDirection() {
             direction.getX() + User::rand_range(-1.0f, 1.0f),
             direction.getY() + User::rand_range(-1.0f, 1.0f));
         direction.normalize();
-        nextPosition = position + direction * speedConstraint;
+        nextPosition = position + direction * speed;
     }
     while (GoesOutOfBounds(nextPosition));
 
@@ -182,13 +181,22 @@ void DroneSpiral::setrItfSimDataSpiral(ItfSimDataInterface* arItfSimDataSpiral) 
     rItfSimDataSpiral = arItfSimDataSpiral;
 }
 
-// +++++++++++++ Access for speedConstraint parameter +++++++++++++
-double DroneSpiral::getSpeedConstraint() {
-    return speedConstraint;
+// +++++++++++++ Access for minSpeed parameter +++++++++++++
+double DroneSpiral::getMinSpeed() {
+    return minSpeed;
 }
 
-void DroneSpiral::setSpeedConstraint(double arg) {
-    speedConstraint = arg;
+void DroneSpiral::setMinSpeed(double arg) {
+    minSpeed = arg;
+}
+
+// +++++++++++++ Access for minSpeed parameter +++++++++++++
+double DroneSpiral::getMaxSpeed() {
+    return maxSpeed;
+}
+
+void DroneSpiral::setMaxSpeed(double arg) {
+    maxSpeed = arg;   
 }
 
 // +++++++++++++ Access for visionRadius parameter +++++++++++++

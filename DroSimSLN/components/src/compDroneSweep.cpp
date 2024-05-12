@@ -33,17 +33,26 @@ void compDroneSweep::doOneStep() {
     }
 }
 
-void compDroneSweep::doStep(int nStep) {
+int compDroneSweep::doStep(int nStep) {
     if (newValue) {
         oldSweepposition = newSweepposition;
         newValue = false;
     }
     readInputs();
     int numberOf = getNumberOf();
+    int returnCode = 0, temp;
     for (int i = 0; i < numberOf; i++) {
-        appli[i]->doStep(nStep);
+        auto it = find(terminated.begin(), terminated.end(), i);
+        if (it != terminated.end()) continue;
+        
+        temp = appli[i]->doStep(nStep);
         newSweepposition[i] = appli[i]->getSweepposition();
+
+        if (temp == 1)
+            returnCode = 1;
+        else if (temp == 2) terminated.push_back(i);
     }
+    
     if (delayMax == 0) {
         oldSweepposition = newSweepposition;
         newValue = false;
@@ -52,6 +61,9 @@ void compDroneSweep::doStep(int nStep) {
         newValue = true;
         delay = 0;
     }
+
+    if (terminated.size() == numberOf) return 2;
+    return returnCode;
 }
 
 void compDroneSweep::readInputs() {}
@@ -62,6 +74,7 @@ void compDroneSweep::initialize() {
 }
 
 void compDroneSweep::end() {
+    terminated.clear();
     for (DroneSweep* obj : appli)
         obj->end();
 }
@@ -81,7 +94,6 @@ void compDroneSweep::setrItfWindForceSweep(ItfWindForceInterface* arItfWindForce
 }
 
 void compDroneSweep::setrItfManageSimSweep(ItfManageSimInterface* arItfManageSimSweep) {
-    cout << arItfManageSimSweep << '\n';
     for (DroneSweep* obj : appli)
         obj->setrItfManageSimSweep(arItfManageSimSweep);
 }
@@ -95,14 +107,24 @@ vector<DroneSweep*> compDroneSweep::getAppli() {
     return appli;
 }
 
-// +++++++++++++ Access for speedConstraint parameter +++++++++++++
-double compDroneSweep::getSpeedConstraint() {
-    return appli[0]->getSpeedConstraint();
+// +++++++++++++ Access for minSpeed parameter +++++++++++++
+double compDroneSweep::getMinSpeed() {
+    return appli[0]->getMinSpeed();
 }
 
-void compDroneSweep::setSpeedConstraint(double arg) {
+void compDroneSweep::setMinSpeed(double arg) {
     for (DroneSweep* obj : appli)
-        obj->setSpeedConstraint(arg);
+        obj->setMinSpeed(arg);
+}
+
+// +++++++++++++ Access for minSpeed parameter +++++++++++++
+double compDroneSweep::getMaxSpeed() {
+    return appli[0]->getMaxSpeed();
+}
+
+void compDroneSweep::setMaxSpeed(double arg) {
+    for (DroneSweep* obj : appli)
+        obj->setMaxSpeed(arg);
 }
 
 // +++++++++++++ Access for visionRadius parameter +++++++++++++

@@ -12,44 +12,44 @@
 class Simulation;
 
 
-
 #include "ItfSimDataInterface.h"
 
-class compSimulation : public LeafComponent  , public ItfSimDataInterface {
+class compSimulation : public LeafComponent, public ItfSimDataInterface {
+protected :
+    /*pyp : inutile
+    */
 
-	protected :
-/*pyp : inutile
-*/
+    bool newValue;
+    int delay;
 
-	 bool newValue;
-	 int delay;
+    string name = "Simulation";
+    
+    Simulation* appli;
 
+public :
+    compSimulation(double aFrequency);
+    virtual ~compSimulation();
+    void doOneStep();
+    int doStep(int nStep);
 
-	Simulation *appli;
+    virtual void readInputs();
+    void initialize();
+    void end();
 
-	public :
-           compSimulation(double aFrequency);
-           virtual ~compSimulation();
-	       void doOneStep();
-	       void doStep(int nStep);
+    string getName() { return name; }
+    // +++++++++++++ Methods of the pItfSimData interface +++++++++++++
+    double grabExpectedEndTime();
 
-	       virtual void readInputs() ;
-	       void initialize();
-	       void end();
-	
-	// +++++++++++++ Methods of the pItfSimData interface +++++++++++++
-	      double grabExpectedEndTime();
+    double grabPositionCorrection();
 
-	      double grabPositionCorrection();
+    Simulation* getAppli();
+    // +++++++++++++ Access for expectedEndTime parameter +++++++++++++
+    double getExpectedEndTime();
 
-	     Simulation *getAppli() ;
-	// +++++++++++++ Access for expectedEndTime parameter +++++++++++++
-	     double getExpectedEndTime();
-	
-	     void setExpectedEndTime(double arg);
-	// +++++++++++++ Access for positionCorrection parameter +++++++++++++
-	     double getPositionCorrection();
-	
-	     void setPositionCorrection(double arg);
+    void setExpectedEndTime(double arg);
+    // +++++++++++++ Access for positionCorrection parameter +++++++++++++
+    double getPositionCorrection();
+
+    void setPositionCorrection(double arg);
 };
 #endif /* compSimulation_H_ */

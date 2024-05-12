@@ -39,26 +39,41 @@ void Scenario::setTime(long m, long mx) {
 
 void Scenario::eventSimulation() {}
 
-void Scenario::startSimulation() {
+bool Scenario::startSimulation() {
     Clock* c = Clock::getInstance();
     c->Init(min, stepTime, max);
     simulationNumber++;
-    //std::cout << "simulation number : " << simulationNumber << std::endl;
+    bool isSimSuccessful = false;
     while (!c->isFinished()) {
         // scenario events
         eventSimulation();
 
         // run des composants
         unsigned int j = root->getListLeafComponents().size();
+        int returnCode;
+        bool doEndSim = false;
         for (unsigned int i = 0; i < j; i++) {
             LeafComponent* lc = root->getListLeafComponents().at(i);
             if (((c->getCurrentMS() % periods.at(i)) == 0) && lc->getIsActive()) {
-                lc->doStep(lc->getDelayMax());
+                returnCode = lc->doStep(lc->getDelayMax());
+                string str;
+                switch (returnCode) {
+                case 1:
+                    str = "objective found," + lc->getName();
+                    isSimSuccessful = true;
+                    break;
+                case 2:
+                    str = "drones batteries are empty";
+                    break;
+                default:
+                    str = "other," + lc->getName();
+                }
+                if (returnCode != 0) {
+                    cout << '(' <<  c->getCurrentMS() << ',' << str << ')' << '\n';
+                    doEndSim = true;
+                }
+                
             }
-            // TODO si tout stop alors fin
-            // cond arret locale : collision, batterie
-            // conditions arret globale : trouve, probleme
-            // format condition : (temps,raison,drone)
         }
         //pyp : run des observations
         j = getCsvLogs().size();
@@ -84,7 +99,9 @@ void Scenario::startSimulation() {
         if (c->getCurrentMS() % (c->getEndTime() / 10) == 0) {
             std::cout << (int)(100 * ((double)c->getCurrentMS() / c->getEndTime())) << " %" << std::endl;
         }
+        if (doEndSim) break;
     }
+    return isSimSuccessful;
 }
 
 //pyp

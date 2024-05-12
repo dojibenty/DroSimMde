@@ -28,7 +28,8 @@ protected :
     // Outputs
     vect2 sweepposition;
     // Parameters
-    double speedConstraint;
+    double minSpeed;
+    double maxSpeed;
     double visionRadius;
     double sweepHeight;
     double batteryCapacity;
@@ -46,7 +47,9 @@ protected:
     wect2 assignedZone;
 
 private:
+    string name = "DroneSweep";
     int droneID;
+    double speed;
     vect2 position;
     vect2 direction;
     double batteryConsumption;
@@ -68,7 +71,7 @@ public :
     void initialize();
     void end();
 
-    void doStep(int nStep);
+    int doStep(int nStep);
 
 
     // Start of user code  : Additional methods
@@ -78,6 +81,9 @@ private:
 
 public:
     void setAssignedZone(wect2 zone);
+    string getName() { return name; }
+    double getSpeed() { return speed; }
+    void setSpeed(double arg) { speed = arg; }
     // End of user code
 
 
@@ -88,10 +94,14 @@ public:
     void setrItfWindForceSweep(ItfWindForceInterface* arItfWindForceSweep);
     void setrItfManageSimSweep(ItfManageSimInterface* arItfManageSimSweep);
     void setrItfSimDataSweep(ItfSimDataInterface* arItfSimDataSweep);
-    // +++++++++++++ Access for speedConstraint parameter +++++++++++++
-    double getSpeedConstraint();
+    // +++++++++++++ Access for minSpeed parameter +++++++++++++
+    double getMinSpeed();
 
-    void setSpeedConstraint(double arg);
+    void setMinSpeed(double arg);
+    // +++++++++++++ Access for minSpeed parameter +++++++++++++
+    double getMaxSpeed();
+
+    void setMaxSpeed(double arg);
     // +++++++++++++ Access for visionRadius parameter +++++++++++++
     double getVisionRadius();
 

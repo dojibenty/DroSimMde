@@ -37,14 +37,14 @@ public :
     void initialize();
     void end();
 
-    void doStep(int nStep);
+    int doStep(int nStep);
 
     // +++++++++++++ Methods of the pItfGeoData interface +++++++++++++
     vect2 grabEnvLimits() override;
 
     wect2 grabAssignedZone(long droneID) override;
 
-    
+
     // Start of user code  : Additional methods
 private:
     vector<wect2> CreateZones();

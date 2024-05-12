@@ -26,7 +26,6 @@ GeoZone::~GeoZone() {
 
 void GeoZone::initialize() {
     // Start of user code  : Implementation of initialize method
-    cout << droneCount << '\n';
     Zones = CreateZones();
     // End of user code
 }
@@ -37,9 +36,9 @@ void GeoZone::end() {
     // End of user code
 }
 
-void GeoZone::doStep(int nStep) {
+int GeoZone::doStep(int nStep) {
     // Start of user code  : Implementation of doStep method
-    // to implement
+    return 0;
     // End of user code
 }
 

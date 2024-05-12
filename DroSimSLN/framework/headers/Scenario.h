@@ -19,13 +19,15 @@ protected :
 
     int simulationNumber;
 
+    vector<int> simulationResults;
+
 public :
     Scenario(RootComponent* aRoot);
     virtual ~Scenario() =0;
 
     void setTime(long min, long max);
 
-    void startSimulation();
+    bool startSimulation();
 
     virtual void eventSimulation() = 0;
     //pyp

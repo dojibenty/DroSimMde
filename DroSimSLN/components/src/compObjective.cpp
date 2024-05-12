@@ -28,13 +28,13 @@ void compObjective::doOneStep() {
 		}
 	}
 
-void compObjective::doStep(int nStep) {	
+int compObjective::doStep(int nStep) {	
 		if (newValue) {
 			oldObjposition = newObjposition;
 			newValue = false;
 		}
 		readInputs();
-		appli->doStep(nStep);
+		const int returnCode = appli->doStep(nStep);
 		newObjposition = appli->getObjposition();
 		if (delayMax == 0) {
 			oldObjposition = newObjposition;
@@ -43,6 +43,7 @@ void compObjective::doStep(int nStep) {
 			newValue = true;
 			delay = 0;
 		}
+	return returnCode;
 	}
 
 void compObjective::readInputs() {

@@ -29,7 +29,8 @@ protected :
     // Outputs
     vect2 spiralposition;
     // Parameters
-    double speedConstraint;
+    double minSpeed;
+    double maxSpeed;
     double visionRadius;
     double spiralRadius;
     bool concentricCircles;
@@ -48,7 +49,9 @@ protected :
 
     // Start of user code  : Properties of DroneSpiral
 private:
+    string name = "DroneSpiral";
     int droneID = 1;
+    double speed;
     vect2 position;
     vect2 direction;
     double battery;
@@ -70,7 +73,7 @@ public :
     void initialize();
     void end();
 
-    void doStep(int nStep);
+    int doStep(int nStep);
 
 
     // Start of user code  : Additional methods
@@ -81,6 +84,9 @@ private:
     bool GoesOutOfBounds(vect2 point);
 
 public:
+    string getName() { return name; }
+    double getSpeed() { return speed; }
+    void setSpeed(double arg) { speed = arg; }
     // End of user code
 
 
@@ -91,10 +97,14 @@ public:
     void setrItfWindForceSpiral(ItfWindForceInterface* arItfWindForceSpiral);
     void setrItfManageSimSpiral(ItfManageSimInterface* arItfManageSimSpiral);
     void setrItfSimDataSpiral(ItfSimDataInterface* arItfSimDataSpiral);
-    // +++++++++++++ Access for speedConstraint parameter +++++++++++++
-    double getSpeedConstraint();
+    // +++++++++++++ Access for minSpeed parameter +++++++++++++
+    double getMinSpeed();
 
-    void setSpeedConstraint(double arg);
+    void setMinSpeed(double arg);
+    // +++++++++++++ Access for minSpeed parameter +++++++++++++
+    double getMaxSpeed();
+
+    void setMaxSpeed(double arg);
     // +++++++++++++ Access for visionRadius parameter +++++++++++++
     double getVisionRadius();
 

@@ -8,6 +8,7 @@
 #ifndef compDroneSpiral_H_
 #define compDroneSpiral_H_
 
+#include "DroneSpiral.h"
 #include "LeafComponent.h"
 class DroneSpiral;
 
@@ -31,6 +32,7 @@ protected :
     bool newValue;
     int delay;
 
+    string name = "DroneSpiral";
 
     DroneSpiral* appli;
 
@@ -38,7 +40,7 @@ public :
     compDroneSpiral(double aFrequency);
     virtual ~compDroneSpiral();
     void doOneStep();
-    void doStep(int nStep);
+    int doStep(int nStep);
 
     virtual void readInputs();
     void initialize();
@@ -50,10 +52,18 @@ public :
     void setrItfManageSimSpiral(ItfManageSimInterface* arItfManageSimSpiral);
     void setrItfSimDataSpiral(ItfSimDataInterface* arItfSimDataSpiral);
     DroneSpiral* getAppli();
-    // +++++++++++++ Access for speedConstraint parameter +++++++++++++
-    double getSpeedConstraint();
 
-    void setSpeedConstraint(double arg);
+    string getName() { return name; }
+    double getSpeed() { return appli->getSpeed(); }
+    void setSpeed(double arg) { appli->setSpeed(arg); }
+    // +++++++++++++ Access for minSpeed parameter +++++++++++++
+    double getMinSpeed();
+
+    void setMinSpeed(double arg);
+    // +++++++++++++ Access for minSpeed parameter +++++++++++++
+    double getMaxSpeed();
+
+    void setMaxSpeed(double arg);
     // +++++++++++++ Access for visionRadius parameter +++++++++++++
     double getVisionRadius();
 

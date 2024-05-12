@@ -7,72 +7,75 @@
 
 #include "compWind.h"
 #include "Wind.h"
-compWind::compWind(double aFrequency) : LeafComponent( aFrequency) {
-		appli = new Wind( this);
-		delay = 0;
-		delayMax = 0;
-		newValue = false;
-		isActive = true;
-	}
-compWind::~compWind()	{}
+
+compWind::compWind(double aFrequency) : LeafComponent(aFrequency) {
+    appli = new Wind(this);
+    delay = 0;
+    delayMax = 0;
+    newValue = false;
+    isActive = true;
+}
+
+compWind::~compWind() {}
 
 void compWind::doOneStep() {
-		if (newValue) {
-			delay++;
-			if (delay == delayMax) {
-			}
-		}
-	}
+    if (newValue) {
+        delay++;
+        if (delay == delayMax) {}
+    }
+}
 
-void compWind::doStep(int nStep) {	
-		if (newValue) {
-		}
-		readInputs();
-		appli->doStep(nStep);
-		if (delayMax == 0) {
-			newValue = false;
-		} else {
-			newValue = true;
-			delay = 0;
-		}
-	}
+int compWind::doStep(int nStep) {
+    if (newValue) {}
+    readInputs();
+    const int returnCode = appli->doStep(nStep);
+    if (delayMax == 0) {
+        newValue = false;
+    }
+    else {
+        newValue = true;
+        delay = 0;
+    }
+    return returnCode;
+}
 
-void compWind::readInputs() {
-	}
+void compWind::readInputs() {}
+
 void compWind::initialize() {
-		appli->initialize();
-	}
+    appli->initialize();
+}
 
 void compWind::end() {
-		appli->end();
-	}
-	
-	// +++++++++++++ Methods of the pItfWindForce interface +++++++++++++
-double compWind::grabForce(){
-		return appli->grabForce();
-	}
+    appli->end();
+}
 
-vect2 compWind::grabDirection(){
-		return appli->grabDirection();
-	}
+// +++++++++++++ Methods of the pItfWindForce interface +++++++++++++
+double compWind::grabForce() {
+    return appli->grabForce();
+}
 
-Wind *compWind::getAppli() {
-		return appli;
-	}
-	// +++++++++++++ Access for force parameter +++++++++++++
+vect2 compWind::grabDirection() {
+    return appli->grabDirection();
+}
+
+Wind* compWind::getAppli() {
+    return appli;
+}
+
+// +++++++++++++ Access for force parameter +++++++++++++
 double compWind::getForce() {
-		return appli->getForce();
-	}
-	
-void compWind::setForce(double arg) {
-		appli->setForce(arg);
-	}
-	// +++++++++++++ Access for direction parameter +++++++++++++
-vect2 compWind::getDirection() {
-		return appli->getDirection();
-	}
-	
-void compWind::setDirection(vect2 arg) {
-		appli->setDirection(arg);
-	}
+    return appli->getForce();
+}
 
+void compWind::setForce(double arg) {
+    appli->setForce(arg);
+}
+
+// +++++++++++++ Access for direction parameter +++++++++++++
+vect2 compWind::getDirection() {
+    return appli->getDirection();
+}
+
+void compWind::setDirection(vect2 arg) {
+    appli->setDirection(arg);
+}

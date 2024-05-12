@@ -33,6 +33,10 @@ protected :
     ADroneSweep* instADroneSweep;
     ADroneSpiral* instADroneSpiral;
 
+    double highestSpeed;
+    double lowestSpeed;
+    double pSpeed = -1;
+
 public :
     DroSimSystem();
     virtual ~DroSimSystem();
@@ -44,6 +48,9 @@ public :
     AObjective* get_AObjective();
     ADroneSweep* get_ADroneSweep();
     ADroneSpiral* get_ADroneSpiral();
+
+    bool mutateParameters(bool isGroupSuccessful);
+    double getPSpeed();
 
     void initialize();
 

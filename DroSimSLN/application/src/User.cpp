@@ -11,52 +11,51 @@
 // End of user code
 
 
-User::User(compUser *container)	{
-		myContainer = container;
-// Start of user code  : Implementation of constructor method
+User::User(compUser* container) {
+    myContainer = container;
+    // Start of user code  : Implementation of constructor method
 
     // End of user code
-	}
-User::~User(){
-// Start of user code  : Implementation of destructor method
+}
+
+User::~User() {
+    // Start of user code  : Implementation of destructor method
 
     // End of user code
-	}
+}
+
 void User::initialize() {
-// Start of user code  : Implementation of initialize method
+    // Start of user code  : Implementation of initialize method
 
     // End of user code
-	}
+}
 
 void User::end() {
-// Start of user code  : Implementation of end method
+    // Start of user code  : Implementation of end method
 
     // End of user code
-	}
+}
 
-void User::doStep(int nStep) {
-// Start of user code  : Implementation of doStep method
-    // to implement
+int User::doStep(int nStep) {
+    // Start of user code  : Implementation of doStep method
+    return 0;
     // End of user code
-	}
-	
-	// +++++++++++++ Methods of the pItfManageSimulation interface +++++++++++++
-void User::signalObjectiveFound(long droneID){
-// Start of user code  : Implementation of method signalObjectiveFound
+}
+
+// +++++++++++++ Methods of the pItfManageSimulation interface +++++++++++++
+void User::signalObjectiveFound(long droneID) {
+    // Start of user code  : Implementation of method signalObjectiveFound
     if (!isObjectiveFound) {
         cout << "Objective found by drone " << droneID << '\n';
         isObjectiveFound = true;
     }
     // End of user code
-	}
+}
 
-	
+
 // Start of user code  : Additional methods
 double User::rand_range(double min, double max) {
     return min + (rand() / (RAND_MAX + 1.0) * (max - min + 1));
 }
 
 // End of user code
-	
-
-

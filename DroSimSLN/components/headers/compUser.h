@@ -12,34 +12,35 @@
 class User;
 
 
-
 #include "ItfManageSimInterface.h"
 
-class compUser : public LeafComponent  , public ItfManageSimInterface {
+class compUser : public LeafComponent, public ItfManageSimInterface {
+protected :
+    /*pyp : inutile
+    */
 
-	protected :
-/*pyp : inutile
-*/
+    bool newValue;
+    int delay;
 
-	 bool newValue;
-	 int delay;
+    string name = "User";
 
+    User* appli;
 
-	User *appli;
+public :
+    compUser(double aFrequency);
+    virtual ~compUser();
+    void doOneStep();
+    int doStep(int nStep);
 
-	public :
-           compUser(double aFrequency);
-           virtual ~compUser();
-	       void doOneStep();
-	       void doStep(int nStep);
+    virtual void readInputs();
+    void initialize();
+    void end();
 
-	       virtual void readInputs() ;
-	       void initialize();
-	       void end();
-	
-	// +++++++++++++ Methods of the pItfManageSimulation interface +++++++++++++
-	      void signalObjectiveFound(long droneID);
+    string getName() { return name; }
+    
+    // +++++++++++++ Methods of the pItfManageSimulation interface +++++++++++++
+    void signalObjectiveFound(long droneID);
 
-	     User *getAppli() ;
+    User* getAppli();
 };
 #endif /* compUser_H_ */
