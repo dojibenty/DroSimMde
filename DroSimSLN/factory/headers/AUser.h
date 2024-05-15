@@ -11,14 +11,13 @@
 #include "compUser.h"
 
 class AUser : public compUser {
-	protected :
+protected :
 
-	public :
+public :
+    AUser(double aFrequency);
+    virtual ~AUser();
 
-            AUser(double aFrequency);
-            virtual ~AUser();
 
-
-	        void readInputs()  override;
+    void readInputs() override;
 };
 #endif /*  AUser_H_ */

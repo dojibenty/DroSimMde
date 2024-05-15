@@ -15,10 +15,8 @@
 
 DroneSweep::DroneSweep(compDroneSweep* container, int ID) {
     myContainer = container;
-    name += "_" + to_string(ID);
     droneID = ID;
     rItfGeoDataSweep = 0;
-    rItfWindForceSweep = 0;
     rItfManageSimSweep = 0;
     rItfSimDataSweep = 0;
     // Start of user code  : Implementation of constructor method
@@ -34,20 +32,20 @@ DroneSweep::~DroneSweep() {
 void DroneSweep::initialize() {
     // Start of user code  : Implementation of initialize method
     assignedZone = rItfManageSimSweep->grabAssignedZone(droneID);
-    
+
     leftYBound = assignedZone.getV1().getY();
     sweepLength = assignedZone.getV2().getY() - leftYBound;
 
-    position = vect2(0.0,0.0);
+    position = vect2(0.0, 0.0);
 
     const auto bottomLeftPoint = vect2(assignedZone.getV2().getX(), assignedZone.getV1().getY());
     zoneStartPoint = bottomLeftPoint + startingPoint * bottomLeftPoint;
-    
+
     direction = zoneStartPoint;
     direction.normalize();
-    
+
     movementTolerance = rItfSimDataSweep->grabPositionCorrection();
-    
+
     battery = batteryCapacity;
     batteryConsumption = 2 * pow(speed, 2) / 3600.0;
     // End of user code
@@ -61,7 +59,7 @@ void DroneSweep::end() {
 int DroneSweep::doStep(int nStep) {
     // Start of user code  : Implementation of doStep method
     // Movement
-    
+
     if (!isInZone)
         if (vect2::distance(position, zoneStartPoint) <= movementTolerance) {
             position = zoneStartPoint;
@@ -86,8 +84,8 @@ int DroneSweep::doStep(int nStep) {
 
 // Start of user code  : Additional methods
 vect2 DroneSweep::SetNextPosition() {
-    if (!isInZone) return { position + direction * speed };
-    
+    if (!isInZone) return {position + direction * speed};
+
     const double targetHeight = sweepHeight * heightCount;
     if (goesVertical &&
         (!topToBottom && position.getX() >= targetHeight) || (topToBottom && position.getX() <= targetHeight)) {
@@ -130,11 +128,20 @@ bool DroneSweep::GoesOutOfBounds(vect2& point) {
 void DroneSweep::setAssignedZone(wect2 zone) {
     assignedZone = zone;
 }
+
 // End of user code
 
 
 void DroneSweep::setObjposition(vect2 arg) {
     objposition = arg;
+}
+
+void DroneSweep::setWindForce(double arg) {
+    windForce = arg;
+}
+
+void DroneSweep::setWindDirection(vect2 arg) {
+    windDirection = arg;
 }
 
 vect2 DroneSweep::getSweepposition() {
@@ -143,10 +150,6 @@ vect2 DroneSweep::getSweepposition() {
 
 void DroneSweep::setrItfGeoDataSweep(ItfGeoDataInterface* arItfGeoDataSweep) {
     rItfGeoDataSweep = arItfGeoDataSweep;
-}
-
-void DroneSweep::setrItfWindForceSweep(ItfWindForceInterface* arItfWindForceSweep) {
-    rItfWindForceSweep = arItfWindForceSweep;
 }
 
 void DroneSweep::setrItfManageSimSweep(ItfManageSimInterface* arItfManageSimSweep) {
@@ -172,7 +175,7 @@ double DroneSweep::getMaxSpeed() {
 }
 
 void DroneSweep::setMaxSpeed(double arg) {
-    maxSpeed = arg;   
+    maxSpeed = arg;
 }
 
 // +++++++++++++ Access for visionRadius parameter +++++++++++++
@@ -218,4 +221,13 @@ vect2 DroneSweep::getStartingPoint() {
 
 void DroneSweep::setStartingPoint(vect2 arg) {
     startingPoint = arg;
+}
+
+// +++++++++++++ Access for collisionRadius parameter +++++++++++++
+double DroneSweep::getCollisionRadius() {
+    return collisionRadius;
+}
+
+void DroneSweep::setCollisionRadius(double arg) {
+    collisionRadius = arg;
 }

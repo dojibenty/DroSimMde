@@ -14,15 +14,13 @@ class GeoZone;
 #include "vect2.h"
 
 #include "ItfGeoDataInterface.h"
-#include "wect2.h"
 
 class compGeoZone : public LeafComponent, public ItfGeoDataInterface {
 protected :
     bool newValue;
     int delay;
 
-    string name = "GeoZone";
-    
+
     GeoZone* appli;
 
 public :
@@ -35,13 +33,12 @@ public :
     void initialize();
     void end();
 
-    string getName() { return name; }
     GeoZone* getAppli();
 
     // +++++++++++++ Methods of the pItfGeoData interface +++++++++++++
     vect2 grabEnvLimits() override;
     vect2 grabBottomLeftPoint() override;
-    
+
     // +++++++++++++ Access for envSize parameter +++++++++++++
     vect2 getEnvSize();
 

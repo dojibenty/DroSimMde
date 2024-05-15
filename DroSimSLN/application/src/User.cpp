@@ -46,10 +46,8 @@ int User::doStep(int nStep) {
 // +++++++++++++ Methods of the pItfManageSimulation interface +++++++++++++
 void User::signalObjectiveFound(long droneID) {
     // Start of user code  : Implementation of method signalObjectiveFound
-    if (!isObjectiveFound) {
-        cout << "Objective found by drone " << droneID << '\n';
-        isObjectiveFound = true;
-    }
+    isObjectiveFound = true;
+    if (!isObjectiveFound) cout << "Objective found by drone " << droneID << '\n';
     // End of user code
 }
 
@@ -60,7 +58,12 @@ wect2 User::grabAssignedZone(long droneID) {
 
 // Start of user code  : Additional methods
 double User::randRange(const double min, const double max) {
-    return min + (rand() / (RAND_MAX + 1.0) * (max - min + 1));
+    return min + (double)rand()/RAND_MAX * (max - min);
+}
+
+double User::roundToDecimal(const double number, const int decimal) {
+    const double power = pow(10, decimal);
+    return round(number * power) / power;
 }
 
 vector<wect2> User::createZones() const {
@@ -68,7 +71,7 @@ vector<wect2> User::createZones() const {
     const int totalLines = (int)ceil((float)droneCount / (float)maxInlineZones);
     const int zonesLastLine = droneCount - filledLines * maxInlineZones;
     vect2 envSize = rItfGeoDataUser->grabEnvLimits();
-    
+
     vector<vector<wect2>> localZones;
 
     // Filled lines

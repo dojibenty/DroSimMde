@@ -5,6 +5,8 @@
 #include "LogComponent.h"
 #include <vector>
 
+#include "Clock.h"
+
 class Scenario {
 protected :
     //std::vector<LeafComponent*> &ptLeafComponents;
@@ -20,6 +22,8 @@ protected :
     int simulationNumber;
 
     vector<int> simulationResults;
+    bool isSimSuccessful;
+    bool doEndSim;
 
 public :
     Scenario(RootComponent* aRoot);
@@ -27,7 +31,8 @@ public :
 
     void setTime(long min, long max);
 
-    bool startSimulation();
+    tuple<bool, double> startSimulation();
+    void computeDoStepResult(Clock* c, int returnCode);
 
     virtual void eventSimulation() = 0;
     //pyp

@@ -22,8 +22,6 @@ protected :
     bool newValue;
     int delay;
 
-    string name = "Simulation";
-    
     Simulation* appli;
 
 public :
@@ -36,7 +34,6 @@ public :
     void initialize();
     void end();
 
-    string getName() { return name; }
     // +++++++++++++ Methods of the pItfSimData interface +++++++++++++
     double grabExpectedEndTime();
 

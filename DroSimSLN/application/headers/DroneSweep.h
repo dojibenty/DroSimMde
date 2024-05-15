@@ -12,7 +12,6 @@ class compDroneSweep;
 
 #include "ItfGeoDataInterface.h"
 #include "wect2.h"
-#include "ItfWindForceInterface.h"
 #include "ItfManageSimInterface.h"
 #include "ItfSimDataInterface.h"
 
@@ -25,6 +24,8 @@ protected :
 
     // Inputs
     vect2 objposition;
+    double windForce;
+    vect2 windDirection;
     // Outputs
     vect2 sweepposition;
     // Parameters
@@ -35,19 +36,15 @@ protected :
     double batteryCapacity;
     long numberOf;
     vect2 startingPoint;
+    double collisionRadius;
 
     // Required Interfaces
     ItfGeoDataInterface* rItfGeoDataSweep;
-    ItfWindForceInterface* rItfWindForceSweep;
     ItfManageSimInterface* rItfManageSimSweep;
     ItfSimDataInterface* rItfSimDataSweep;
 
     // Start of user code  : Properties of DroneSweep
-protected:
-    wect2 assignedZone;
-
 private:
-    string name = "DroneSweep";
     int droneID;
     double speed;
     vect2 position;
@@ -55,6 +52,7 @@ private:
     double batteryConsumption;
     double battery;
     double movementTolerance;
+    wect2 assignedZone;
     bool goesVertical = true;
     bool leftToRight = false;
     bool topToBottom = false;
@@ -81,17 +79,19 @@ private:
 
 public:
     void setAssignedZone(wect2 zone);
-    string getName() { return name; }
     double getSpeed() { return speed; }
     void setSpeed(double arg) { speed = arg; }
+    int getDroneID() { return droneID; }
+    vect2& getPosition() { return position; }
     // End of user code
 
 
     void setObjposition(vect2 arg);
+    void setWindForce(double arg);
+    void setWindDirection(vect2 arg);
 
     vect2 getSweepposition();
     void setrItfGeoDataSweep(ItfGeoDataInterface* arItfGeoDataSweep);
-    void setrItfWindForceSweep(ItfWindForceInterface* arItfWindForceSweep);
     void setrItfManageSimSweep(ItfManageSimInterface* arItfManageSimSweep);
     void setrItfSimDataSweep(ItfSimDataInterface* arItfSimDataSweep);
     // +++++++++++++ Access for minSpeed parameter +++++++++++++
@@ -122,5 +122,9 @@ public:
     vect2 getStartingPoint();
 
     void setStartingPoint(vect2 arg);
+    // +++++++++++++ Access for collisionRadius parameter +++++++++++++
+    double getCollisionRadius();
+
+    void setCollisionRadius(double arg);
 };
 #endif /*  DroneSweep_H_ */

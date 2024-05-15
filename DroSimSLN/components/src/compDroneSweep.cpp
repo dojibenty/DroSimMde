@@ -39,20 +39,17 @@ int compDroneSweep::doStep(int nStep) {
         newValue = false;
     }
     readInputs();
-    int numberOf = getNumberOf();
-    int returnCode = 0, temp;
+    const int numberOf = getNumberOf();
+    vector<int> returnCodes;
     for (int i = 0; i < numberOf; i++) {
         auto it = find(terminated.begin(), terminated.end(), i);
         if (it != terminated.end()) continue;
-        
-        temp = appli[i]->doStep(nStep);
-        newSweepposition[i] = appli[i]->getSweepposition();
-
-        if (temp == 1)
-            returnCode = 1;
-        else if (temp == 2) terminated.push_back(i);
+        auto inst = appli[i];
+        if (pauseCondition(inst)) continue;
+        returnCodes.push_back(inst->doStep(nStep));
+        newSweepposition[i] = inst->getSweepposition();
     }
-    
+
     if (delayMax == 0) {
         oldSweepposition = newSweepposition;
         newValue = false;
@@ -62,8 +59,35 @@ int compDroneSweep::doStep(int nStep) {
         delay = 0;
     }
 
-    if (terminated.size() == numberOf) return 2;
-    return returnCode;
+    return sendReturnCode(returnCodes);
+}
+
+int compDroneSweep::sendReturnCode(const vector<int>& returnCodes) {
+    int code = 0;
+    for (int i = 0; i < returnCodes.size(); i++) {
+        switch (returnCodes[i]) {
+        case 1:
+            code = 1;
+            break;
+        case 2:
+            terminated.push_back(i);
+            break;
+        default:
+            break;
+        }
+    }
+    if (terminated.size() == getNumberOf()) code = 2;
+
+    return code;
+}
+
+bool compDroneSweep::pauseCondition(DroneSweep* inst) {
+    const double collisionRadius = inst->getCollisionRadius();
+    for (DroneSweep* obj : appli)
+        if (vect2::distance(inst->getPosition(), obj->getPosition()) <= collisionRadius)
+            if (inst->getDroneID() < obj->getDroneID())
+                return true;
+    return false;
 }
 
 void compDroneSweep::readInputs() {}
@@ -86,11 +110,6 @@ vector<vect2> compDroneSweep::getSweepposition() {
 void compDroneSweep::setrItfGeoDataSweep(ItfGeoDataInterface* arItfGeoDataSweep) {
     for (DroneSweep* obj : appli)
         obj->setrItfGeoDataSweep(arItfGeoDataSweep);
-}
-
-void compDroneSweep::setrItfWindForceSweep(ItfWindForceInterface* arItfWindForceSweep) {
-    for (DroneSweep* obj : appli)
-        obj->setrItfWindForceSweep(arItfWindForceSweep);
 }
 
 void compDroneSweep::setrItfManageSimSweep(ItfManageSimInterface* arItfManageSimSweep) {
@@ -175,4 +194,14 @@ vect2 compDroneSweep::getStartingPoint() {
 void compDroneSweep::setStartingPoint(vect2 arg) {
     for (DroneSweep* obj : appli)
         obj->setStartingPoint(arg);
+}
+
+// +++++++++++++ Access for collisionRadius parameter +++++++++++++
+double compDroneSweep::getCollisionRadius() {
+    return appli[0]->getCollisionRadius();
+}
+
+void compDroneSweep::setCollisionRadius(double arg) {
+    for (DroneSweep* obj : appli)
+        obj->setCollisionRadius(arg);
 }

@@ -10,19 +10,21 @@
 
 #include "compDroneSpiral.h"
 #include "AObjective.h"
+class AWind;
 class AObjective;
 
 class ADroneSpiral : public compDroneSpiral {
-	protected :
-              AObjective *attAObjective;
+protected :
+    AObjective* attAObjective;
+    AWind* attAWind;
 
-	public :
+public :
+    ADroneSpiral(double aFrequency);
+    virtual ~ADroneSpiral();
 
-            ADroneSpiral(double aFrequency);
-            virtual ~ADroneSpiral();
+    void setAObjective(AObjective* pAObjective);
+    void setAWind(AWind* pAWind);
 
-	        void setAObjective(AObjective *pAObjective);
-
-	        void readInputs()  override;
+    void readInputs() override;
 };
 #endif /*  ADroneSpiral_H_ */

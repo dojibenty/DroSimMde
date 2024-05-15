@@ -13,7 +13,6 @@ class compDroneSpiral;
 
 #include "ItfGeoDataInterface.h"
 #include "wect2.h"
-#include "ItfWindForceInterface.h"
 #include "ItfManageSimInterface.h"
 #include "ItfSimDataInterface.h"
 
@@ -26,6 +25,8 @@ protected :
 
     // Inputs
     vect2 objposition;
+    double windForce;
+    vect2 windDirection;
     // Outputs
     vect2 spiralposition;
     // Parameters
@@ -43,13 +44,11 @@ protected :
 
     // Required Interfaces
     ItfGeoDataInterface* rItfGeoDataSpiral;
-    ItfWindForceInterface* rItfWindForceSpiral;
     ItfManageSimInterface* rItfManageSimSpiral;
     ItfSimDataInterface* rItfSimDataSpiral;
 
     // Start of user code  : Properties of DroneSpiral
 private:
-    string name = "DroneSpiral";
     int droneID = 1;
     double speed;
     vect2 position;
@@ -84,17 +83,17 @@ private:
     bool GoesOutOfBounds(vect2 point);
 
 public:
-    string getName() { return name; }
     double getSpeed() { return speed; }
     void setSpeed(double arg) { speed = arg; }
     // End of user code
 
 
     void setObjposition(vect2 arg);
+    void setWindForce(double arg);
+    void setWindDirection(vect2 arg);
 
     vect2 getSpiralposition();
     void setrItfGeoDataSpiral(ItfGeoDataInterface* arItfGeoDataSpiral);
-    void setrItfWindForceSpiral(ItfWindForceInterface* arItfWindForceSpiral);
     void setrItfManageSimSpiral(ItfManageSimInterface* arItfManageSimSpiral);
     void setrItfSimDataSpiral(ItfSimDataInterface* arItfSimDataSpiral);
     // +++++++++++++ Access for minSpeed parameter +++++++++++++

@@ -14,6 +14,10 @@ compWind::compWind(double aFrequency) : LeafComponent(aFrequency) {
     delayMax = 0;
     newValue = false;
     isActive = true;
+    oldWindForce = appli->getWindForce();
+    newWindForce = appli->getWindForce();
+    oldWindDirection = appli->getWindDirection();
+    newWindDirection = appli->getWindDirection();
 }
 
 compWind::~compWind() {}
@@ -21,15 +25,25 @@ compWind::~compWind() {}
 void compWind::doOneStep() {
     if (newValue) {
         delay++;
-        if (delay == delayMax) {}
+        if (delay == delayMax) {
+            oldWindForce = newWindForce;
+            oldWindDirection = newWindDirection;
+            newValue = false;
+        }
     }
 }
 
 int compWind::doStep(int nStep) {
-    if (newValue) {}
+    if (newValue) {
+        oldWindForce = newWindForce;
+        oldWindDirection = newWindDirection;
+        newValue = false;
+    }
     readInputs();
     const int returnCode = appli->doStep(nStep);
     if (delayMax == 0) {
+        oldWindForce = newWindForce;
+        oldWindDirection = newWindDirection;
         newValue = false;
     }
     else {
@@ -49,13 +63,12 @@ void compWind::end() {
     appli->end();
 }
 
-// +++++++++++++ Methods of the pItfWindForce interface +++++++++++++
-double compWind::grabForce() {
-    return appli->grabForce();
+double compWind::getWindForce() {
+    return oldWindForce;
 }
 
-vect2 compWind::grabDirection() {
-    return appli->grabDirection();
+vect2 compWind::getWindDirection() {
+    return oldWindDirection;
 }
 
 Wind* compWind::getAppli() {

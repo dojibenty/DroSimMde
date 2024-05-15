@@ -53,7 +53,6 @@ vect2 GeoZone::grabBottomLeftPoint() {
 }
 
 
-
 // Start of user code  : Additional methods
 // End of user code
 

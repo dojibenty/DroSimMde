@@ -3,6 +3,7 @@
 #include "Clock.h"
 #include <cmath>
 #include <iostream>
+#include <tuple>
 
 Scenario::Scenario(RootComponent* aRoot) {
     stepTime = 1;
@@ -39,41 +40,21 @@ void Scenario::setTime(long m, long mx) {
 
 void Scenario::eventSimulation() {}
 
-bool Scenario::startSimulation() {
+tuple<bool, double> Scenario::startSimulation() {
     Clock* c = Clock::getInstance();
     c->Init(min, stepTime, max);
     simulationNumber++;
-    bool isSimSuccessful = false;
+    isSimSuccessful = doEndSim = false;
     while (!c->isFinished()) {
         // scenario events
         eventSimulation();
 
         // run des composants
         unsigned int j = root->getListLeafComponents().size();
-        int returnCode;
-        bool doEndSim = false;
         for (unsigned int i = 0; i < j; i++) {
             LeafComponent* lc = root->getListLeafComponents().at(i);
-            if (((c->getCurrentMS() % periods.at(i)) == 0) && lc->getIsActive()) {
-                returnCode = lc->doStep(lc->getDelayMax());
-                string str;
-                switch (returnCode) {
-                case 1:
-                    str = "objective found," + lc->getName();
-                    isSimSuccessful = true;
-                    break;
-                case 2:
-                    str = "drones batteries are empty";
-                    break;
-                default:
-                    str = "other," + lc->getName();
-                }
-                if (returnCode != 0) {
-                    cout << '(' <<  c->getCurrentMS() << ',' << str << ')' << '\n';
-                    doEndSim = true;
-                }
-                
-            }
+            if (((c->getCurrentMS() % periods.at(i)) == 0) && lc->getIsActive())
+                computeDoStepResult(c, lc->doStep(lc->getDelayMax()));
         }
         //pyp : run des observations
         j = getCsvLogs().size();
@@ -101,7 +82,27 @@ bool Scenario::startSimulation() {
         }
         if (doEndSim) break;
     }
-    return isSimSuccessful;
+    return make_tuple(isSimSuccessful, c->getCurrentMS());
+}
+
+void Scenario::computeDoStepResult(Clock* c, int returnCode) {
+    string str;
+    if (isSimSuccessful) return;
+    switch (returnCode) {
+    case 1:
+        str = "objective found";
+        isSimSuccessful = true;
+        break;
+    case 2:
+        str = "drones batteries are empty";
+        break;
+    default:
+        str = "other";
+    }
+    if (returnCode != 0) {
+        cout << '(' << c->getCurrentMS() << ',' << str << ')' << '\n';
+        doEndSim = true;
+    }
 }
 
 //pyp

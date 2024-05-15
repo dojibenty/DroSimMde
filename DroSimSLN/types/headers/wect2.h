@@ -29,7 +29,7 @@ public :
     vect2 getV2();
 
     void setV2(vect2 varv2);
-    
+
     // Start of user code  : Additional methods
     wect2 operator+(const vect2& arg) const;
     // End of user code

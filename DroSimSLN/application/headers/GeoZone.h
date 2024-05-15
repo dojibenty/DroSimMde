@@ -10,7 +10,6 @@ class compGeoZone;
 #include "vect2.h"
 
 #include "ItfGeoDataInterface.h"
-#include "wect2.h"
 
 // Start of user code  : Additional imports for GeoZone
 // End of user code
@@ -22,7 +21,7 @@ protected :
     // Parameters
     vect2 envSize;
     vect2 bottomLeftPoint;
-    
+
     // Start of user code  : Properties of GeoZone
     // End of user code
 
@@ -37,7 +36,7 @@ public :
     // +++++++++++++ Methods of the pItfGeoData interface +++++++++++++
     vect2 grabEnvLimits() override;
     vect2 grabBottomLeftPoint() override;
-    
+
     // Start of user code  : Additional methods
     // End of user code
 

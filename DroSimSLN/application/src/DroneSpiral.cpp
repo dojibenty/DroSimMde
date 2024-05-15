@@ -17,7 +17,6 @@
 DroneSpiral::DroneSpiral(compDroneSpiral* container) {
     myContainer = container;
     rItfGeoDataSpiral = 0;
-    rItfWindForceSpiral = 0;
     rItfManageSimSpiral = 0;
     rItfSimDataSpiral = 0;
     // Start of user code  : Implementation of constructor method
@@ -37,10 +36,10 @@ void DroneSpiral::initialize() {
 
     const auto bottomLeftPoint = vect2(assignedZone.getV2().getX(), assignedZone.getV1().getY());
     zoneStartPoint = bottomLeftPoint + startingPoint * bottomLeftPoint;
-    
+
     direction = zoneStartPoint;
     direction.normalize();
-    
+
     movementTolerance = rItfSimDataSpiral->grabPositionCorrection();
 
     battery = batteryCapacity;
@@ -140,8 +139,7 @@ vect2 DroneSpiral::GetRandomDirection() {
             direction.getY() + User::randRange(-1.0f, 1.0f));
         direction.normalize();
         nextPosition = position + direction * speed;
-    }
-    while (GoesOutOfBounds(nextPosition));
+    } while (GoesOutOfBounds(nextPosition));
 
     if (--wander == 0) SetCircle();
     return nextPosition;
@@ -161,16 +159,20 @@ void DroneSpiral::setObjposition(vect2 arg) {
     objposition = arg;
 }
 
+void DroneSpiral::setWindForce(double arg) {
+    windForce = arg;
+}
+
+void DroneSpiral::setWindDirection(vect2 arg) {
+    windDirection = arg;
+}
+
 vect2 DroneSpiral::getSpiralposition() {
     return spiralposition;
 }
 
 void DroneSpiral::setrItfGeoDataSpiral(ItfGeoDataInterface* arItfGeoDataSpiral) {
     rItfGeoDataSpiral = arItfGeoDataSpiral;
-}
-
-void DroneSpiral::setrItfWindForceSpiral(ItfWindForceInterface* arItfWindForceSpiral) {
-    rItfWindForceSpiral = arItfWindForceSpiral;
 }
 
 void DroneSpiral::setrItfManageSimSpiral(ItfManageSimInterface* arItfManageSimSpiral) {
@@ -196,7 +198,7 @@ double DroneSpiral::getMaxSpeed() {
 }
 
 void DroneSpiral::setMaxSpeed(double arg) {
-    maxSpeed = arg;   
+    maxSpeed = arg;
 }
 
 // +++++++++++++ Access for visionRadius parameter +++++++++++++
@@ -270,6 +272,7 @@ long DroneSpiral::getNumberOf() {
 void DroneSpiral::setNumberOf(long arg) {
     numberOf = arg;
 }
+
 // +++++++++++++ Access for startingPoint parameter +++++++++++++
 vect2 DroneSpiral::getStartingPoint() {
     return startingPoint;

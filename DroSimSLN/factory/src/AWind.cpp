@@ -8,14 +8,7 @@
 #include "AWind.h"
 #include "Wind.h"
 
-AWind::AWind(double aFrequency)	: compWind(aFrequency){
-		
-}
-AWind::~AWind()	{
-		
-}
+AWind::AWind(double aFrequency) : compWind(aFrequency) {}
+AWind::~AWind() {}
 
-void AWind::readInputs() {
-}
-
-
+void AWind::readInputs() {}

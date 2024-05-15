@@ -13,20 +13,16 @@ class Wind;
 
 #include "vect2.h"
 
-
-#include "ItfWindForceInterface.h"
-#include "vect2.h"
-
-class compWind : public LeafComponent, public ItfWindForceInterface {
+class compWind : public LeafComponent {
 protected :
-    /*pyp : inutile
-    */
-
+    double oldWindForce;
+    double newWindForce;
+    vect2 oldWindDirection;
+    vect2 newWindDirection;
+    
     bool newValue;
     int delay;
 
-    string name = "Wind";
-    
     Wind* appli;
 
 public :
@@ -39,14 +35,10 @@ public :
     void initialize();
     void end();
 
-    string getName() { return name; }
-    
-    // +++++++++++++ Methods of the pItfWindForce interface +++++++++++++
-    double grabForce();
-
-    vect2 grabDirection();
-
+    double getWindForce();
+    vect2 getWindDirection();
     Wind* getAppli();
+    
     // +++++++++++++ Access for force parameter +++++++++++++
     double getForce();
 

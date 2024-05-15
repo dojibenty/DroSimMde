@@ -8,6 +8,7 @@
 //#include "DroSimSystem.h"
 #include "ScenarLog.h"
 #include "myPositionsLogLogObservationComponent.h"
+#include <tuple>
 // Start of user code  : Additional imports for testDroSim
 #include <string>
 // End of user code
@@ -29,6 +30,7 @@
 
 int main() {
     auto* root = new DroSimSystem();
+    vector<double> times;
     int successfulSims;
     do {
         successfulSims = 0;
@@ -41,18 +43,21 @@ int main() {
             string si = to_string(i);
             string fileName = "PositionsLog";
             const string completeFileName = fileName + si;
-            auto* PositionsLogLogObservationComponent = new myPositionsLogLogObservationComponent(completeFileName, 1.0);
+            auto* PositionsLogLogObservationComponent = new
+                myPositionsLogLogObservationComponent(completeFileName, 1.0);
             PositionsLogLogObservationComponent->setObjective(root->get_AObjective()->getAppli());
             PositionsLogLogObservationComponent->setDroneSweep(root->get_ADroneSweep()->getAppli());
             simulatedScenario->push(PositionsLogLogObservationComponent);
 
 
             simulatedScenario->setTime(0, 600000);
-            if (simulatedScenario->startSimulation()) successfulSims++;
+            auto simResult = simulatedScenario->startSimulation();
+            if (get<0>(simResult)) successfulSims++;
+            times.push_back(get<1>(simResult));
             root->end();
             simulatedScenario->end();
         }
-    } while (root->mutateParameters(successfulSims >= 5 / 2));
+    } while (root->mutateParameters(successfulSims >= 5 / 2, times));
     cout << "Lowest speed is " << root->getPSpeed();
     // Start of user code  : Additional code main for testDroSim
     // End of user code

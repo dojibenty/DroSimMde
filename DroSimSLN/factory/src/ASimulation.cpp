@@ -8,14 +8,7 @@
 #include "ASimulation.h"
 #include "Simulation.h"
 
-ASimulation::ASimulation(double aFrequency)	: compSimulation(aFrequency){
-		
-}
-ASimulation::~ASimulation()	{
-		
-}
+ASimulation::ASimulation(double aFrequency) : compSimulation(aFrequency) {}
+ASimulation::~ASimulation() {}
 
-void ASimulation::readInputs() {
-}
-
-
+void ASimulation::readInputs() {}

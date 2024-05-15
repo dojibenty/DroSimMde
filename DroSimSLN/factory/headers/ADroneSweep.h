@@ -10,19 +10,20 @@
 
 #include "compDroneSweep.h"
 #include "AObjective.h"
-class AObjective;
+#include "AWind.h"
 
 class ADroneSweep : public compDroneSweep {
-	protected :
-              AObjective *attAObjective;
+protected :
+    AObjective* attAObjective;
+    AWind* attAWind;
 
-	public :
+public :
+    ADroneSweep(double aFrequency, long numberOf);
+    virtual ~ADroneSweep();
 
-            ADroneSweep(double aFrequency, long numberOf);
-            virtual ~ADroneSweep();
+    void setAObjective(AObjective* pAObjective);
+    void setAWind(AWind* pAWind);
 
-	        void setAObjective(AObjective *pAObjective);
-
-	        void readInputs()  override;
+    void readInputs() override;
 };
 #endif /*  ADroneSweep_H_ */

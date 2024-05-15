@@ -43,12 +43,12 @@ public :
     int doStep(int nStep);
 
     void setrItfGeoDataUser(ItfGeoDataInterface* arItfGeoDataUser);
-        
+
     // +++++++++++++ Methods of the pItfManageSimulation interface +++++++++++++
     void signalObjectiveFound(long droneID) override;
 
     wect2 grabAssignedZone(long droneID) override;
-    
+
     // +++++++++++++ Access for maxInlineZones parameter +++++++++++++
     long getMaxInlineZones();
 
@@ -56,11 +56,12 @@ public :
 
     // +++++++++++++ Access for droneCount calculated attribute +++++++++++++
     long getDroneCount();
-    
+
     void setDroneCount(long arg);
-    
+
     // Start of user code  : Additional methods
     static double randRange(double min, double max);
+    static double roundToDecimal(double number, int decimal);
     vector<wect2> createZones() const;
     // End of user code
 };

@@ -159,21 +159,21 @@
         <ClCompile Include="application\src\DroneSpiral.cpp"/>
         <ClCompile Include="application\src\DroneSweep.cpp"/>
         <ClCompile Include="application\src\GeoZone.cpp"/>
-        <ClCompile Include="application\src\User.cpp" />
+        <ClCompile Include="application\src\User.cpp"/>
         <ClCompile Include="application\src\Objective.cpp"/>
         <ClCompile Include="application\src\Simulation.cpp"/>
         <ClCompile Include="application\src\Wind.cpp"/>
         <ClCompile Include="components\src\compDroneSpiral.cpp"/>
         <ClCompile Include="components\src\compDroneSweep.cpp"/>
         <ClCompile Include="components\src\compGeoZone.cpp"/>
-        <ClCompile Include="components\src\compUser.cpp" />
+        <ClCompile Include="components\src\compUser.cpp"/>
         <ClCompile Include="components\src\compObjective.cpp"/>
         <ClCompile Include="components\src\compSimulation.cpp"/>
         <ClCompile Include="components\src\compWind.cpp"/>
         <ClCompile Include="factory\src\ADroneSpiral.cpp"/>
         <ClCompile Include="factory\src\ADroneSweep.cpp"/>
         <ClCompile Include="factory\src\AGeoZone.cpp"/>
-        <ClCompile Include="factory\src\AUser.cpp" />
+        <ClCompile Include="factory\src\AUser.cpp"/>
         <ClCompile Include="factory\src\AObjective.cpp"/>
         <ClCompile Include="factory\src\ASimulation.cpp"/>
         <ClCompile Include="factory\src\AWind.cpp"/>
@@ -194,21 +194,21 @@
         <ClInclude Include="application\headers\DroneSpiral.h"/>
         <ClInclude Include="application\headers\DroneSweep.h"/>
         <ClInclude Include="application\headers\GeoZone.h"/>
-        <ClInclude Include="application\headers\User.h" />
+        <ClInclude Include="application\headers\User.h"/>
         <ClInclude Include="application\headers\Objective.h"/>
         <ClInclude Include="application\headers\Simulation.h"/>
         <ClInclude Include="application\headers\Wind.h"/>
         <ClInclude Include="components\headers\compDroneSpiral.h"/>
         <ClInclude Include="components\headers\compDroneSweep.h"/>
         <ClInclude Include="components\headers\compGeoZone.h"/>
-        <ClInclude Include="components\headers\compUser.h" />
+        <ClInclude Include="components\headers\compUser.h"/>
         <ClInclude Include="components\headers\compObjective.h"/>
         <ClInclude Include="components\headers\compSimulation.h"/>
         <ClInclude Include="components\headers\compWind.h"/>
         <ClInclude Include="factory\headers\ADroneSpiral.h"/>
         <ClInclude Include="factory\headers\ADroneSweep.h"/>
         <ClInclude Include="factory\headers\AGeoZone.h"/>
-        <ClInclude Include="factory\headers\AUser.h" />
+        <ClInclude Include="factory\headers\AUser.h"/>
         <ClInclude Include="factory\headers\AObjective.h"/>
         <ClInclude Include="factory\headers\ASimulation.h"/>
         <ClInclude Include="factory\headers\AWind.h"/>
@@ -222,14 +222,13 @@
         <ClInclude Include="interfaces\headers\ItfGeoDataInterface.h"/>
         <ClInclude Include="interfaces\headers\ItfManageSimInterface.h"/>
         <ClInclude Include="interfaces\headers\ItfSimDataInterface.h"/>
-        <ClInclude Include="interfaces\headers\ItfWindForceInterface.h"/>
         <ClInclude Include="observation\headers\myPositionsLogLogObservationComponent.h"/>
         <ClInclude Include="scenario\headers\ScenarLog.h"/>
         <ClInclude Include="types\headers\vect2.h"/>
         <ClInclude Include="types\headers\wect2.h"/>
     </ItemGroup>
     <ItemGroup>
-      <Content Include="notes.txt" />
+        <Content Include="notes.txt"/>
     </ItemGroup>
     <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets"/>
     <ImportGroup Label="ExtensionTargets">

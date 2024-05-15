@@ -11,14 +11,13 @@
 #include "compGeoZone.h"
 
 class AGeoZone : public compGeoZone {
-	protected :
+protected :
 
-	public :
+public :
+    AGeoZone(double aFrequency);
+    virtual ~AGeoZone();
 
-            AGeoZone(double aFrequency);
-            virtual ~AGeoZone();
 
-
-	        void readInputs()  override;
+    void readInputs() override;
 };
 #endif /*  AGeoZone_H_ */

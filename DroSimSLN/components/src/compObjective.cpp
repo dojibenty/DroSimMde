@@ -7,78 +7,84 @@
 
 #include "compObjective.h"
 #include "Objective.h"
-compObjective::compObjective(double aFrequency) : LeafComponent( aFrequency) {
-		appli = new Objective( this);
-		delay = 0;
-		delayMax = 0;
-		newValue = false;
-		isActive = true;
-		oldObjposition = appli->getObjposition();
-		newObjposition = appli->getObjposition();
-	}
-compObjective::~compObjective()	{}
+
+compObjective::compObjective(double aFrequency) : LeafComponent(aFrequency) {
+    appli = new Objective(this);
+    delay = 0;
+    delayMax = 0;
+    newValue = false;
+    isActive = true;
+    oldObjposition = appli->getObjposition();
+    newObjposition = appli->getObjposition();
+}
+
+compObjective::~compObjective() {}
 
 void compObjective::doOneStep() {
-		if (newValue) {
-			delay++;
-			if (delay == delayMax) {
-					oldObjposition = newObjposition;
-					newValue = false;
-			}
-		}
-	}
+    if (newValue) {
+        delay++;
+        if (delay == delayMax) {
+            oldObjposition = newObjposition;
+            newValue = false;
+        }
+    }
+}
 
-int compObjective::doStep(int nStep) {	
-		if (newValue) {
-			oldObjposition = newObjposition;
-			newValue = false;
-		}
-		readInputs();
-		const int returnCode = appli->doStep(nStep);
-		newObjposition = appli->getObjposition();
-		if (delayMax == 0) {
-			oldObjposition = newObjposition;
-			newValue = false;
-		} else {
-			newValue = true;
-			delay = 0;
-		}
-	return returnCode;
-	}
+int compObjective::doStep(int nStep) {
+    if (newValue) {
+        oldObjposition = newObjposition;
+        newValue = false;
+    }
+    readInputs();
+    const int returnCode = appli->doStep(nStep);
+    newObjposition = appli->getObjposition();
+    if (delayMax == 0) {
+        oldObjposition = newObjposition;
+        newValue = false;
+    }
+    else {
+        newValue = true;
+        delay = 0;
+    }
+    return returnCode;
+}
 
-void compObjective::readInputs() {
-	}
+void compObjective::readInputs() {}
+
 void compObjective::initialize() {
-		appli->initialize();
-	}
+    appli->initialize();
+}
 
 void compObjective::end() {
-		appli->end();
-	}
-	
-vect2 compObjective::getObjposition() {
-		return oldObjposition;
-	}
-void compObjective::setrItfGeoDataObj(ItfGeoDataInterface *arItfGeoDataObj) {
-		appli->setrItfGeoDataObj(arItfGeoDataObj);
-	}
-Objective *compObjective::getAppli() {
-		return appli;
-	}
-	// +++++++++++++ Access for speedConstraint parameter +++++++++++++
-double compObjective::getSpeedConstraint() {
-		return appli->getSpeedConstraint();
-	}
-	
-void compObjective::setSpeedConstraint(double arg) {
-		appli->setSpeedConstraint(arg);
-	}
-	// +++++++++++++ Access for position parameter +++++++++++++
-vect2 compObjective::getPosition() {
-		return appli->getPosition();
-	}
-	
-void compObjective::setPosition(vect2 arg) {
-		appli->setPosition(arg);
-	}
+    appli->end();
+}
 
+vect2 compObjective::getObjposition() {
+    return oldObjposition;
+}
+
+void compObjective::setrItfGeoDataObj(ItfGeoDataInterface* arItfGeoDataObj) {
+    appli->setrItfGeoDataObj(arItfGeoDataObj);
+}
+
+Objective* compObjective::getAppli() {
+    return appli;
+}
+
+// +++++++++++++ Access for speedConstraint parameter +++++++++++++
+double compObjective::getSpeedConstraint() {
+    return appli->getSpeedConstraint();
+}
+
+void compObjective::setSpeedConstraint(double arg) {
+    appli->setSpeedConstraint(arg);
+}
+
+// +++++++++++++ Access for position parameter +++++++++++++
+vect2 compObjective::getPosition() {
+    return appli->getPosition();
+}
+
+void compObjective::setPosition(vect2 arg) {
+    appli->setPosition(arg);
+}

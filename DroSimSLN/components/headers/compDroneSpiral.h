@@ -15,7 +15,6 @@ class DroneSpiral;
 #include "vect2.h"
 
 #include "ItfGeoDataInterface.h"
-#include "ItfWindForceInterface.h"
 #include "ItfManageSimInterface.h"
 #include "ItfSimDataInterface.h"
 
@@ -32,8 +31,6 @@ protected :
     bool newValue;
     int delay;
 
-    string name = "DroneSpiral";
-
     DroneSpiral* appli;
 
 public :
@@ -48,12 +45,10 @@ public :
 
     vect2 getSpiralposition();
     void setrItfGeoDataSpiral(ItfGeoDataInterface* arItfGeoDataSpiral);
-    void setrItfWindForceSpiral(ItfWindForceInterface* arItfWindForceSpiral);
     void setrItfManageSimSpiral(ItfManageSimInterface* arItfManageSimSpiral);
     void setrItfSimDataSpiral(ItfSimDataInterface* arItfSimDataSpiral);
     DroneSpiral* getAppli();
 
-    string getName() { return name; }
     double getSpeed() { return appli->getSpeed(); }
     void setSpeed(double arg) { appli->setSpeed(arg); }
     // +++++++++++++ Access for minSpeed parameter +++++++++++++

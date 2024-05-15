@@ -49,7 +49,7 @@ public :
     ADroneSweep* get_ADroneSweep();
     ADroneSpiral* get_ADroneSpiral();
 
-    bool mutateParameters(bool isGroupSuccessful);
+    bool mutateParameters(const bool isGroupSuccessful, vector<double> times);
     double getPSpeed();
 
     void initialize();

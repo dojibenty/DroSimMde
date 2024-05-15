@@ -11,14 +11,13 @@
 #include "compObjective.h"
 
 class AObjective : public compObjective {
-	protected :
+protected :
 
-	public :
+public :
+    AObjective(double aFrequency);
+    virtual ~AObjective();
 
-            AObjective(double aFrequency);
-            virtual ~AObjective();
 
-
-	        void readInputs()  override;
+    void readInputs() override;
 };
 #endif /*  AObjective_H_ */

@@ -6,7 +6,7 @@
  */
 
 #include "Wind.h"
-#include "compWind.h"
+#include "User.h"
 // Start of user code  : Additional imports for Wind
 // End of user code
 
@@ -26,7 +26,8 @@ Wind::~Wind() {
 
 void Wind::initialize() {
     // Start of user code  : Implementation of initialize method
-
+    windForce = force;
+    windDirection = direction;
     // End of user code
 }
 
@@ -38,28 +39,27 @@ void Wind::end() {
 
 int Wind::doStep(int nStep) {
     // Start of user code  : Implementation of doStep method
+    windForce += User::roundToDecimal(User::randRange(-1, 1)/10,2);
+    if (windForce < 0) windForce = 0;
+    const double dirModX = User::roundToDecimal(User::randRange(-1, 1)/10,2);
+    const double dirModY = User::roundToDecimal(User::randRange(-1, 1)/10,2);
+    windDirection += vect2(dirModX,dirModY);
+    windDirection.normalize();
     return 0;
     // End of user code
 }
-
-// +++++++++++++ Methods of the pItfWindForce interface +++++++++++++
-double Wind::grabForce() {
-    // Start of user code  : Implementation of method grabForce
-    return force;
-    // End of user code
-}
-
-vect2 Wind::grabDirection() {
-    // Start of user code  : Implementation of method grabDirection
-    return direction;
-    // End of user code
-}
-
 
 // Start of user code  : Additional methods
 
 // End of user code
 
+double Wind::getWindForce() {
+    return windForce;
+}
+
+vect2 Wind::getWindDirection() {
+    return windDirection;
+}
 
 // +++++++++++++ Access for force parameter +++++++++++++
 double Wind::getForce() {

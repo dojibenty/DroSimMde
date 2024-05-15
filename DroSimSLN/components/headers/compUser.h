@@ -18,13 +18,8 @@ class User;
 
 class compUser : public LeafComponent, public ItfManageSimInterface {
 protected :
-    /*pyp : inutile
-    */
-
     bool newValue;
     int delay;
-
-    string name = "User";
 
     User* appli;
 
@@ -38,10 +33,8 @@ public :
     void initialize();
     void end();
 
-    string getName() { return name; }
-
     void setrItfGeoDataUser(ItfGeoDataInterface* arItfGeoDataUser);
-    
+
     // +++++++++++++ Methods of the pItfManageSimulation interface +++++++++++++
     void signalObjectiveFound(long droneID) override;
     wect2 grabAssignedZone(long droneID) override;
@@ -55,7 +48,7 @@ public :
 
     // +++++++++++++ Access for droneCount calculated attribute +++++++++++++
     long getDroneCount();
-    
+
     void setDroneCount(long arg);
 };
 #endif /* compUser_H_ */

@@ -38,6 +38,8 @@ public :
     string toString() const;
 
     vect2 operator+(const vect2& vect2) const;
+    vect2& operator+=(const vect2& vect2);
+    vect2& operator+=(double arg);
     vect2 operator*(double arg) const;
     vect2 operator*(const vect2& vect2) const;
     vect2 operator-(const vect2& vect2) const;

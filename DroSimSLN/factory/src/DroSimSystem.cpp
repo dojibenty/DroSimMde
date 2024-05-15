@@ -59,17 +59,17 @@ DroSimSystem::DroSimSystem() {
     instADroneSpiral = new ADroneSpiral(2.0);
     leafComponents.push_back(instADroneSpiral);
     instADroneSweep->setAObjective(instAObjective);
+    instADroneSweep->setAWind(instAWind);
     instADroneSpiral->setAObjective(instAObjective);
+    instADroneSpiral->setAWind(instAWind);
     instAUser->setrItfGeoDataUser(instAGeoZone->getAppli());
     instAObjective->setrItfGeoDataObj(instAGeoZone->getAppli());
     instADroneSweep->setrItfManageSimSweep(instAUser->getAppli());
     instADroneSweep->setrItfGeoDataSweep(instAGeoZone->getAppli());
     instADroneSweep->setrItfSimDataSweep(instASimulation->getAppli());
-    instADroneSweep->setrItfWindForceSweep(instAWind->getAppli());
     instADroneSpiral->setrItfManageSimSpiral(instAUser->getAppli());
     instADroneSpiral->setrItfGeoDataSpiral(instAGeoZone->getAppli());
     instADroneSpiral->setrItfSimDataSpiral(instASimulation->getAppli());
-    instADroneSpiral->setrItfWindForceSpiral(instAWind->getAppli());
 
     pSpeed = (14.0 + 28.0) / 2;
     instADroneSweep->setSpeed(pSpeed);
@@ -143,7 +143,7 @@ void DroSimSystem::end() {
     // End of user code
 }
 
-bool DroSimSystem::mutateParameters(const bool isGroupSuccessful) {
+bool DroSimSystem::mutateParameters(const bool isGroupSuccessful, vector<double> times) {
     cout << (isGroupSuccessful ? "Success" : "Fail") << endl;
 
     double speed;

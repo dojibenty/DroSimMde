@@ -67,10 +67,6 @@ void compDroneSpiral::setrItfGeoDataSpiral(ItfGeoDataInterface* arItfGeoDataSpir
     appli->setrItfGeoDataSpiral(arItfGeoDataSpiral);
 }
 
-void compDroneSpiral::setrItfWindForceSpiral(ItfWindForceInterface* arItfWindForceSpiral) {
-    appli->setrItfWindForceSpiral(arItfWindForceSpiral);
-}
-
 void compDroneSpiral::setrItfManageSimSpiral(ItfManageSimInterface* arItfManageSimSpiral) {
     appli->setrItfManageSimSpiral(arItfManageSimSpiral);
 }
@@ -98,7 +94,7 @@ double compDroneSpiral::getMaxSpeed() {
 }
 
 void compDroneSpiral::setMaxSpeed(double arg) {
-    appli->setMaxSpeed(arg);   
+    appli->setMaxSpeed(arg);
 }
 
 // +++++++++++++ Access for visionRadius parameter +++++++++++++
@@ -181,4 +177,3 @@ vect2 compDroneSpiral::getStartingPoint() {
 void compDroneSpiral::setStartingPoint(vect2 arg) {
     appli->setStartingPoint(arg);
 }
-

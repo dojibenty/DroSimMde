@@ -12,24 +12,16 @@
 class Objective;
 
 #include "vect2.h"
-#include "vect2.h"
-
 
 #include "ItfGeoDataInterface.h"
-#include "vect2.h"
-#include "wect2.h"
 
 class compObjective : public LeafComponent {
 protected :
-    /*pyp : inutile
-    */
     vect2 oldObjposition;
     vect2 newObjposition;
 
     bool newValue;
     int delay;
-
-    string name = "Objective";
 
     Objective* appli;
 
@@ -47,7 +39,6 @@ public :
     void setrItfGeoDataObj(ItfGeoDataInterface* arItfGeoDataObj);
     Objective* getAppli();
 
-    string getName() { return name; }
     // +++++++++++++ Access for speedConstraint parameter +++++++++++++
     double getSpeedConstraint();
 

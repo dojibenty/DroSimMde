@@ -15,7 +15,6 @@ class DroneSweep;
 #include "vect2.h"
 
 #include "ItfGeoDataInterface.h"
-#include "ItfWindForceInterface.h"
 #include "ItfManageSimInterface.h"
 #include "ItfSimDataInterface.h"
 
@@ -31,8 +30,6 @@ protected :
     vector<vect2> oldSweepposition;
     vector<vect2> newSweepposition;
 
-    string name = "DroneSweep"; 
-
     bool newValue;
     int delay;
 
@@ -41,6 +38,8 @@ public :
     virtual ~compDroneSweep();
     void doOneStep();
     int doStep(int nStep);
+    int sendReturnCode(const vector<int>& returnCodes);
+    bool pauseCondition(DroneSweep* inst);
 
     virtual void readInputs();
     void initialize();
@@ -48,12 +47,10 @@ public :
 
     vector<vect2> getSweepposition();
     void setrItfGeoDataSweep(ItfGeoDataInterface* arItfGeoDataSweep);
-    void setrItfWindForceSweep(ItfWindForceInterface* arItfWindForceSweep);
     void setrItfManageSimSweep(ItfManageSimInterface* arItfManageSimSweep);
     void setrItfSimDataSweep(ItfSimDataInterface* arItfSimDataSweep);
     vector<DroneSweep*> getAppli();
-    
-    string getName() { return name; }
+
     double getSpeed() { return appli[0]->getSpeed(); }
     void setSpeed(double arg) { for (DroneSweep* obj : appli) obj->setSpeed(arg); }
     // +++++++++++++ Access for minSpeed parameter +++++++++++++
@@ -84,5 +81,9 @@ public :
     vect2 getStartingPoint();
 
     void setStartingPoint(vect2 arg);
+    // +++++++++++++ Access for collisionRadius parameter +++++++++++++
+    double getCollisionRadius();
+
+    void setCollisionRadius(double arg);
 };
 #endif /* compDroneSweep_H_ */
