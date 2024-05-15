@@ -49,11 +49,38 @@ void compUser::end() {
     appli->end();
 }
 
+void compUser::setrItfGeoDataUser(ItfGeoDataInterface* arItfGeoDataUser) {
+    appli->setrItfGeoDataUser(arItfGeoDataUser);
+}
+
 // +++++++++++++ Methods of the pItfManageSimulation interface +++++++++++++
 void compUser::signalObjectiveFound(long droneID) {
     appli->signalObjectiveFound(droneID);
 }
 
+wect2 compUser::grabAssignedZone(long droneID) {
+    return appli->grabAssignedZone(droneID);
+}
+
+
 User* compUser::getAppli() {
     return appli;
+}
+
+// +++++++++++++ Access for maxInlineZones parameter +++++++++++++
+long compUser::getMaxInlineZones() {
+    return appli->getMaxInlineZones();
+}
+
+void compUser::setMaxInlineZones(long arg) {
+    appli->setMaxInlineZones(arg);
+}
+
+// +++++++++++++ Access for droneCount calculated attribute +++++++++++++
+long compUser::getDroneCount() {
+    return appli->getDroneCount();
+}
+
+void compUser::setDroneCount(long arg) {
+    appli->setDroneCount(arg);
 }

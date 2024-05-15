@@ -26,7 +26,6 @@ GeoZone::~GeoZone() {
 
 void GeoZone::initialize() {
     // Start of user code  : Implementation of initialize method
-    Zones = CreateZones();
     // End of user code
 }
 
@@ -49,84 +48,13 @@ vect2 GeoZone::grabEnvLimits() {
     // End of user code
 }
 
-wect2 GeoZone::grabAssignedZone(long droneID) {
-    // Start of user code  : Implementation of method grabAssignedZone
-    return Zones[droneID];
-    // End of user code
+vect2 GeoZone::grabBottomLeftPoint() {
+    return bottomLeftPoint;
 }
+
 
 
 // Start of user code  : Additional methods
-vector<wect2> GeoZone::CreateZones() {
-    const int FilledLines = (int)floor((float)droneCount / (float)maxInlineZones);
-    const int TotalLines = (int)ceil((float)droneCount / (float)maxInlineZones);
-    const int ZonesLastLine = droneCount - FilledLines * maxInlineZones;
-
-    vector<vector<wect2>> LocalZones;
-
-    // Filled lines
-    for (int line = 0; line < FilledLines; line++) {
-        vector<wect2> Line;
-        for (int zone = 0; zone < maxInlineZones; zone++) {
-            wect2 Zone;
-
-            // Top left point
-            Zone.setV1({
-                envSize.getX() - (envSize.getX() / TotalLines) * line,
-                (envSize.getY() / maxInlineZones) * zone
-            });
-
-            // Bottom right point
-            Zone.setV2({
-                envSize.getX() - (envSize.getX() / TotalLines) * (line + 1),
-                (envSize.getY() / maxInlineZones) * (zone + 1)
-            });
-
-            Line.push_back(Zone);
-        }
-        LocalZones.push_back(Line);
-    }
-
-    // Last line if excess zones
-    if (ZonesLastLine != 0) {
-        vector<wect2> Line;
-        for (int zone = 0; zone < ZonesLastLine; zone++) {
-            wect2 Zone;
-
-            // Top left point
-            Zone.setV1({
-                envSize.getX() - (envSize.getX() / TotalLines) * FilledLines,
-                (envSize.getY() / ZonesLastLine) * zone
-            });
-
-            // Bottom right point
-            Zone.setV2({
-                0,
-                (envSize.getY() / ZonesLastLine) * (zone + 1)
-            });
-
-            Line.push_back(Zone);
-        }
-        LocalZones.push_back(Line);
-    }
-
-    vector<wect2> ZonesList;
-
-    for (const auto& line : LocalZones)
-        for (const wect2& zone : line)
-            ZonesList.push_back(zone /*+ bottomLeftPoint*/);
-
-    return ZonesList;
-}
-
-// +++++++++++++ Access for droneCount attribute +++++++++++++
-long GeoZone::getDroneCount() {
-    return droneCount;
-}
-
-void GeoZone::setDroneCount(long arg) {
-    droneCount = arg;
-}
 // End of user code
 
 
@@ -137,15 +65,6 @@ vect2 GeoZone::getEnvSize() {
 
 void GeoZone::setEnvSize(vect2 arg) {
     envSize = arg;
-}
-
-// +++++++++++++ Access for maxInlineZones parameter +++++++++++++
-long GeoZone::getMaxInlineZones() {
-    return maxInlineZones;
-}
-
-void GeoZone::setMaxInlineZones(long arg) {
-    maxInlineZones = arg;
 }
 
 // +++++++++++++ Access for bottomLeftPoint parameter +++++++++++++

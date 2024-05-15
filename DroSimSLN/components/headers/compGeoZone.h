@@ -18,9 +18,6 @@ class GeoZone;
 
 class compGeoZone : public LeafComponent, public ItfGeoDataInterface {
 protected :
-    /*pyp : inutile
-    */
-
     bool newValue;
     int delay;
 
@@ -39,26 +36,19 @@ public :
     void end();
 
     string getName() { return name; }
+    GeoZone* getAppli();
 
     // +++++++++++++ Methods of the pItfGeoData interface +++++++++++++
-    vect2 grabEnvLimits();
-
-    wect2 grabAssignedZone(long droneID);
-
-    GeoZone* getAppli();
+    vect2 grabEnvLimits() override;
+    vect2 grabBottomLeftPoint() override;
+    
     // +++++++++++++ Access for envSize parameter +++++++++++++
     vect2 getEnvSize();
 
     void setEnvSize(vect2 arg);
-    // +++++++++++++ Access for maxInlineZones parameter +++++++++++++
-    long getMaxInlineZones();
-
-    void setMaxInlineZones(long arg);
     // +++++++++++++ Access for bottomLeftPoint parameter +++++++++++++
     vect2 getBottomLeftPoint();
 
     void setBottomLeftPoint(vect2 arg);
-    long getDroneCount();
-    void setDroneCount(long arg);
 };
 #endif /* compGeoZone_H_ */

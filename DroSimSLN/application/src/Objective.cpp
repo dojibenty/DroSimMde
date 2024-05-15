@@ -30,8 +30,8 @@ void Objective::initialize() {
     // Start of user code  : Implementation of initialize method
     direction = vect2(0, 1.0);
     vect2 envLimits = rItfGeoDataObj->grabEnvLimits();
-    const double posX = User::rand_range(envLimits.getX() / 2, envLimits.getX());
-    const double posY = User::rand_range(0, envLimits.getY());
+    const double posX = User::randRange(envLimits.getX() / 2, envLimits.getX());
+    const double posY = User::randRange(0, envLimits.getY());
 
     objposition = position = vect2(posX, posY);
     YLimit = envLimits.getY();

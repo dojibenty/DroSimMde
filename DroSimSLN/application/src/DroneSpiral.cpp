@@ -33,7 +33,7 @@ DroneSpiral::~DroneSpiral() {
 
 void DroneSpiral::initialize() {
     // Start of user code  : Implementation of initialize method
-    assignedZone = rItfGeoDataSpiral->grabAssignedZone(droneID);
+    assignedZone = rItfManageSimSpiral->grabAssignedZone(droneID);
 
     const auto bottomLeftPoint = vect2(assignedZone.getV2().getX(), assignedZone.getV1().getY());
     zoneStartPoint = bottomLeftPoint + startingPoint * bottomLeftPoint;
@@ -136,8 +136,8 @@ vect2 DroneSpiral::GetRandomDirection() {
 
     do {
         direction = vect2(
-            direction.getX() + User::rand_range(-1.0f, 1.0f),
-            direction.getY() + User::rand_range(-1.0f, 1.0f));
+            direction.getX() + User::randRange(-1.0f, 1.0f),
+            direction.getY() + User::randRange(-1.0f, 1.0f));
         direction.normalize();
         nextPosition = position + direction * speed;
     }

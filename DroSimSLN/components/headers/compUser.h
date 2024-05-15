@@ -8,7 +8,9 @@
 #ifndef compUser_H_
 #define compUser_H_
 
+#include "ItfGeoDataInterface.h"
 #include "LeafComponent.h"
+#include "wect2.h"
 class User;
 
 
@@ -30,17 +32,30 @@ public :
     compUser(double aFrequency);
     virtual ~compUser();
     void doOneStep();
-    int doStep(int nStep);
+    int doStep(int nStep) override;
 
     virtual void readInputs();
     void initialize();
     void end();
 
     string getName() { return name; }
+
+    void setrItfGeoDataUser(ItfGeoDataInterface* arItfGeoDataUser);
     
     // +++++++++++++ Methods of the pItfManageSimulation interface +++++++++++++
-    void signalObjectiveFound(long droneID);
+    void signalObjectiveFound(long droneID) override;
+    wect2 grabAssignedZone(long droneID) override;
 
     User* getAppli();
+
+    // +++++++++++++ Access for maxInlineZones parameter +++++++++++++
+    long getMaxInlineZones();
+
+    void setMaxInlineZones(long arg);
+
+    // +++++++++++++ Access for droneCount calculated attribute +++++++++++++
+    long getDroneCount();
+    
+    void setDroneCount(long arg);
 };
 #endif /* compUser_H_ */

@@ -33,7 +33,7 @@ DroneSweep::~DroneSweep() {
 
 void DroneSweep::initialize() {
     // Start of user code  : Implementation of initialize method
-    assignedZone = rItfGeoDataSweep->grabAssignedZone(droneID);
+    assignedZone = rItfManageSimSweep->grabAssignedZone(droneID);
     
     leftYBound = assignedZone.getV1().getY();
     sweepLength = assignedZone.getV2().getY() - leftYBound;

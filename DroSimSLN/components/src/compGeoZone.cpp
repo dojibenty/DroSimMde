@@ -54,9 +54,10 @@ vect2 compGeoZone::grabEnvLimits() {
     return appli->grabEnvLimits();
 }
 
-wect2 compGeoZone::grabAssignedZone(long droneID) {
-    return appli->grabAssignedZone(droneID);
+vect2 compGeoZone::grabBottomLeftPoint() {
+    return appli->grabBottomLeftPoint();
 }
+
 
 GeoZone* compGeoZone::getAppli() {
     return appli;
@@ -69,24 +70,6 @@ vect2 compGeoZone::getEnvSize() {
 
 void compGeoZone::setEnvSize(vect2 arg) {
     appli->setEnvSize(arg);
-}
-
-// +++++++++++++ Access for maxInlineZones parameter +++++++++++++
-long compGeoZone::getMaxInlineZones() {
-    return appli->getMaxInlineZones();
-}
-
-void compGeoZone::setMaxInlineZones(long arg) {
-    appli->setMaxInlineZones(arg);
-}
-
-// +++++++++++++ Access for droneCount parameter +++++++++++++
-long compGeoZone::getDroneCount() {
-    return appli->getDroneCount();
-}
-
-void compGeoZone::setDroneCount(long arg) {
-    appli->setDroneCount(arg);
 }
 
 // +++++++++++++ Access for bottomLeftPoint parameter +++++++++++++

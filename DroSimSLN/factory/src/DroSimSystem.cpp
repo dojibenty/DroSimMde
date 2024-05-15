@@ -60,6 +60,7 @@ DroSimSystem::DroSimSystem() {
     leafComponents.push_back(instADroneSpiral);
     instADroneSweep->setAObjective(instAObjective);
     instADroneSpiral->setAObjective(instAObjective);
+    instAUser->setrItfGeoDataUser(instAGeoZone->getAppli());
     instAObjective->setrItfGeoDataObj(instAGeoZone->getAppli());
     instADroneSweep->setrItfManageSimSweep(instAUser->getAppli());
     instADroneSweep->setrItfGeoDataSweep(instAGeoZone->getAppli());
@@ -86,9 +87,9 @@ void DroSimSystem::initialize() {
     instAWind->setForce(0.0);
     instAWind->setDirection(vect2(0.5, 0.5));
     //instAWind->setFrequency(0.0);
+    instAUser->setMaxInlineZones(3);
     //instAUser->setFrequency(0.0);
     instAGeoZone->setEnvSize(vect2(1000.0, 1200.0));
-    instAGeoZone->setMaxInlineZones(3);
     instAGeoZone->setBottomLeftPoint(vect2(45.0, -5.0));
     //instAGeoZone->setFrequency(0.0);
     instAObjective->setSpeedConstraint(0.0);
@@ -115,8 +116,10 @@ void DroSimSystem::initialize() {
     instADroneSpiral->setStartingPoint(vect2(0.5, 0.5));
     //instADroneSpiral->setFrequency(2.0);
 
-    instAGeoZone->setDroneCount(3 + 0);
+    // Calcultated attributes
+    instAUser->setDroneCount(3 + 0);
 
+    // Initialization
     if (instASimulation->getIsActive()) instASimulation->initialize();
     if (instAWind->getIsActive()) instAWind->initialize();
     if (instAUser->getIsActive()) instAUser->initialize();

@@ -26,7 +26,7 @@ User::~User() {
 
 void User::initialize() {
     // Start of user code  : Implementation of initialize method
-
+    zones = createZones();
     // End of user code
 }
 
@@ -38,6 +38,7 @@ void User::end() {
 
 int User::doStep(int nStep) {
     // Start of user code  : Implementation of doStep method
+    if (isObjectiveFound) return 1;
     return 0;
     // End of user code
 }
@@ -52,10 +53,99 @@ void User::signalObjectiveFound(long droneID) {
     // End of user code
 }
 
+wect2 User::grabAssignedZone(long droneID) {
+    return zones[droneID];
+}
+
 
 // Start of user code  : Additional methods
-double User::rand_range(double min, double max) {
+double User::randRange(const double min, const double max) {
     return min + (rand() / (RAND_MAX + 1.0) * (max - min + 1));
 }
 
+vector<wect2> User::createZones() const {
+    const int filledLines = (int)floor((float)droneCount / (float)maxInlineZones);
+    const int totalLines = (int)ceil((float)droneCount / (float)maxInlineZones);
+    const int zonesLastLine = droneCount - filledLines * maxInlineZones;
+    vect2 envSize = rItfGeoDataUser->grabEnvLimits();
+    
+    vector<vector<wect2>> localZones;
+
+    // Filled lines
+    for (int line = 0; line < filledLines; line++) {
+        vector<wect2> Line;
+        for (int zone = 0; zone < maxInlineZones; zone++) {
+            wect2 Zone;
+
+            // Top left point
+            Zone.setV1({
+                envSize.getX() - (envSize.getX() / totalLines) * line,
+                (envSize.getY() / maxInlineZones) * zone
+            });
+
+            // Bottom right point
+            Zone.setV2({
+                envSize.getX() - (envSize.getX() / totalLines) * (line + 1),
+                (envSize.getY() / maxInlineZones) * (zone + 1)
+            });
+
+            Line.push_back(Zone);
+        }
+        localZones.push_back(Line);
+    }
+
+    // Last line if excess zones
+    if (zonesLastLine != 0) {
+        vector<wect2> Line;
+        for (int zone = 0; zone < zonesLastLine; zone++) {
+            wect2 Zone;
+
+            // Top left point
+            Zone.setV1({
+                envSize.getX() - (envSize.getX() / totalLines) * filledLines,
+                (envSize.getY() / zonesLastLine) * zone
+            });
+
+            // Bottom right point
+            Zone.setV2({
+                0,
+                (envSize.getY() / zonesLastLine) * (zone + 1)
+            });
+
+            Line.push_back(Zone);
+        }
+        localZones.push_back(Line);
+    }
+
+    vector<wect2> ZonesList;
+
+    for (const auto& line : localZones)
+        for (const wect2& zone : line)
+            ZonesList.push_back(zone /*+ bottomLeftPoint*/);
+
+    return ZonesList;
+}
+
 // End of user code
+
+void User::setrItfGeoDataUser(ItfGeoDataInterface* arItfGeoDataUser) {
+    rItfGeoDataUser = arItfGeoDataUser;
+}
+
+// +++++++++++++ Access for maxInlineZones parameter +++++++++++++
+long User::getMaxInlineZones() {
+    return maxInlineZones;
+}
+
+void User::setMaxInlineZones(long arg) {
+    maxInlineZones = arg;
+}
+
+// +++++++++++++ Access for droneCount calculated attribute +++++++++++++
+long User::getDroneCount() {
+    return droneCount;
+}
+
+void User::setDroneCount(long arg) {
+    droneCount = arg;
+}
