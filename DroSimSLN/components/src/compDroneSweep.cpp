@@ -8,13 +8,11 @@
 #include "compDroneSweep.h"
 #include "DroneSweep.h"
 
-compDroneSweep::compDroneSweep(double aFrequency, long numberOf) : LeafComponent(aFrequency) {
-    for (int i = 0; i < numberOf; i++) {
-        auto obj = new DroneSweep(this, i);
-        appli.emplace_back(obj);
-        oldSweepposition.push_back(obj->getSweepposition());
-        newSweepposition.push_back(obj->getSweepposition());
-    }
+compDroneSweep::compDroneSweep(double aFrequency) : LeafComponent(aFrequency) {
+    auto obj = new DroneSweep(this, 0);
+    appli.emplace_back(obj);
+    oldSweepposition.push_back(obj->getSweepposition());
+    newSweepposition.push_back(obj->getSweepposition());
     delay = 0;
     delayMax = 0;
     newValue = false;
@@ -42,8 +40,7 @@ int compDroneSweep::doStep(int nStep) {
     const int numberOf = getNumberOf();
     vector<int> returnCodes;
     for (int i = 0; i < numberOf; i++) {
-        auto it = find(terminated.begin(), terminated.end(), i);
-        if (it != terminated.end()) continue;
+        if (status[i]) continue;
         auto inst = appli[i];
         if (pauseCondition(inst)) continue;
         returnCodes.push_back(inst->doStep(nStep));
@@ -70,13 +67,16 @@ int compDroneSweep::sendReturnCode(const vector<int>& returnCodes) {
             code = 1;
             break;
         case 2:
-            terminated.push_back(i);
+            status[i] = false;
             break;
         default:
             break;
         }
     }
-    if (terminated.size() == getNumberOf()) code = 2;
+    for (int i = 0; i < status.size(); i++) {
+        if (!status[i]) break;
+        return 2;
+    }
 
     return code;
 }
@@ -90,15 +90,35 @@ bool compDroneSweep::pauseCondition(DroneSweep* inst) {
     return false;
 }
 
+void compDroneSweep::updateNumberOfInstances(const unsigned int arg) {
+    if (appli.size() == arg) return;
+    if (appli.size() < arg) {
+        auto obj = new DroneSweep(this, appli.size());
+        appli.emplace_back(obj);
+        oldSweepposition.push_back(obj->getSweepposition());
+        newSweepposition.push_back(obj->getSweepposition());
+        obj->setrItfGeoDataSweep(appli[0]->getItfGeoDataInterface());
+        obj->setrItfManageSimSweep(appli[0]->getItfManageSimInterface());
+        obj->setrItfSimDataSweep(appli[0]->getItfSimDataInterface());
+    }
+    else {
+        appli.pop_back();
+        oldSweepposition.pop_back();
+        newSweepposition.pop_back();
+    }
+}
+
 void compDroneSweep::readInputs() {}
 
 void compDroneSweep::initialize() {
-    for (DroneSweep* obj : appli)
-        obj->initialize();
+    for (int i = 0; i < getNumberOf(); i++) {
+        appli[i]->initialize();
+        status[i] = false;
+    }
 }
 
 void compDroneSweep::end() {
-    terminated.clear();
+    status.clear();
     for (DroneSweep* obj : appli)
         obj->end();
 }
@@ -182,6 +202,7 @@ long compDroneSweep::getNumberOf() {
 }
 
 void compDroneSweep::setNumberOf(long arg) {
+    updateNumberOfInstances(arg);
     for (DroneSweep* obj : appli)
         obj->setNumberOf(arg);
 }

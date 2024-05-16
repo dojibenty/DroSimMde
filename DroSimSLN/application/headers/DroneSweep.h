@@ -51,6 +51,7 @@ private:
     vect2 direction;
     double batteryConsumption;
     double battery;
+    int batteryCount;
     double movementTolerance;
     wect2 assignedZone;
     bool goesVertical = true;
@@ -62,6 +63,7 @@ private:
     bool isInZone = false;
     vect2 zoneStartPoint;
     double windInfluence = 0.6;
+    int cpt = 0;
     // End of user code
 
 public :
@@ -84,6 +86,8 @@ public:
     void setSpeed(double arg) { speed = arg; }
     int getDroneID() { return droneID; }
     vect2& getPosition() { return position; }
+    int getBatteryCount() { return batteryCount; }
+    void setBatteryCount(int arg) { batteryCount = arg; }
     // End of user code
 
 
@@ -92,8 +96,11 @@ public:
     void setWindDirection(vect2 arg);
 
     vect2 getSweepposition();
+    ItfGeoDataInterface* getItfGeoDataInterface() { return rItfGeoDataSweep; }
     void setrItfGeoDataSweep(ItfGeoDataInterface* arItfGeoDataSweep);
+    ItfManageSimInterface* getItfManageSimInterface() { return rItfManageSimSweep; }
     void setrItfManageSimSweep(ItfManageSimInterface* arItfManageSimSweep);
+    ItfSimDataInterface* getItfSimDataInterface() { return rItfSimDataSweep; }
     void setrItfSimDataSweep(ItfSimDataInterface* arItfSimDataSweep);
     // +++++++++++++ Access for minSpeed parameter +++++++++++++
     double getMinSpeed();

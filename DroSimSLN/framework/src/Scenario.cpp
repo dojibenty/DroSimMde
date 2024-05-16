@@ -78,7 +78,7 @@ tuple<bool, double> Scenario::startSimulation() {
         //fin pyp
         c->doStep();
         if (c->getCurrentMS() % (c->getEndTime() / 10) == 0) {
-            std::cout << (int)(100 * ((double)c->getCurrentMS() / c->getEndTime())) << " %" << std::endl;
+            //std::cout << (int)(100 * ((double)c->getCurrentMS() / c->getEndTime())) << " %" << std::endl;
         }
         if (doEndSim) break;
     }

@@ -8,7 +8,7 @@
 #include "ADroneSweep.h"
 #include "DroneSweep.h"
 
-ADroneSweep::ADroneSweep(double aFrequency, long numberOf) : compDroneSweep(aFrequency, numberOf) {}
+ADroneSweep::ADroneSweep(double aFrequency) : compDroneSweep(aFrequency) {}
 ADroneSweep::~ADroneSweep() {}
 
 void ADroneSweep::setAObjective(AObjective* pAObjective) {

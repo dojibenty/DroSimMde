@@ -20,6 +20,7 @@
 #include "ADroneSweep.h"
 #include "ADroneSpiral.h"
 // Start of user code  : Additional imports for DroSimSystem
+#include <tuple>
 // End of user code
 
 class DroSimSystem : public RootComponent {
@@ -33,9 +34,20 @@ protected :
     ADroneSweep* instADroneSweep;
     ADroneSpiral* instADroneSpiral;
 
-    double highestSpeed;
-    double lowestSpeed;
+    double minSpeed;
+    double maxSpeed;
+    int maxBatCount;
+    int maxNumberOf;
     double pSpeed = -1;
+    int pNumberOf = -1;
+    int pBatCount = -1;
+    bool isCurveFound = false;
+    bool isMaxFound = false;
+    double speedIncrement;
+    int numberOfIncrement;
+
+    vector<tuple<double,int,int>> slowConfigs;
+    tuple<double,int,int> fastConfig;
 
 public :
     DroSimSystem();
@@ -49,11 +61,13 @@ public :
     ADroneSweep* get_ADroneSweep();
     ADroneSpiral* get_ADroneSpiral();
 
-    bool mutateParameters(const bool isGroupSuccessful, vector<double> times);
-    double getPSpeed();
-
     void initialize();
 
     void end();
+    int calculateMinBatteryCountForGroup(const double averageTimeToFind) const;
+    bool continueCondition() const;
+    vector<tuple<double, int, int>> getSlowConfigs();
+    tuple<double, int, int> getFastConfig();
+    void mutateParameters(bool isGroupSuccessful, double averageTimeToFind);
 };
 #endif /*  DroSimSystem_H_ */

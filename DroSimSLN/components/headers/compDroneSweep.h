@@ -18,15 +18,12 @@ class DroneSweep;
 #include "ItfManageSimInterface.h"
 #include "ItfSimDataInterface.h"
 
+#include <unordered_map>
+
 class compDroneSweep : public LeafComponent {
 protected :
-    /*pyp : inutile
-        //inputs source
-         LeafComponent ObjpositionSourceComponent;
-         String portNameObjposition;
-    */
     vector<DroneSweep*> appli;
-    vector<int> terminated;
+    unordered_map<int,bool> status;
     vector<vect2> oldSweepposition;
     vector<vect2> newSweepposition;
 
@@ -34,12 +31,13 @@ protected :
     int delay;
 
 public :
-    compDroneSweep(double aFrequency, long numberOf);
+    compDroneSweep(double aFrequency);
     virtual ~compDroneSweep();
     void doOneStep();
     int doStep(int nStep);
     int sendReturnCode(const vector<int>& returnCodes);
     bool pauseCondition(DroneSweep* inst);
+    void updateNumberOfInstances(const unsigned int arg);
 
     virtual void readInputs();
     void initialize();
@@ -53,6 +51,9 @@ public :
 
     double getSpeed() { return appli[0]->getSpeed(); }
     void setSpeed(double arg) { for (DroneSweep* obj : appli) obj->setSpeed(arg); }
+    int getBatteryCount() { return appli[0]->getBatteryCount(); }
+    void setBatteryCount(int arg) { for (DroneSweep* obj : appli) obj->setBatteryCount(arg); }
+    
     // +++++++++++++ Access for minSpeed parameter +++++++++++++
     double getMinSpeed();
 

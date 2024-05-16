@@ -18,7 +18,7 @@ protected :
     AWind* attAWind;
 
 public :
-    ADroneSweep(double aFrequency, long numberOf);
+    ADroneSweep(double aFrequency);
     virtual ~ADroneSweep();
 
     void setAObjective(AObjective* pAObjective);

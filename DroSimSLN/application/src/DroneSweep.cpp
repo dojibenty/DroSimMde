@@ -38,6 +38,8 @@ void DroneSweep::initialize() {
 
     position = vect2(0.0, 0.0);
 
+    heightCount = 1;
+
     const auto bottomLeftPoint = vect2(assignedZone.getV2().getX(), assignedZone.getV1().getY());
     zoneStartPoint = bottomLeftPoint + startingPoint * bottomLeftPoint;
 
@@ -46,40 +48,55 @@ void DroneSweep::initialize() {
 
     movementTolerance = rItfSimDataSweep->grabPositionCorrection();
 
-    battery = batteryCapacity;
+    battery = batteryCapacity * batteryCount;
     batteryConsumption = 2 * pow(speed, 2) / 3600.0;
+    cout << "############### b:" << battery << " bct:" << batteryCount << " bcs:" << batteryConsumption << '\n' ;
+    cpt = 0;
     // End of user code
 }
 
 void DroneSweep::end() {
     // Start of user code  : Implementation of end method
+    cout << cpt << " steps\n";
     // End of user code
 }
 
 int DroneSweep::doStep(int nStep) {
     // Start of user code  : Implementation of doStep method
+    cpt++;
+    
     // Movement
-
     if (!isInZone)
         if (vect2::distance(position, zoneStartPoint) <= movementTolerance) {
             position = zoneStartPoint;
             isInZone = true;
         }
-
+    
     position = setNextPosition();
     sweepposition = position;
 
+    //cout << "step:" << cpt << " pos: " << position.toString() << '\n';
+
     // Objective detection
     if (vect2::distance(position, objposition) <= visionRadius
-        && objposition.getX() > 0)
+        && objposition.getX() > 0) {
+        //cout << "1bat: " << battery << '\n';
+        cout << "pos: " << position.toString() << "obj: " << objposition.toString() << '\n';
         return 1;
+    }
 
     // Battery
     double windInducedConsumption = 2 * pow(windForce,2) / 3600.0;
     const int alignment = direction.alignment(windDirection);
-    if (alignment == 0) windInducedConsumption *= -1;
+    if (alignment == 0) {
+        if (abs(windInducedConsumption) > batteryConsumption) windInducedConsumption = batteryConsumption;
+        windInducedConsumption *= -1;
+    }
     else if (alignment == 1) windInducedConsumption *= 0;
-    if ((batteryCapacity -= batteryConsumption + windInducedConsumption * windInfluence) <= 0) return 2;
+    if ((battery -= batteryConsumption + windInducedConsumption * windInfluence) <= 0) return 2;
+
+    //cout << "2bat: " << battery << '\n';
+    //cout << "bcs: " << batteryConsumption << " // wic+i: " << windInducedConsumption*windInfluence << " // wf: " << windForce << '\n';
     
     return 0;
     // End of user code

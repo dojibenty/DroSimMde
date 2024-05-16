@@ -30,9 +30,10 @@
 
 int main() {
     auto* root = new DroSimSystem();
-    vector<double> times;
+    double summedTimesToFind;
     int successfulSims;
     do {
+        summedTimesToFind = 0;
         successfulSims = 0;
         for (int i = 0; i < 5; i++) {
             //pyp : configuration des switches et autres actions
@@ -40,6 +41,7 @@ int main() {
             root->initialize();
             //pyp : run des observations
             auto* simulatedScenario = new ScenarLog(root);
+            /*
             string si = to_string(i);
             string fileName = "PositionsLog";
             const string completeFileName = fileName + si;
@@ -48,17 +50,29 @@ int main() {
             PositionsLogLogObservationComponent->setObjective(root->get_AObjective()->getAppli());
             PositionsLogLogObservationComponent->setDroneSweep(root->get_ADroneSweep()->getAppli());
             simulatedScenario->push(PositionsLogLogObservationComponent);
+            */
 
-
-            simulatedScenario->setTime(0, 600000);
+            simulatedScenario->setTime(0, 360000);
             auto simResult = simulatedScenario->startSimulation();
-            if (get<0>(simResult)) successfulSims++;
-            times.push_back(get<1>(simResult));
+            if (get<0>(simResult)) {
+                successfulSims++;
+                summedTimesToFind += get<1>(simResult);
+            }
             root->end();
             simulatedScenario->end();
         }
-    } while (root->mutateParameters(successfulSims >= 5 / 2, times));
-    cout << "Lowest speed is " << root->getPSpeed();
+        root->mutateParameters(successfulSims >= 5 / 2, summedTimesToFind/successfulSims); 
+    } while (root->continueCondition());
+
+    const auto slowConfigs = root->getSlowConfigs();
+    const auto fastConfig = root->getFastConfig();
+
+    cout << "Fast config:\n";
+    cout << "speed:" << get<0>(fastConfig) << " ; minNumberOf: " << get<1>(fastConfig) << " ; batteryCount: " << get<2>(fastConfig) << '\n';
+    cout << "\nSlow configs:\n";
+    for (auto t : slowConfigs)
+        cout << "speed:" << get<0>(t) << " ; numberOf: " << get<1>(t) << " ; batteryCount: " << get<2>(t) << '\n';
+    
     // Start of user code  : Additional code main for testDroSim
     // End of user code
 }

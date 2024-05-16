@@ -71,7 +71,7 @@ int myPositionsLogLogObservationComponent::doStep(int nStep) {
 
     //on retire le dernier ";" separateur
     //s = s.substring(0, s.length() - 1);
-    //cout << "mySwimmerPositionLogObservationComponent::doStep : " << '\n' << s << endl;
+    cout << "mySwimmerPositionLogObservationComponent::doStep : " << '\n' << s << endl;
     writeNames(s);
     endLine();
 
