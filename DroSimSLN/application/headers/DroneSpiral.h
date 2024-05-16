@@ -77,10 +77,10 @@ public :
 
     // Start of user code  : Additional methods
 private:
-    vect2 SetNextPosition();
-    void SetCircle();
-    vect2 GetRandomDirection();
-    bool GoesOutOfBounds(vect2 point);
+    vect2 setNextPosition();
+    void setCircle();
+    vect2 getRandomDirection();
+    bool goesOutOfBounds(vect2 point);
 
 public:
     double getSpeed() { return speed; }

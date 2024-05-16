@@ -85,7 +85,14 @@ void vect2::normalize() {
 }
 
 double vect2::distance(vect2& v1, vect2& v2) {
-    return sqrt(pow(v2.getX() - v1.getX(), 2) + pow(v2.getY() - v1.getY(), 2));
+    return sqrt(pow(v2.x - v1.x, 2) + pow(v2.y - v1.y, 2));
+}
+
+int vect2::alignment(const vect2& other) const {
+    const double dif = abs(other.x - x) + abs(other.y - y);
+    if (dif < 1) return 0; // parallel
+    if (dif < 2) return 1; // perpendicular
+    return 2; // opposite
 }
 
 string vect2::toString() const {

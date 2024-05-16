@@ -61,6 +61,7 @@ private:
     double leftYBound;
     bool isInZone = false;
     vect2 zoneStartPoint;
+    double windInfluence = 0.6;
     // End of user code
 
 public :
@@ -74,8 +75,8 @@ public :
 
     // Start of user code  : Additional methods
 private:
-    vect2 SetNextPosition();
-    bool GoesOutOfBounds(vect2& point);
+    vect2 setNextPosition();
+    bool goesOutOfBounds(vect2& point);
 
 public:
     void setAssignedZone(wect2 zone);

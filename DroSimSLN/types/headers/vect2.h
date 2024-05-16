@@ -35,6 +35,7 @@ public :
     void switchSignY();
     void normalize();
     static double distance(vect2& v1, vect2& v2);
+    int alignment(const vect2& other) const;
     string toString() const;
 
     vect2 operator+(const vect2& vect2) const;

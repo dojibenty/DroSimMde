@@ -41,6 +41,8 @@ int compWind::doStep(int nStep) {
     }
     readInputs();
     const int returnCode = appli->doStep(nStep);
+    newWindForce = appli->getWindForce();
+    newWindDirection = appli->getWindDirection();
     if (delayMax == 0) {
         oldWindForce = newWindForce;
         oldWindDirection = newWindDirection;

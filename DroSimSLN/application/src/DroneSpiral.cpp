@@ -56,7 +56,7 @@ void DroneSpiral::end() {
 int DroneSpiral::doStep(int nStep) {
     // Start of user code  : Implementation of doStep method
     // Calculate the Drone's next position
-    position = SetNextPosition();
+    position = setNextPosition();
     if (!isInZone)
         if (vect2::distance(position, zoneStartPoint) <= movementTolerance) {
             position = zoneStartPoint;
@@ -75,11 +75,11 @@ int DroneSpiral::doStep(int nStep) {
 
 
 // Start of user code  : Additional methods
-vect2 DroneSpiral::SetNextPosition() {
+vect2 DroneSpiral::setNextPosition() {
     vect2 nextPosition;
 
     if (!isInZone) nextPosition = position + direction * speed;
-    else if (wander > 0) nextPosition = GetRandomDirection();
+    else if (wander > 0) nextPosition = getRandomDirection();
     else // Making spiral
     {
         currentCirclePointID = currentCirclePointID % nbCirclePoints + 1;
@@ -98,7 +98,7 @@ vect2 DroneSpiral::SetNextPosition() {
 
         // Can be translated as "if the current intermediate point is equal or is greater than the selected circle point"
         if (currentSpiralIncrementFactor >= nbCirclePoints
-            || GoesOutOfBounds(IntermediatePoint)) {
+            || goesOutOfBounds(IntermediatePoint)) {
             // Go back at the center of the circle
             direction = currentCircleCenter - position;
             wander = wanderSteps + 1;
@@ -112,7 +112,7 @@ vect2 DroneSpiral::SetNextPosition() {
     return nextPosition;
 }
 
-void DroneSpiral::SetCircle() {
+void DroneSpiral::setCircle() {
     circlePoints.clear();
 
     const double AngleStep = 2.0 * PI / nbCirclePoints;
@@ -130,7 +130,7 @@ void DroneSpiral::SetCircle() {
     currentSpiralIncrementFactor = 1;
 }
 
-vect2 DroneSpiral::GetRandomDirection() {
+vect2 DroneSpiral::getRandomDirection() {
     vect2 nextPosition;
 
     do {
@@ -139,13 +139,13 @@ vect2 DroneSpiral::GetRandomDirection() {
             direction.getY() + User::randRange(-1.0f, 1.0f));
         direction.normalize();
         nextPosition = position + direction * speed;
-    } while (GoesOutOfBounds(nextPosition));
+    } while (goesOutOfBounds(nextPosition));
 
-    if (--wander == 0) SetCircle();
+    if (--wander == 0) setCircle();
     return nextPosition;
 }
 
-bool DroneSpiral::GoesOutOfBounds(vect2 point) {
+bool DroneSpiral::goesOutOfBounds(vect2 point) {
     return point.getX() < assignedZone.getV2().getX()
         || point.getY() < assignedZone.getV1().getY()
         || point.getX() > assignedZone.getV1().getX()

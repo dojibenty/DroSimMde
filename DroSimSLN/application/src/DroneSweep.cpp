@@ -66,7 +66,7 @@ int DroneSweep::doStep(int nStep) {
             isInZone = true;
         }
 
-    position = SetNextPosition();
+    position = setNextPosition();
     sweepposition = position;
 
     // Objective detection
@@ -75,15 +75,19 @@ int DroneSweep::doStep(int nStep) {
         return 1;
 
     // Battery
-    if ((batteryCapacity -= batteryConsumption) <= 0) return 2;
-
+    double windInducedConsumption = 2 * pow(windForce,2) / 3600.0;
+    const int alignment = direction.alignment(windDirection);
+    if (alignment == 0) windInducedConsumption *= -1;
+    else if (alignment == 1) windInducedConsumption *= 0;
+    if ((batteryCapacity -= batteryConsumption + windInducedConsumption * windInfluence) <= 0) return 2;
+    
     return 0;
     // End of user code
 }
 
 
 // Start of user code  : Additional methods
-vect2 DroneSweep::SetNextPosition() {
+vect2 DroneSweep::setNextPosition() {
     if (!isInZone) return {position + direction * speed};
 
     const double targetHeight = sweepHeight * heightCount;
@@ -106,7 +110,7 @@ vect2 DroneSweep::SetNextPosition() {
     }
 
     vect2 nextPosition = position + direction * speed;
-    if (GoesOutOfBounds(nextPosition)) {
+    if (goesOutOfBounds(nextPosition)) {
         if (goesVertical) {
             nextPosition = position - direction * speed;
             topToBottom = !topToBottom;
@@ -118,7 +122,7 @@ vect2 DroneSweep::SetNextPosition() {
     return nextPosition;
 }
 
-bool DroneSweep::GoesOutOfBounds(vect2& point) {
+bool DroneSweep::goesOutOfBounds(vect2& point) {
     return point.getX() < assignedZone.getV2().getX()
         || point.getY() < assignedZone.getV1().getY()
         || point.getX() > assignedZone.getV1().getX()

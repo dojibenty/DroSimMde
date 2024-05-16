@@ -39,7 +39,7 @@ void Wind::end() {
 
 int Wind::doStep(int nStep) {
     // Start of user code  : Implementation of doStep method
-    windForce += User::roundToDecimal(User::randRange(-1, 1)/10,2);
+    windForce += User::roundToDecimal(User::randRange(-5, 5),2);
     if (windForce < 0) windForce = 0;
     const double dirModX = User::roundToDecimal(User::randRange(-1, 1)/10,2);
     const double dirModY = User::roundToDecimal(User::randRange(-1, 1)/10,2);
