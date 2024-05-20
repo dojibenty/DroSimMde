@@ -109,6 +109,7 @@ void DroSimSystem::initialize() {
     instADroneSweep->setVisionRadius(1000.0);
     instADroneSweep->setSweepHeight(2000.0);
     instADroneSweep->setBatteryCapacity(200.0);
+    instADroneSweep->setCollisionRadius(5.0);
     //instADroneSweep->setNumberOf(1); -> mutable
     instADroneSweep->setStartingPoint(vect2(0.0, 0.0));
     //instADroneSweep->setFrequency(1.0);
@@ -155,16 +156,17 @@ void DroSimSystem::end() {
 void DroSimSystem::mutateParameters(const bool isGroupSuccessful, const double averageTimeToFind) {
     cout << (isGroupSuccessful ? "Success" : "Fail") << endl;
 
-    if (isGroupSuccessful) cout << "Average of " << (int)(averageTimeToFind /*/ 1000*/ / 60) << " min to find\n";
+    if (isGroupSuccessful) cout << "Average of " << (int)(averageTimeToFind / 1000 / 60 * 10) << " min to find\n";
 
     const double groupSpeed = instADroneSweep->getSpeed();
     const int groupNumberOf = instADroneSweep->getNumberOf();
-    const int groupBatCount = isGroupSuccessful? calculateMinBatteryCountForGroup(averageTimeToFind) : instADroneSweep->getBatteryCount();
-
+    cBatCount = isGroupSuccessful? calculateMinBatteryCountForGroup(averageTimeToFind) : instADroneSweep->getBatteryCount();
+    
     if (!isCurveFound || isGroupSuccessful) {
         // We overwrite the saved config as we don't need it right now
         pSpeed = groupSpeed;
-        pBatCount = groupBatCount;
+        pBatCount = cBatCount;
+        //pBatCount = groupBatCount;
     }
 
     if (isCurveFound && isMaxFound) {
@@ -177,13 +179,13 @@ void DroSimSystem::mutateParameters(const bool isGroupSuccessful, const double a
 
             // We save the current config for later comparison
             pSpeed = groupSpeed;
-            pBatCount = groupBatCount;
+            //pBatCount = groupBatCount;
         }
     }
     else {
         if (!isCurveFound && isGroupSuccessful) {
             // Found the first valid configuration
-            slowConfigs.push_back(make_tuple(groupSpeed, groupNumberOf, groupBatCount));
+            slowConfigs.push_back(make_tuple(groupSpeed, groupNumberOf, cBatCount));
             isCurveFound = true;
             cout << "Curve found" << '\n';
         }
@@ -191,7 +193,7 @@ void DroSimSystem::mutateParameters(const bool isGroupSuccessful, const double a
             instADroneSweep->setSpeed(groupSpeed + speedIncrement);
         else if (isCurveFound) {
             // Found the maximum speed drones need to go at
-            fastConfig = make_tuple(groupSpeed, groupNumberOf, groupBatCount);
+            fastConfig = make_tuple(groupSpeed, groupNumberOf, cBatCount);
             isMaxFound = true;
             cout << "Max speed found" << '\n';
             instADroneSweep->setNumberOf(groupNumberOf + numberOfIncrement);
@@ -203,15 +205,17 @@ void DroSimSystem::mutateParameters(const bool isGroupSuccessful, const double a
         }
     }
 
-    instADroneSweep->setBatteryCount(groupBatCount);
-
+    instADroneSweep->setBatteryCount(maxBatCount);
+    
     cout << "Trying with " << instADroneSweep->getNumberOf()
     << " drone" << (instADroneSweep->getNumberOf() > 1 ? "s" : "")
     << " at " << instADroneSweep->getSpeed() << " m/s\n";
 }
 
 int DroSimSystem::calculateMinBatteryCountForGroup(const double averageTimeToFind) const {
-    const double consumption = averageTimeToFind /*/ 1000.0*/ / 60.0 / 60.0 * pow(instADroneSweep->getSpeed(), 2) * 2.0;
+    cout << "attf: " << averageTimeToFind << '\n';
+    const double consumption = averageTimeToFind / 1000.0 * 10.0 / 60.0 / 60.0 * pow(instADroneSweep->getSpeed(), 2) * 2.0;
+    cout << "conso: " << consumption << '\n';
     int bc = 1;
     while (bc * instADroneSweep->getBatteryCapacity() < consumption) bc++;
     if (bc >= maxBatCount) return maxBatCount;

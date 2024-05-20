@@ -41,6 +41,7 @@ protected :
     double pSpeed = -1;
     int pNumberOf = -1;
     int pBatCount = -1;
+    int cBatCount = -1;
     bool isCurveFound = false;
     bool isMaxFound = false;
     double speedIncrement;

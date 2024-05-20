@@ -40,9 +40,15 @@ int compDroneSweep::doStep(int nStep) {
     const int numberOf = getNumberOf();
     vector<int> returnCodes;
     for (int i = 0; i < numberOf; i++) {
-        if (status[i]) continue;
+        if (status[i]) {
+            returnCodes.push_back(-1);
+            continue;
+        }
         auto inst = appli[i];
-        if (pauseCondition(inst)) continue;
+        if (pauseCondition(inst)) {
+            returnCodes.push_back(-1);
+            continue;
+        }
         returnCodes.push_back(inst->doStep(nStep));
         newSweepposition[i] = inst->getSweepposition();
     }
@@ -67,18 +73,19 @@ int compDroneSweep::sendReturnCode(const vector<int>& returnCodes) {
             code = 1;
             break;
         case 2:
-            status[i] = false;
+            status[i] = true;
             break;
         default:
             break;
         }
     }
-    for (int i = 0; i < status.size(); i++) {
-        if (!status[i]) break;
-        return 2;
-    }
+    
+    if (code == 1) return 1;
+    
+    for (int i = 0; i < status.size(); i++)
+        if (!status[i]) return 0;
 
-    return code;
+    return 2;
 }
 
 bool compDroneSweep::pauseCondition(DroneSweep* inst) {
@@ -100,11 +107,18 @@ void compDroneSweep::updateNumberOfInstances(const unsigned int arg) {
         obj->setrItfGeoDataSweep(appli[0]->getItfGeoDataInterface());
         obj->setrItfManageSimSweep(appli[0]->getItfManageSimInterface());
         obj->setrItfSimDataSweep(appli[0]->getItfSimDataInterface());
+        obj->setSpeed(appli[0]->getSpeed());
     }
     else {
         appli.pop_back();
         oldSweepposition.pop_back();
         newSweepposition.pop_back();
+    }
+}
+
+void compDroneSweep::printInstRecap() {
+    for (DroneSweep* obj : appli) {
+        obj->printRecap();
     }
 }
 
@@ -118,9 +132,9 @@ void compDroneSweep::initialize() {
 }
 
 void compDroneSweep::end() {
+    for (int i = 0; i < getNumberOf(); i++)
+        appli[i]->end();
     status.clear();
-    for (DroneSweep* obj : appli)
-        obj->end();
 }
 
 vector<vect2> compDroneSweep::getSweepposition() {

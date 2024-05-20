@@ -50,14 +50,15 @@ void DroneSweep::initialize() {
 
     battery = batteryCapacity * batteryCount;
     batteryConsumption = 2 * pow(speed, 2) / 3600.0;
-    cout << "############### b:" << battery << " bct:" << batteryCount << " bcs:" << batteryConsumption << '\n' ;
     cpt = 0;
+
+    //printRecap();
     // End of user code
 }
 
 void DroneSweep::end() {
     // Start of user code  : Implementation of end method
-    cout << cpt << " steps\n";
+    cout << droneID << " - bat: " << battery << " // " << cpt << " steps\n";
     // End of user code
 }
 
@@ -93,7 +94,11 @@ int DroneSweep::doStep(int nStep) {
         windInducedConsumption *= -1;
     }
     else if (alignment == 1) windInducedConsumption *= 0;
-    if ((battery -= batteryConsumption + windInducedConsumption * windInfluence) <= 0) return 2;
+    else if (windInducedConsumption > batteryConsumption) windInducedConsumption = batteryConsumption;
+    if ((battery -= batteryConsumption + windInducedConsumption * windInfluence) <= 0) {
+        battery = 0;
+        return 2;
+    }
 
     //cout << "2bat: " << battery << '\n';
     //cout << "bcs: " << batteryConsumption << " // wic+i: " << windInducedConsumption*windInfluence << " // wf: " << windForce << '\n';
@@ -144,6 +149,18 @@ bool DroneSweep::goesOutOfBounds(vect2& point) {
         || point.getY() < assignedZone.getV1().getY()
         || point.getX() > assignedZone.getV1().getX()
         || point.getY() > assignedZone.getV2().getY();
+}
+
+void DroneSweep::printRecap() {
+    cout << "*** Drone " << droneID << " ***";
+    cout << "\nnumberOf: " << numberOf;
+    cout << "\nstartingPoint: " << startingPoint.toString();
+    cout << "\nspeed: " << speed;
+    cout << "\nposition: " << position.toString();
+    cout << "\ndirection: " << direction.toString();
+    cout << "\nbattery: " << battery;
+    cout << "\nbatteryConsumption: " << batteryConsumption;
+    cout << endl;
 }
 
 void DroneSweep::setAssignedZone(wect2 zone) {

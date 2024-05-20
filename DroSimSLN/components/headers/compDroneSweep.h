@@ -38,6 +38,7 @@ public :
     int sendReturnCode(const vector<int>& returnCodes);
     bool pauseCondition(DroneSweep* inst);
     void updateNumberOfInstances(const unsigned int arg);
+    void printInstRecap();
 
     virtual void readInputs();
     void initialize();

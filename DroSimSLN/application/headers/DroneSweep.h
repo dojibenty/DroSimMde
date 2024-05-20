@@ -82,6 +82,7 @@ private:
 
 public:
     void setAssignedZone(wect2 zone);
+    void printRecap();
     double getSpeed() { return speed; }
     void setSpeed(double arg) { speed = arg; }
     int getDroneID() { return droneID; }
