@@ -70,6 +70,8 @@ public :
     vector<tuple<double, int, int>> getSlowConfigs();
     tuple<double, int, int> getFastConfig();
     void mutateParameters(bool isGroupSuccessful, double averageTimeToFind);
-    void initializeForTest_StopsIn3();
+    void initializeForTest_StopsAfterOneStep();
+    void initializeForTest_FindsInstantly();
+    void initializeForTest_TooMuchWind();
 };
 #endif /*  DroSimSystem_H_ */

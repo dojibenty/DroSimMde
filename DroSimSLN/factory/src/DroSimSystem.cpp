@@ -233,3 +233,99 @@ vector<tuple<double,int,int>> DroSimSystem::getSlowConfigs() {
 tuple<double,int,int> DroSimSystem::getFastConfig() {
     return fastConfig;
 }
+
+void DroSimSystem::initializeForTest_StopsAfterOneStep() {
+    instASimulation->setPositionCorrection(1.0);
+    instAWind->setForce(0.0);
+    instAWind->setDirection(vect2(0.5, 0.5));
+    instAUser->setMaxInlineZones(3);
+    instAGeoZone->setEnvSize(vect2(20000.0, 20000.0));
+    instAGeoZone->setBottomLeftPoint(vect2(45.0, -5.0));
+    instAObjective->setSpeedConstraint(0.0);
+    instAObjective->setPosition(vect2(0, 0));
+    instADroneSweep->setMinSpeed(10.0);
+    instADroneSweep->setMaxSpeed(30.0);
+    instADroneSweep->setVisionRadius(1000.0);
+    instADroneSweep->setSweepHeight(2000.0);
+    instADroneSweep->setBatteryCapacity(200.0);
+    instADroneSweep->setCollisionRadius(5.0);
+    instADroneSweep->setStartingPoint(vect2(0.0, 0.0));
+    
+    instADroneSweep->setSpeed(1000.0);
+
+    // Calcultated attributes
+    instAUser->setDroneCount(instADroneSweep->getNumberOf() + instADroneSpiral->getNumberOf());
+
+    // Initialization
+    if (instASimulation->getIsActive()) instASimulation->initialize();
+    if (instAWind->getIsActive()) instAWind->initialize();
+    if (instAUser->getIsActive()) instAUser->initialize();
+    if (instAGeoZone->getIsActive()) instAGeoZone->initialize();
+    if (instAObjective->getIsActive()) instAObjective->initialize();
+    if (instADroneSweep->getIsActive()) instADroneSweep->initialize();
+    if (instADroneSpiral->getIsActive()) instADroneSpiral->initialize();
+}
+
+void DroSimSystem::initializeForTest_FindsInstantly() {
+    instASimulation->setPositionCorrection(1.0);
+    instAWind->setForce(0.0);
+    instAWind->setDirection(vect2(0.5, 0.5));
+    instAUser->setMaxInlineZones(3);
+    instAGeoZone->setEnvSize(vect2(20000.0, 20000.0));
+    instAGeoZone->setBottomLeftPoint(vect2(45.0, -5.0));
+    instAObjective->setSpeedConstraint(0.0);
+    instAObjective->setPosition(vect2(0, 0));
+    instADroneSweep->setMinSpeed(10.0);
+    instADroneSweep->setMaxSpeed(30.0);
+    instADroneSweep->setSweepHeight(2000.0);
+    instADroneSweep->setBatteryCapacity(200.0);
+    instADroneSweep->setCollisionRadius(5.0);
+    instADroneSweep->setStartingPoint(vect2(0.0, 0.0));
+    instADroneSweep->setSpeed(minSpeed);
+
+    instADroneSweep->setVisionRadius(30000.0);
+
+    // Calcultated attributes
+    instAUser->setDroneCount(instADroneSweep->getNumberOf() + instADroneSpiral->getNumberOf());
+
+    // Initialization
+    if (instASimulation->getIsActive()) instASimulation->initialize();
+    if (instAWind->getIsActive()) instAWind->initialize();
+    if (instAUser->getIsActive()) instAUser->initialize();
+    if (instAGeoZone->getIsActive()) instAGeoZone->initialize();
+    if (instAObjective->getIsActive()) instAObjective->initialize();
+    if (instADroneSweep->getIsActive()) instADroneSweep->initialize();
+    if (instADroneSpiral->getIsActive()) instADroneSpiral->initialize();
+}
+
+void DroSimSystem::initializeForTest_TooMuchWind() {
+    instASimulation->setPositionCorrection(1.0);
+    instAWind->setDirection(vect2(0.5, 0.5));
+    instAUser->setMaxInlineZones(3);
+    instAGeoZone->setEnvSize(vect2(20000.0, 20000.0));
+    instAGeoZone->setBottomLeftPoint(vect2(45.0, -5.0));
+    instAObjective->setSpeedConstraint(0.0);
+    instAObjective->setPosition(vect2(0, 0));
+    instADroneSweep->setMinSpeed(10.0);
+    instADroneSweep->setMaxSpeed(30.0);
+    instADroneSweep->setVisionRadius(1000.0);
+    instADroneSweep->setSweepHeight(2000.0);
+    instADroneSweep->setBatteryCapacity(200.0);
+    instADroneSweep->setCollisionRadius(5.0);
+    instADroneSweep->setStartingPoint(vect2(0.0, 0.0));
+    instADroneSweep->setSpeed(minSpeed);
+
+    instAWind->setForce(50.0);
+    
+    // Calcultated attributes
+    instAUser->setDroneCount(instADroneSweep->getNumberOf() + instADroneSpiral->getNumberOf());
+
+    // Initialization
+    if (instASimulation->getIsActive()) instASimulation->initialize();
+    if (instAWind->getIsActive()) instAWind->initialize();
+    if (instAUser->getIsActive()) instAUser->initialize();
+    if (instAGeoZone->getIsActive()) instAGeoZone->initialize();
+    if (instAObjective->getIsActive()) instAObjective->initialize();
+    if (instADroneSweep->getIsActive()) instADroneSweep->initialize();
+    if (instADroneSpiral->getIsActive()) instADroneSpiral->initialize();
+}

@@ -58,7 +58,7 @@ void DroneSweep::initialize() {
 
 void DroneSweep::end() {
     // Start of user code  : Implementation of end method
-    cout << droneID << " - bat: " << battery << " // " << cpt << " steps\n";
+    cout << droneID << " - bat: " << battery << " // " << cpt << " step" << (cpt>1?"s":"") << " done\n";
     // End of user code
 }
 
