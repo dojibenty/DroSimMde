@@ -6,6 +6,7 @@
  */
 #ifndef Objective_H_
 #define Objective_H_
+#include "ReturnCode.h"
 class compObjective;
 #include "vect2.h"
 #include "ItfGeoDataInterface.h"
@@ -37,7 +38,7 @@ public :
     void initialize();
     void end();
 
-    int doStep(int nStep);
+    ReturnCode doStep(int nStep);
 
 
     // Start of user code  : Additional methods

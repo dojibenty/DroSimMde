@@ -13,7 +13,7 @@ protected :
 public :
     LeafComponent(double aFrequency);
     ~LeafComponent() override = 0;
-    int doStep(int nStep) override;
+    ReturnCode doStep(int nStep) override;
 
     bool getIsActive();
 

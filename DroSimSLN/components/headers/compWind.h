@@ -9,6 +9,7 @@
 #define compWind_H_
 
 #include "LeafComponent.h"
+#include "ReturnCode.h"
 class Wind;
 
 #include "vect2.h"
@@ -29,7 +30,7 @@ public :
     compWind(double aFrequency);
     virtual ~compWind();
     void doOneStep();
-    int doStep(int nStep);
+    ReturnCode doStep(int nStep);
 
     virtual void readInputs();
     void initialize();

@@ -9,6 +9,7 @@
 #define compObjective_H_
 
 #include "LeafComponent.h"
+#include "ReturnCode.h"
 class Objective;
 
 #include "vect2.h"
@@ -29,7 +30,7 @@ public :
     compObjective(double aFrequency);
     virtual ~compObjective();
     void doOneStep();
-    int doStep(int nStep);
+    ReturnCode doStep(int nStep);
 
     virtual void readInputs();
     void initialize();

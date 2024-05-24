@@ -8,6 +8,7 @@
 #define User_H_
 #include "Clock.h"
 #include "ItfGeoDataInterface.h"
+#include "ReturnCode.h"
 #include "wect2.h"
 class compUser;
 
@@ -40,7 +41,7 @@ public :
     void initialize();
     void end();
 
-    int doStep(int nStep);
+    ReturnCode doStep(int nStep);
 
     void setrItfGeoDataUser(ItfGeoDataInterface* arItfGeoDataUser);
 

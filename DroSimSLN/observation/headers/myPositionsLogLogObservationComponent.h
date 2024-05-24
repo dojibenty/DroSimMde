@@ -33,6 +33,6 @@ public :
 
     void setObjective(Objective* myObjective);
     void setDroneSweep(vector<DroneSweep*> myDroneSweep);
-    int doStep(int nStep);
+    ReturnCode doStep(int nStep);
 };
 #endif /* myPositionsLogLogObservationComponent */

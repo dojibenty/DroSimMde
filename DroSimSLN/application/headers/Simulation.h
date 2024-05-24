@@ -6,6 +6,7 @@
  */
 #ifndef Simulation_H_
 #define Simulation_H_
+#include "ReturnCode.h"
 class compSimulation;
 
 #include "ItfSimDataInterface.h"
@@ -31,7 +32,7 @@ public :
     void initialize();
     void end();
 
-    int doStep(int nStep);
+    ReturnCode doStep(int nStep);
 
     // +++++++++++++ Methods of the pItfSimData interface +++++++++++++
     double grabExpectedEndTime();

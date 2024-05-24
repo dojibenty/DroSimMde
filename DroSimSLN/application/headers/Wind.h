@@ -7,6 +7,7 @@
 #ifndef Wind_H_
 #define Wind_H_
 #include "Clock.h"
+#include "ReturnCode.h"
 class compWind;
 #include "vect2.h"
 
@@ -34,7 +35,7 @@ public :
     void initialize();
     void end();
 
-    int doStep(int nStep);
+    ReturnCode doStep(int nStep);
 
     double getWindForce();
     vect2 getWindDirection();

@@ -37,7 +37,7 @@ void Wind::end() {
     // End of user code
 }
 
-int Wind::doStep(int nStep) {
+ReturnCode Wind::doStep(int nStep) {
     // Start of user code  : Implementation of doStep method
     windForce += User::roundToDecimal(User::randRange(-5, 5),2);
     if (windForce < 0) windForce = 0;
@@ -45,7 +45,7 @@ int Wind::doStep(int nStep) {
     const double dirModY = User::roundToDecimal(User::randRange(-1, 1)/10,2);
     windDirection += vect2(dirModX,dirModY);
     windDirection.normalize();
-    return 0;
+    return ReturnCode::nothing;
     // End of user code
 }
 

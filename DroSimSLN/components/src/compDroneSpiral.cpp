@@ -30,13 +30,13 @@ void compDroneSpiral::doOneStep() {
     }
 }
 
-int compDroneSpiral::doStep(int nStep) {
+ReturnCode compDroneSpiral::doStep(int nStep) {
     if (newValue) {
         oldSpiralposition = newSpiralposition;
         newValue = false;
     }
     readInputs();
-    const int returnCode = appli->doStep(nStep);
+    const auto returnCode = appli->doStep(nStep);
     newSpiralposition = appli->getSpiralposition();
     if (delayMax == 0) {
         oldSpiralposition = newSpiralposition;

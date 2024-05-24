@@ -7,6 +7,7 @@
 #ifndef DroneSpiral_H_
 #define DroneSpiral_H_
 #include "Clock.h"
+#include "ReturnCode.h"
 class compDroneSpiral;
 // Inputs
 #include "vect2.h"
@@ -72,7 +73,7 @@ public :
     void initialize();
     void end();
 
-    int doStep(int nStep);
+    ReturnCode doStep(int nStep);
 
 
     // Start of user code  : Additional methods

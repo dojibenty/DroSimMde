@@ -7,6 +7,8 @@
 
 #include "TimeableObject.h"
 
+#include "ReturnCode.h"
+
 TimeableObject::TimeableObject(double aFrequency) {
     if (aFrequency <= 0) {
         frequency = 1;
@@ -26,4 +28,4 @@ void TimeableObject::setFrequency(double freq) {
     frequency = freq;
 }
 
-int TimeableObject::doStep(int nStep) { return 0; }
+ReturnCode TimeableObject::doStep(int nStep) { return ReturnCode::nothing; }

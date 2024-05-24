@@ -7,7 +7,7 @@ LeafComponent::LeafComponent(double aFrequency) : TimeableObject(aFrequency) {
 
 LeafComponent::~LeafComponent() {}
 
-int LeafComponent::doStep(int nStep) { return 0; }
+ReturnCode LeafComponent::doStep(int nStep) { return ReturnCode::nothing; }
 
 bool LeafComponent::getIsActive() {
     return isActive;

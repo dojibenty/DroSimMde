@@ -9,6 +9,7 @@
 #define compSimulation_H_
 
 #include "LeafComponent.h"
+#include "ReturnCode.h"
 class Simulation;
 
 
@@ -28,7 +29,7 @@ public :
     compSimulation(double aFrequency);
     virtual ~compSimulation();
     void doOneStep();
-    int doStep(int nStep);
+    ReturnCode doStep(int nStep);
 
     virtual void readInputs();
     void initialize();

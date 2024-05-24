@@ -7,9 +7,9 @@
 
 #include "DroneSweep.h"
 #include "compDroneSweep.h"
+#include "ReturnCode.h"
 // Start of user code  : Additional imports for DroneSweep
 #include <sstream>
-#define M_PER_DEG 111000
 // End of user code
 
 
@@ -30,13 +30,12 @@ DroneSweep::~DroneSweep() {
 }
 
 void DroneSweep::initialize() {
+    status = true;
     // Start of user code  : Implementation of initialize method
     assignedZone = rItfManageSimSweep->grabAssignedZone(droneID);
 
     leftYBound = assignedZone.getV1().getY();
     sweepLength = assignedZone.getV2().getY() - leftYBound;
-
-    position = vect2(0.0, 0.0);
 
     heightCount = 1;
 
@@ -48,8 +47,8 @@ void DroneSweep::initialize() {
 
     movementTolerance = rItfSimDataSweep->grabPositionCorrection();
 
-    battery = batteryCapacity * batteryCount;
-    batteryConsumption = 2 * pow(speed, 2) / 3600.0;
+    battery = 2;
+    batteryConsumption = 0.0002;//CONSUMPTION(speed,weight);
     cpt = 0;
 
     //printRecap();
@@ -62,7 +61,7 @@ void DroneSweep::end() {
     // End of user code
 }
 
-int DroneSweep::doStep(int nStep) {
+ReturnCode DroneSweep::doStep(int nStep) {
     // Start of user code  : Implementation of doStep method
     cpt++;
     
@@ -76,35 +75,49 @@ int DroneSweep::doStep(int nStep) {
     position = setNextPosition();
     sweepposition = position;
 
-    //cout << "step:" << cpt << " pos: " << position.toString() << '\n';
-
-    // Objective detection
-    if (vect2::distance(position, objposition) <= visionRadius
-        && objposition.getX() > 0) {
-        //cout << "1bat: " << battery << '\n';
-        cout << "pos: " << position.toString() << "obj: " << objposition.toString() << '\n';
-        return 1;
-    }
-
     // Battery
-    double windInducedConsumption = 2 * pow(windForce,2) / 3600.0;
-    const int alignment = direction.alignment(windDirection);
-    if (alignment == 0) {
-        if (abs(windInducedConsumption) > batteryConsumption) windInducedConsumption = batteryConsumption;
-        windInducedConsumption *= -1;
-    }
-    else if (alignment == 1) windInducedConsumption *= 0;
-    else if (windInducedConsumption > batteryConsumption) windInducedConsumption = batteryConsumption;
-    if ((battery -= batteryConsumption + windInducedConsumption * windInfluence) <= 0) {
-        battery = 0;
-        return 2;
-    }
-
-    //cout << "2bat: " << battery << '\n';
-    //cout << "bcs: " << batteryConsumption << " // wic+i: " << windInducedConsumption*windInfluence << " // wf: " << windForce << '\n';
+    /*const int alignment = direction.alignment(windDirection);
+    switch (alignment) {
+    case 0: // vent arriere
+        batteryConsumption = CONSUMPTION(speed-(windForce*windInfluence),weight);
+        break;
+    case 1: // vent de cote
+        batteryConsumption = CONSUMPTION(speed+(windForce*windInfluence*0.5),weight);
+        break;
+    case 2: // vent contraire
+        batteryConsumption = CONSUMPTION(speed+(windForce*windInfluence),weight);
+        break;
+    default:
+        break;
+    }*/
+    battery -= batteryConsumption;
     
-    return 0;
+    // Test for return conditions
+
+    using enum ReturnCode;
+    
+    // Is objective found
+    if (condReturnObjectiveFound())
+        return objective_found;
+
+    // Is battery low
+    if (condReturnLowBattery())
+        return low_battery;
+    
+    return nothing;
     // End of user code
+}
+
+bool DroneSweep::condReturnObjectiveFound() {
+    return vect2::distance(position, objposition) <= visionRadius && objposition.getX() > 0;
+}
+
+bool DroneSweep::condReturnLowBattery() {
+    if (battery <= 0) {
+        battery = 0;
+        return true;
+    }
+    return false;
 }
 
 

@@ -9,6 +9,7 @@
 #define compGeoZone_H_
 
 #include "LeafComponent.h"
+#include "ReturnCode.h"
 class GeoZone;
 
 #include "vect2.h"
@@ -27,7 +28,7 @@ public :
     compGeoZone(double aFrequency);
     virtual ~compGeoZone();
     void doOneStep();
-    int doStep(int nStep);
+    ReturnCode doStep(int nStep);
 
     virtual void readInputs();
     void initialize();

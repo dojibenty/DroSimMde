@@ -6,6 +6,7 @@
  */
 #ifndef DroneSweep_H_
 #define DroneSweep_H_
+#include "ReturnCode.h"
 class compDroneSweep;
 // Inputs
 #include "vect2.h"
@@ -16,6 +17,7 @@ class compDroneSweep;
 #include "ItfSimDataInterface.h"
 
 // Start of user code  : Additional imports for DroneSweep
+#define CONSUMPTION(speed,weight) (1.0/2.0*(weight)*pow(speed,2.0))
 // End of user code
 
 class DroneSweep {
@@ -43,6 +45,9 @@ protected :
     ItfManageSimInterface* rItfManageSimSweep;
     ItfSimDataInterface* rItfSimDataSweep;
 
+    // Status
+    bool status;
+
     // Start of user code  : Properties of DroneSweep
 private:
     int droneID;
@@ -51,7 +56,6 @@ private:
     vect2 direction;
     double batteryConsumption;
     double battery;
-    int batteryCount;
     double movementTolerance;
     wect2 assignedZone;
     bool goesVertical = true;
@@ -63,6 +67,7 @@ private:
     bool isInZone = false;
     vect2 zoneStartPoint;
     double windInfluence = 0.6;
+    double weight = 15.0;
     int cpt = 0;
     // End of user code
 
@@ -72,7 +77,9 @@ public :
     void initialize();
     void end();
 
-    int doStep(int nStep);
+    ReturnCode doStep(int nStep);
+    bool condReturnObjectiveFound();
+    bool condReturnLowBattery();
 
 
     // Start of user code  : Additional methods
@@ -87,8 +94,9 @@ public:
     void setSpeed(double arg) { speed = arg; }
     int getDroneID() { return droneID; }
     vect2& getPosition() { return position; }
-    int getBatteryCount() { return batteryCount; }
-    void setBatteryCount(int arg) { batteryCount = arg; }
+    void setPosition(const vect2& arg) { position = arg; }
+    bool getStatus() { return status; }
+    void setStatus(bool arg) { status = arg; }
     // End of user code
 
 

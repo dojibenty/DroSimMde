@@ -53,7 +53,7 @@ void DroneSpiral::end() {
     // End of user code
 }
 
-int DroneSpiral::doStep(int nStep) {
+ReturnCode DroneSpiral::doStep(int nStep) {
     // Start of user code  : Implementation of doStep method
     // Calculate the Drone's next position
     position = setNextPosition();
@@ -65,11 +65,13 @@ int DroneSpiral::doStep(int nStep) {
 
     spiralposition = position;
 
+    using enum ReturnCode;
+    
     if (vect2::distance(position, objposition) <= visionRadius
         && objposition.getX() > 0)
-        return 1;
+        return objective_found;
 
-    return 0;
+    return nothing;
     // End of user code
 }
 

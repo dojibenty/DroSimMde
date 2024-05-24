@@ -6,6 +6,7 @@
  */
 #ifndef GeoZone_H_
 #define GeoZone_H_
+#include "ReturnCode.h"
 class compGeoZone;
 #include "vect2.h"
 
@@ -31,7 +32,7 @@ public :
     void initialize();
     void end();
 
-    int doStep(int nStep);
+    ReturnCode doStep(int nStep);
 
     // +++++++++++++ Methods of the pItfGeoData interface +++++++++++++
     vect2 grabEnvLimits() override;

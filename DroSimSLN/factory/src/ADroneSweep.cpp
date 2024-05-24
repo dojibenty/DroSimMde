@@ -20,9 +20,9 @@ void ADroneSweep::setAWind(AWind* pAWind) {
 }
 
 void ADroneSweep::readInputs() {
-    for (DroneSweep* obj : appli) {
-        obj->setObjposition(attAObjective->getObjposition());
-        obj->setWindForce(attAWind->getWindForce());
-        obj->setWindDirection(attAWind->getWindDirection());
+    for (const auto& obj : appli) {
+        obj.second->setObjposition(attAObjective->getObjposition());
+        obj.second->setWindForce(attAWind->getWindForce());
+        obj.second->setWindDirection(attAWind->getWindDirection());
     }
 }

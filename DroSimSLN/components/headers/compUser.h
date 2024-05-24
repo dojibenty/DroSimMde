@@ -10,6 +10,7 @@
 
 #include "ItfGeoDataInterface.h"
 #include "LeafComponent.h"
+#include "ReturnCode.h"
 #include "wect2.h"
 class User;
 
@@ -27,7 +28,7 @@ public :
     compUser(double aFrequency);
     virtual ~compUser();
     void doOneStep();
-    int doStep(int nStep) override;
+    ReturnCode doStep(int nStep) override;
 
     virtual void readInputs();
     void initialize();

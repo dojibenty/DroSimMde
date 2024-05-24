@@ -32,7 +32,7 @@ public :
     void setTime(long min, long max);
 
     tuple<bool, double> startSimulation();
-    void computeDoStepResult(Clock* c, int returnCode);
+    void computeDoStepResult(Clock* c, ReturnCode returnCode);
 
     virtual void eventSimulation() = 0;
     //pyp

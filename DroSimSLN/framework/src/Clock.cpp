@@ -48,7 +48,7 @@ bool Clock::isFinished() {
 Clock::Clock() {
     i = 0;
     startTime = 0; // UTC epoch
-    stepTime = 1; // in ms
+    stepTime = 10; // in ms
     currentTime = 0; // UTC epoch
     endTime = 0; // UTC epoch
     end = false;

@@ -36,10 +36,10 @@ void User::end() {
     // End of user code
 }
 
-int User::doStep(int nStep) {
+ReturnCode User::doStep(int nStep) {
     // Start of user code  : Implementation of doStep method
-    if (isObjectiveFound) return 1;
-    return 0;
+    if (isObjectiveFound) return ReturnCode::objective_found;
+    return ReturnCode::nothing;
     // End of user code
 }
 

@@ -7,6 +7,7 @@
 
 #include "compObjective.h"
 #include "Objective.h"
+#include "ReturnCode.h"
 
 compObjective::compObjective(double aFrequency) : LeafComponent(aFrequency) {
     appli = new Objective(this);
@@ -30,13 +31,13 @@ void compObjective::doOneStep() {
     }
 }
 
-int compObjective::doStep(int nStep) {
+ReturnCode compObjective::doStep(int nStep) {
     if (newValue) {
         oldObjposition = newObjposition;
         newValue = false;
     }
     readInputs();
-    const int returnCode = appli->doStep(nStep);
+    const auto returnCode = appli->doStep(nStep);
     newObjposition = appli->getObjposition();
     if (delayMax == 0) {
         oldObjposition = newObjposition;

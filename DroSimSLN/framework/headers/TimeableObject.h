@@ -7,6 +7,7 @@
 
 #ifndef TIMEABLEOBJECT_H_
 #define TIMEABLEOBJECT_H_
+#include "ReturnCode.h"
 
 
 class TimeableObject {
@@ -18,6 +19,6 @@ public:
     virtual ~TimeableObject() =0;
     double getFrequency();
     void setFrequency(double freq);
-    virtual int doStep(int nStep);
+    virtual ReturnCode doStep(int nStep);
 };
 #endif /* TIMEABLEOBJECT_H_ */

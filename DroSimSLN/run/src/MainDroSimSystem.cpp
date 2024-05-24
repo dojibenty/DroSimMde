@@ -28,8 +28,21 @@
 // Start of user code  : Additional imports for testDroSim
 // End of user code
 
+namespace {
+    void initRandom() {
+        srand(time(nullptr));
+        for (int i = 0; i < 5; i++) rand();
+    }
+
+    void initRandom(const int& shuffles) {
+        srand(time(nullptr));
+        for (int i = 0; i < shuffles; i++) rand();
+    }
+}
+
 int main() {
     auto* root = new DroSimSystem();
+    initRandom(20);
     double summedTimesToFind;
     int successfulSims;
     do {
@@ -52,7 +65,7 @@ int main() {
             simulatedScenario->push(PositionsLogLogObservationComponent);
             */
 
-            simulatedScenario->setTime(0, 360000);
+            simulatedScenario->setTime(0, 108000);
             auto simResult = simulatedScenario->startSimulation();
             if (get<0>(simResult)) {
                 successfulSims++;
@@ -68,10 +81,10 @@ int main() {
     const auto fastConfig = root->getFastConfig();
 
     cout << "Fast config:\n";
-    cout << "speed:" << get<0>(fastConfig) << " ; minNumberOf: " << get<1>(fastConfig) << " ; batteryCount: " << get<2>(fastConfig) << '\n';
+    cout << "speed:" << get<0>(fastConfig) << " ; minNumberOf: " << get<1>(fastConfig) << " ; batteryCap: " << get<2>(fastConfig) << '\n';
     cout << "\nSlow configs:\n";
     for (auto t : slowConfigs)
-        cout << "speed:" << get<0>(t) << " ; numberOf: " << get<1>(t) << " ; batteryCount: " << get<2>(t) << '\n';
+        cout << "speed:" << get<0>(t) << " ; numberOf: " << get<1>(t) << " ; batteryCap: " << get<2>(t) << '\n';
     
     // Start of user code  : Additional code main for testDroSim
     // End of user code

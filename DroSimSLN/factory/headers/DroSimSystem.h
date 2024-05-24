@@ -40,8 +40,7 @@ protected :
     int maxNumberOf;
     double pSpeed = -1;
     int pNumberOf = -1;
-    int pBatCount = -1;
-    int cBatCount = -1;
+    double pBatCap = -1;
     bool isCurveFound = false;
     bool isMaxFound = false;
     double speedIncrement;
@@ -65,7 +64,7 @@ public :
     void initialize();
 
     void end();
-    int calculateMinBatteryCountForGroup(const double averageTimeToFind) const;
+    double calculateBatteryCapForGroup(const double averageTimeToFind) const;
     bool continueCondition() const;
     vector<tuple<double, int, int>> getSlowConfigs();
     tuple<double, int, int> getFastConfig();

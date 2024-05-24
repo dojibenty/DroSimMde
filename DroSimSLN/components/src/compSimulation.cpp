@@ -25,10 +25,10 @@ void compSimulation::doOneStep() {
     }
 }
 
-int compSimulation::doStep(int nStep) {
+ReturnCode compSimulation::doStep(int nStep) {
     if (newValue) {}
     readInputs();
-    const int returnCode = appli->doStep(nStep);
+    const auto returnCode = appli->doStep(nStep);
     if (delayMax == 0) {
         newValue = false;
     }

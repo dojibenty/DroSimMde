@@ -6,6 +6,8 @@
  */
 
 #include "compWind.h"
+
+#include "ReturnCode.h"
 #include "Wind.h"
 
 compWind::compWind(double aFrequency) : LeafComponent(aFrequency) {
@@ -33,14 +35,14 @@ void compWind::doOneStep() {
     }
 }
 
-int compWind::doStep(int nStep) {
+ReturnCode compWind::doStep(int nStep) {
     if (newValue) {
         oldWindForce = newWindForce;
         oldWindDirection = newWindDirection;
         newValue = false;
     }
     readInputs();
-    const int returnCode = appli->doStep(nStep);
+    const auto returnCode = appli->doStep(nStep);
     newWindForce = appli->getWindForce();
     newWindDirection = appli->getWindDirection();
     if (delayMax == 0) {

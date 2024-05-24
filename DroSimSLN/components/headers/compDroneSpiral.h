@@ -10,6 +10,7 @@
 
 #include "DroneSpiral.h"
 #include "LeafComponent.h"
+#include "ReturnCode.h"
 class DroneSpiral;
 
 #include "vect2.h"
@@ -37,7 +38,7 @@ public :
     compDroneSpiral(double aFrequency);
     virtual ~compDroneSpiral();
     void doOneStep();
-    int doStep(int nStep);
+    ReturnCode doStep(int nStep);
 
     virtual void readInputs();
     void initialize();

@@ -36,9 +36,9 @@ void Simulation::end() {
     // End of user code
 }
 
-int Simulation::doStep(int nStep) {
+ReturnCode Simulation::doStep(int nStep) {
     // Start of user code  : Implementation of doStep method
-    return 0;
+    return ReturnCode::nothing;
     // End of user code
 }
 

@@ -22,8 +22,7 @@ class DroneSweep;
 
 class compDroneSweep : public LeafComponent {
 protected :
-    vector<DroneSweep*> appli;
-    unordered_map<int,bool> status;
+    unordered_map<int,DroneSweep*> appli;
     vector<vect2> oldSweepposition;
     vector<vect2> newSweepposition;
 
@@ -34,9 +33,9 @@ public :
     compDroneSweep(double aFrequency);
     virtual ~compDroneSweep();
     void doOneStep();
-    int doStep(int nStep);
-    int sendReturnCode(const vector<int>& returnCodes);
-    bool pauseCondition(DroneSweep* inst);
+    ReturnCode doStep(int nStep);
+    ReturnCode makeReturnCode(const unordered_map<DroneSweep*, ReturnCode>& returnCodes);
+    bool stopCondition(DroneSweep* inst);
     void updateNumberOfInstances(const unsigned int arg);
     void printInstRecap();
 
@@ -48,12 +47,7 @@ public :
     void setrItfGeoDataSweep(ItfGeoDataInterface* arItfGeoDataSweep);
     void setrItfManageSimSweep(ItfManageSimInterface* arItfManageSimSweep);
     void setrItfSimDataSweep(ItfSimDataInterface* arItfSimDataSweep);
-    vector<DroneSweep*> getAppli();
-
-    double getSpeed() { return appli[0]->getSpeed(); }
-    void setSpeed(double arg) { for (DroneSweep* obj : appli) obj->setSpeed(arg); }
-    int getBatteryCount() { return appli[0]->getBatteryCount(); }
-    void setBatteryCount(int arg) { for (DroneSweep* obj : appli) obj->setBatteryCount(arg); }
+    unordered_map<int, DroneSweep*> getAppli();
     
     // +++++++++++++ Access for minSpeed parameter +++++++++++++
     double getMinSpeed();
@@ -87,5 +81,9 @@ public :
     double getCollisionRadius();
 
     void setCollisionRadius(double arg);
+    // +++++++++++++ Access for speed parameter +++++++++++++
+    double getSpeed();
+    
+    void setSpeed(double arg);
 };
 #endif /* compDroneSweep_H_ */

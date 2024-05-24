@@ -45,7 +45,7 @@ void myPositionsLogLogObservationComponent::setDroneSweep(vector<DroneSweep*> my
     theDroneSweep = myDroneSweep;
 }
 
-int myPositionsLogLogObservationComponent::doStep(int nStep) {
+ReturnCode myPositionsLogLogObservationComponent::doStep(int nStep) {
     Clock* c = Clock::getInstance();
     readInputs();
     //int i = 0;
@@ -75,5 +75,5 @@ int myPositionsLogLogObservationComponent::doStep(int nStep) {
     writeNames(s);
     endLine();
 
-    return 0;
+    return ReturnCode::nothing;
 }

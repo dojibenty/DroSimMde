@@ -6,7 +6,7 @@
 #include <tuple>
 
 Scenario::Scenario(RootComponent* aRoot) {
-    stepTime = 1;
+    stepTime = 10;
     max = 0;
     min = 0;
     simulationNumber = 0;
@@ -34,7 +34,7 @@ Scenario::~Scenario() {}
 
 void Scenario::setTime(long m, long mx) {
     min = m;
-    stepTime = 1;
+    stepTime = 10; // n'est pas mis à jour en changeant dans le scn
     max = mx;
 }
 
@@ -85,21 +85,27 @@ tuple<bool, double> Scenario::startSimulation() {
     return make_tuple(isSimSuccessful, c->getCurrentMS());
 }
 
-void Scenario::computeDoStepResult(Clock* c, int returnCode) {
+void Scenario::computeDoStepResult(Clock* c, ReturnCode returnCode) {
+    using enum ReturnCode;
+    
     string str;
     if (isSimSuccessful) return;
     switch (returnCode) {
-    case 1:
+    case objective_found:
         str = "objective found";
         isSimSuccessful = true;
         break;
-    case 2:
+    case low_battery:
         str = "drones batteries are empty";
         break;
-    default:
+    case other:
         str = "other";
+        break;
+    case nothing:
+        break;
     }
-    if (returnCode != 0) {
+    
+    if (returnCode != nothing) {
         cout << '(' << c->getCurrentMS() << ',' << str << ')' << '\n';
         doEndSim = true;
     }

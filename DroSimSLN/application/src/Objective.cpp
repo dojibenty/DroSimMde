@@ -44,9 +44,9 @@ void Objective::end() {
     // End of user code
 }
 
-int Objective::doStep(int nStep) {
+ReturnCode Objective::doStep(int nStep) {
     // Start of user code  : Implementation of doStep method
-    if (speedConstraint == 0.0) return 0;
+    if (speedConstraint == 0.0) return ReturnCode::nothing;
 
     vect2 nextPosition = position + direction * speedConstraint;
 
@@ -55,7 +55,7 @@ int Objective::doStep(int nStep) {
 
     objposition = position;
 
-    return 0;
+    return ReturnCode::nothing;
     // End of user code
 }
 

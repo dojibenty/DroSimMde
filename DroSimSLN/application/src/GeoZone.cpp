@@ -35,9 +35,9 @@ void GeoZone::end() {
     // End of user code
 }
 
-int GeoZone::doStep(int nStep) {
+ReturnCode GeoZone::doStep(int nStep) {
     // Start of user code  : Implementation of doStep method
-    return 0;
+    return ReturnCode::nothing;
     // End of user code
 }
 
