@@ -46,7 +46,7 @@ ReturnCode compDroneSweep::doStep(int nStep) {
     for (const auto& [id, inst] : appli) {
         
         if (stopCondition(inst)) {
-            returnCodes.insert(make_pair(inst,nothing));
+            returnCodes.insert(make_pair(inst,proceed));
             continue;
         }
 
@@ -73,15 +73,15 @@ ReturnCode compDroneSweep::makeReturnCode(const unordered_map<DroneSweep*,Return
     using enum ReturnCode;
 
     for (const auto& [inst, code] : returnCodes) {
-        if (code == objective_found) return objective_found;
+        if (code == simulation_success) return simulation_success;
         if (code == other) return other;
-        if (code == low_battery) inst->setStatus(false);
+        if (code == local_stop) inst->setStatus(false);
     }
 
     for (const auto& [id, obj] : appli)
-        if (obj->getStatus() == true) return nothing;
+        if (obj->getStatus() == true) return proceed;
 
-    return low_battery;
+    return simulation_fail;
 }
 
 bool compDroneSweep::stopCondition(DroneSweep* inst) {

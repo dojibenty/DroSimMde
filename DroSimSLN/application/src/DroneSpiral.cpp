@@ -69,9 +69,9 @@ ReturnCode DroneSpiral::doStep(int nStep) {
     
     if (vect2::distance(position, objposition) <= visionRadius
         && objposition.getX() > 0)
-        return objective_found;
+        return simulation_success;
 
-    return nothing;
+    return proceed;
     // End of user code
 }
 

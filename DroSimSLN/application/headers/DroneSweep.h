@@ -17,7 +17,7 @@ class compDroneSweep;
 #include "ItfSimDataInterface.h"
 
 // Start of user code  : Additional imports for DroneSweep
-#define CONSUMPTION(speed,weight) (1.0/2.0*(weight)*pow(speed,2.0))
+#define CONSUMPTION(speed) ((batConsoFactA+(batConsoFactB*(pow(speed,2.0))))/3600.0)
 // End of user code
 
 class DroneSweep {
@@ -55,6 +55,8 @@ private:
     vect2 position;
     vect2 direction;
     double batteryConsumption;
+    double batConsoFactA;
+    double batConsoFactB;
     double battery;
     double movementTolerance;
     wect2 assignedZone;
@@ -66,8 +68,7 @@ private:
     double leftYBound;
     bool isInZone = false;
     vect2 zoneStartPoint;
-    double windInfluence = 0.6;
-    double weight = 15.0;
+    double windInfluence = 0.2;
     int cpt = 0;
     // End of user code
 
@@ -78,8 +79,8 @@ public :
     void end();
 
     ReturnCode doStep(int nStep);
-    bool condReturnObjectiveFound();
-    bool condReturnLowBattery();
+    bool condSimulationSuccess();
+    bool condLocalStop();
 
 
     // Start of user code  : Additional methods

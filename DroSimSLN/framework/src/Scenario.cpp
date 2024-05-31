@@ -91,21 +91,25 @@ void Scenario::computeDoStepResult(Clock* c, ReturnCode returnCode) {
     string str;
     if (isSimSuccessful) return;
     switch (returnCode) {
-    case objective_found:
+    case proceed:
+        break;
+    case local_stop:
+        str = "";
+        break;
+    case simulation_success:
         str = "objective found";
         isSimSuccessful = true;
         break;
-    case low_battery:
-        str = "drones batteries are empty";
+    case simulation_fail:
+        str = "simulation failed";
+        isSimSuccessful = false;
         break;
     case other:
         str = "other";
         break;
-    case nothing:
-        break;
     }
     
-    if (returnCode != nothing) {
+    if (returnCode != proceed) {
         cout << '(' << c->getCurrentMS() << ',' << str << ')' << '\n';
         doEndSim = true;
     }

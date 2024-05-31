@@ -10,6 +10,8 @@
 #include "ReturnCode.h"
 // Start of user code  : Additional imports for DroneSweep
 #include <sstream>
+
+#include "User.h"
 // End of user code
 
 
@@ -47,10 +49,11 @@ void DroneSweep::initialize() {
 
     movementTolerance = rItfSimDataSweep->grabPositionCorrection();
 
-    battery = 2;
-    batteryConsumption = 0.0002;//CONSUMPTION(speed,weight);
+    battery = batteryCapacity;
+    batConsoFactA = 50;
+    batConsoFactB = 0.4;
+    batteryConsumption = CONSUMPTION(speed);
     cpt = 0;
-
     //printRecap();
     // End of user code
 }
@@ -76,43 +79,45 @@ ReturnCode DroneSweep::doStep(int nStep) {
     sweepposition = position;
 
     // Battery
-    /*const int alignment = direction.alignment(windDirection);
+    const int alignment = direction.alignment(windDirection);
     switch (alignment) {
     case 0: // vent arriere
-        batteryConsumption = CONSUMPTION(speed-(windForce*windInfluence),weight);
+        batteryConsumption = CONSUMPTION(speed-(windForce*windInfluence));
         break;
     case 1: // vent de cote
-        batteryConsumption = CONSUMPTION(speed+(windForce*windInfluence*0.5),weight);
+        batteryConsumption = CONSUMPTION(speed+(windForce*windInfluence)*0.5);
         break;
     case 2: // vent contraire
-        batteryConsumption = CONSUMPTION(speed+(windForce*windInfluence),weight);
+        batteryConsumption = CONSUMPTION(speed+(windForce*windInfluence));
         break;
     default:
         break;
-    }*/
+    }
     battery -= batteryConsumption;
+    //cout << "bat: " << battery << "\nconso: " << batteryConsumption << '\n';
     
     // Test for return conditions
 
     using enum ReturnCode;
     
     // Is objective found
-    if (condReturnObjectiveFound())
-        return objective_found;
+    if (condSimulationSuccess())
+        return simulation_success;
 
     // Is battery low
-    if (condReturnLowBattery())
-        return low_battery;
+    if (condLocalStop())
+        return local_stop;
+        
     
-    return nothing;
+    return proceed;
     // End of user code
 }
 
-bool DroneSweep::condReturnObjectiveFound() {
+bool DroneSweep::condSimulationSuccess() {
     return vect2::distance(position, objposition) <= visionRadius && objposition.getX() > 0;
 }
 
-bool DroneSweep::condReturnLowBattery() {
+bool DroneSweep::condLocalStop() {
     if (battery <= 0) {
         battery = 0;
         return true;

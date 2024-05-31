@@ -51,7 +51,7 @@ DroSimSystem::DroSimSystem() {
     leafComponents.push_back(instAGeoZone);
     instAObjective = new AObjective(1.0);
     leafComponents.push_back(instAObjective);
-    instADroneSweep = new ADroneSweep(100.0);
+    instADroneSweep = new ADroneSweep(10.0);
     leafComponents.push_back(instADroneSweep);
     instADroneSpiral = new ADroneSpiral(1.0);
     leafComponents.push_back(instADroneSpiral);
@@ -90,7 +90,7 @@ void DroSimSystem::initialize() {
     instAWind->setForce(0.0);
     instAWind->setDirection(vect2(0.5, 0.5));
     //instAWind->setFrequency(0.0);
-    instAUser->setMaxInlineZones(3);
+    instAUser->setMaxInlineZones(4);
     //instAUser->setFrequency(0.0);
     instAGeoZone->setEnvSize(vect2(20000.0, 20000.0));
     instAGeoZone->setBottomLeftPoint(vect2(45.0, -5.0));
@@ -154,7 +154,7 @@ void DroSimSystem::mutateParameters(const bool isGroupSuccessful, const double a
 
     const double groupSpeed = instADroneSweep->getSpeed();
     const int groupNumberOf = instADroneSweep->getNumberOf();
-    const double groupBatCap = calculateBatteryCapForGroup(averageTimeToFind);
+    const double groupBatCap = 200.0;
     
     if (!isCurveFound || isGroupSuccessful) {
         // We overwrite the saved config as we don't need it right now

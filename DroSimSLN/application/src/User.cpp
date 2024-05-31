@@ -38,8 +38,8 @@ void User::end() {
 
 ReturnCode User::doStep(int nStep) {
     // Start of user code  : Implementation of doStep method
-    if (isObjectiveFound) return ReturnCode::objective_found;
-    return ReturnCode::nothing;
+    if (isObjectiveFound) return ReturnCode::simulation_success;
+    return ReturnCode::proceed;
     // End of user code
 }
 
@@ -62,8 +62,14 @@ double User::randRange(const double min, const double max) {
 }
 
 double User::roundToDecimal(const double number, const int decimal) {
+    if (number == 0.0) return number;
+    if (decimal == 0) return number;
+    
     const double power = pow(10, decimal);
-    return round(number * power) / power;
+    double rounded;
+    if ((rounded = round(number * power) / power) == 0.0)
+        return roundToDecimal(number,decimal+1);
+    return rounded;
 }
 
 vector<wect2> User::createZones() const {

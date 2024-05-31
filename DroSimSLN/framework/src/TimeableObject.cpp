@@ -28,4 +28,4 @@ void TimeableObject::setFrequency(double freq) {
     frequency = freq;
 }
 
-ReturnCode TimeableObject::doStep(int nStep) { return ReturnCode::nothing; }
+ReturnCode TimeableObject::doStep(int nStep) { return ReturnCode::proceed; }

@@ -4,9 +4,10 @@
 #define RETURNCODE_H
 
 enum class ReturnCode {
-    nothing,
-    objective_found,
-    low_battery,
+    proceed,
+    local_stop,
+    simulation_success,
+    simulation_fail,
     other
 };
 

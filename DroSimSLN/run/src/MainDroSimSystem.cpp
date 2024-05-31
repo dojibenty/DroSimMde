@@ -65,7 +65,7 @@ int main() {
             simulatedScenario->push(PositionsLogLogObservationComponent);
             */
 
-            simulatedScenario->setTime(0, 108000);
+            simulatedScenario->setTime(0, 360000);
             auto simResult = simulatedScenario->startSimulation();
             if (get<0>(simResult)) {
                 successfulSims++;
