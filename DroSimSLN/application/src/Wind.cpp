@@ -39,8 +39,10 @@ void Wind::end() {
 
 ReturnCode Wind::doStep(int nStep) {
     // Start of user code  : Implementation of doStep method
-    windForce += User::roundToDecimal(User::randRange(-5, 5),2);
+    windForce += User::roundToDecimal(User::randRange(-2, 2),2);
     if (windForce < 0) windForce = 0;
+    if (windForce > maxWindForce) windForce = maxWindForce;
+    windForce *= damp;
     const double dirModX = User::roundToDecimal(User::randRange(-1, 1)/10,2);
     const double dirModY = User::roundToDecimal(User::randRange(-1, 1)/10,2);
     windDirection += vect2(dirModX,dirModY);

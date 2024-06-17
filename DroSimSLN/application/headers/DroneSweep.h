@@ -68,7 +68,7 @@ private:
     double leftYBound;
     bool isInZone = false;
     vect2 zoneStartPoint;
-    double windInfluence = 0.2;
+    double windInfluence = 0;
     int cpt = 0;
     // End of user code
 

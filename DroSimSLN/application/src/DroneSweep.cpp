@@ -35,7 +35,12 @@ void DroneSweep::initialize() {
     status = true;
     // Start of user code  : Implementation of initialize method
     assignedZone = rItfManageSimSweep->grabAssignedZone(droneID);
+    const auto rescaledZone = wect2(vect2(assignedZone.getV1().getX() - visionRadius, assignedZone.getV1().getY() + visionRadius),
+                              vect2(assignedZone.getV2().getX() + visionRadius, assignedZone.getV2().getY() - visionRadius));
+    assignedZone = rescaledZone;
 
+    cout << droneID << " (" << assignedZone.getV1().toString() << "),(" << assignedZone.getV2().toString() << ")" << endl;
+    
     leftYBound = assignedZone.getV1().getY();
     sweepLength = assignedZone.getV2().getY() - leftYBound;
 

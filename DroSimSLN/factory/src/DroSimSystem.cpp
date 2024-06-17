@@ -119,7 +119,7 @@ void DroSimSystem::initialize() {
     instADroneSpiral->setNumberOf(0);
     instADroneSpiral->setStartingPoint(vect2(0.5, 0.5));
     //instADroneSpiral->setFrequency(2.0);
-
+    
     // Calcultated attributes
     instAUser->setDroneCount(instADroneSweep->getNumberOf() + instADroneSpiral->getNumberOf());
 

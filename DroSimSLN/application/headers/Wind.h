@@ -24,9 +24,11 @@ protected :
     // Parameters
     double force;
     vect2 direction;
+    double maxWindForce = 14.0;
 
 
     // Start of user code  : Properties of Wind
+    double damp = .98;
     // End of user code
 
 public :
