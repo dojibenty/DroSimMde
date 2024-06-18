@@ -79,6 +79,8 @@ public :
     void end();
 
     ReturnCode doStep(int nStep);
+    void move();
+    void consumeBattery();
     bool condSimulationSuccess();
     bool condLocalStop();
 

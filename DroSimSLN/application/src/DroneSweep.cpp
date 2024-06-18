@@ -74,32 +74,10 @@ ReturnCode DroneSweep::doStep(int nStep) {
     cpt++;
     
     // Movement
-    if (!isInZone)
-        if (vect2::distance(position, zoneStartPoint) <= movementTolerance) {
-            position = zoneStartPoint;
-            isInZone = true;
-        }
+    move();
     
-    position = setNextPosition();
-    sweepposition = position;
-
     // Battery
-    const int alignment = direction.alignment(windDirection);
-    switch (alignment) {
-    case 0: // vent arriere
-        batteryConsumption = CONSUMPTION(speed-(windForce*windInfluence));
-        break;
-    case 1: // vent de cote
-        batteryConsumption = CONSUMPTION(speed+(windForce*windInfluence)*0.5);
-        break;
-    case 2: // vent contraire
-        batteryConsumption = CONSUMPTION(speed+(windForce*windInfluence));
-        break;
-    default:
-        break;
-    }
-    battery -= batteryConsumption;
-    //cout << "bat: " << battery << "\nconso: " << batteryConsumption << '\n';
+    consumeBattery();
     
     // Test for return conditions
 
@@ -116,6 +94,35 @@ ReturnCode DroneSweep::doStep(int nStep) {
     
     return proceed;
     // End of user code
+}
+
+void DroneSweep::move() {
+    if (!isInZone)
+        if (vect2::distance(position, zoneStartPoint) <= movementTolerance) {
+            position = zoneStartPoint;
+            isInZone = true;
+        }
+    
+    position = setNextPosition();
+    sweepposition = position;
+}
+
+void DroneSweep::consumeBattery() {
+    const int alignment = direction.alignment(windDirection);
+    switch (alignment) {
+    case 0: // vent arriere
+        batteryConsumption = CONSUMPTION(speed-(windForce*windInfluence));
+        break;
+    case 1: // vent de cote
+        batteryConsumption = CONSUMPTION(speed+(windForce*windInfluence)*0.5);
+        break;
+    case 2: // vent contraire
+        batteryConsumption = CONSUMPTION(speed+(windForce*windInfluence));
+        break;
+    default:
+        break;
+    }
+    battery -= batteryConsumption;
 }
 
 bool DroneSweep::condSimulationSuccess() {
