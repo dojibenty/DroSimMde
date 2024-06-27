@@ -8,18 +8,18 @@
 #include "compDroneSweep.h"
 #include "DroneSweep.h"
 
-compDroneSweep::compDroneSweep(double aFrequency) : LeafComponent(aFrequency) {
-    const auto obj = new DroneSweep(this, 0);
-    appli.insert(make_pair(appli.size(), obj));
-    oldSweepposition.push_back(obj->getSweepposition());
-    newSweepposition.push_back(obj->getSweepposition());
+compDroneSweep::compDroneSweep(double aFrequency, const int ID) : LeafComponent(aFrequency) {
+    appli = new DroneSweep(this, ID);
+    oldSweepposition = appli->getSweepposition();
+    newSweepposition = appli->getSweepposition();
     delay = 0;
     delayMax = 0;
     newValue = false;
     isActive = true;
+    objectcode_ = objDroneSweep;
 }
 
-compDroneSweep::~compDroneSweep() {}
+compDroneSweep::~compDroneSweep() = default;
 
 void compDroneSweep::doOneStep() {
     if (newValue) {
@@ -32,8 +32,6 @@ void compDroneSweep::doOneStep() {
 }
 
 ReturnCode compDroneSweep::doStep(int nStep) {
-    using enum ReturnCode;
-
     if (newValue) {
         oldSweepposition = newSweepposition;
         newValue = false;
@@ -41,19 +39,8 @@ ReturnCode compDroneSweep::doStep(int nStep) {
 
     readInputs();
 
-    unordered_map<DroneSweep*, ReturnCode> returnCodes;
-
-    for (const auto& [id, inst] : appli) {
-        if (stopCondition(inst)) {
-            returnCodes.insert(make_pair(inst, proceed));
-            continue;
-        }
-
-        const auto rc = inst->doStep(nStep);
-
-        returnCodes.insert(make_pair(inst, rc));
-        newSweepposition[inst->getDroneID()] = inst->getSweepposition();
-    }
+    const auto rc = appli->doStep(nStep);
+    newSweepposition = appli->getSweepposition();
 
     if (delayMax == 0) {
         oldSweepposition = newSweepposition;
@@ -63,196 +50,118 @@ ReturnCode compDroneSweep::doStep(int nStep) {
         newValue = true;
         delay = 0;
     }
-
-    const auto rc = makeReturnCode(returnCodes);
+    
     return rc;
-}
-
-ReturnCode compDroneSweep::makeReturnCode(const unordered_map<DroneSweep*, ReturnCode>& returnCodes) {
-    using enum ReturnCode;
-
-    for (const auto& [inst, code] : returnCodes) {
-        if (code == simulation_success) return simulation_success;
-        if (code == other) return other;
-        if (code == local_stop) inst->setStatus(false);
-    }
-
-    for (const auto& [id, obj] : appli)
-        if (obj->getStatus() == true) return proceed;
-
-    return simulation_fail;
-}
-
-bool compDroneSweep::stopCondition(DroneSweep* inst) {
-    if (inst->getStatus() == false) return true;
-
-    const auto& collisionRadius = inst->getCollisionRadius();
-    auto& position = inst->getPosition();
-    const auto& droneID = inst->getDroneID();
-    for (const auto& [id, other] : appli)
-        if (vect2::distance(position, other->getPosition()) <= collisionRadius) {
-            if (droneID == id) continue;
-            cout << "drone " << droneID << "collided with drone " << id << '\n';
-            inst->setStatus(false);
-            other->setStatus(false);
-            return true;
-        }
-
-    return false;
-}
-
-void compDroneSweep::updateNumberOfInstances(const unsigned int arg) {
-    int elementDifference = arg - appli.size();
-    if (elementDifference == 0) return;
-    if (elementDifference > 0)
-        do {
-            const auto obj = new DroneSweep(this, appli.size());
-            appli.insert(make_pair(appli.size(), obj));
-            oldSweepposition.push_back(obj->getSweepposition());
-            newSweepposition.push_back(obj->getSweepposition());
-            obj->setrItfGeoDataSweep(appli[0]->getItfGeoDataInterface());
-            obj->setrItfManageSimSweep(appli[0]->getItfManageSimInterface());
-            obj->setrItfSimDataSweep(appli[0]->getItfSimDataInterface());
-            obj->setSpeed(appli[0]->getSpeed());
-        } while (appli.size() < arg);
-    else
-        do {
-            appli.erase(--appli.end());
-            oldSweepposition.pop_back();
-            newSweepposition.pop_back();
-        } while (appli.size() > arg);
-}
-
-void compDroneSweep::printInstRecap() {
-    for (const auto& [id, obj] : appli) {
-        obj->printRecap();
-    }
 }
 
 void compDroneSweep::readInputs() {}
 
 void compDroneSweep::initialize() {
-    for (const auto& [id, obj] : appli) {
-        obj->setPosition(vect2(0.0, id * 20));
-        obj->initialize();
-    }
+    appli->setPosition(vect2(0.0, appli->getID() * 20));
+    appli->initialize();
 }
 
 void compDroneSweep::end() {
-    for (const auto& [id, obj] : appli)
-        obj->end();
+    appli->end();
 }
 
-vector<vect2> compDroneSweep::getSweepposition() {
+vect2 compDroneSweep::getSweepposition() {
     return oldSweepposition;
 }
 
+int compDroneSweep::getID() {
+    return appli->getID();
+}
+
+vect2& compDroneSweep::getPosition() {
+    return appli->getPosition();
+}
+
+
 void compDroneSweep::setrItfGeoDataSweep(ItfGeoDataInterface* arItfGeoDataSweep) {
-    for (const auto& [id, obj] : appli)
-        obj->setrItfGeoDataSweep(arItfGeoDataSweep);
+    appli->setrItfGeoDataSweep(arItfGeoDataSweep);
 }
 
 void compDroneSweep::setrItfManageSimSweep(ItfManageSimInterface* arItfManageSimSweep) {
-    for (const auto& [id, obj] : appli)
-        obj->setrItfManageSimSweep(arItfManageSimSweep);
+    appli->setrItfManageSimSweep(arItfManageSimSweep);
 }
 
 void compDroneSweep::setrItfSimDataSweep(ItfSimDataInterface* arItfSimDataSweep) {
-    for (const auto& [id, obj] : appli)
-        obj->setrItfSimDataSweep(arItfSimDataSweep);
+    appli->setrItfSimDataSweep(arItfSimDataSweep);
 }
 
-unordered_map<int, DroneSweep*> compDroneSweep::getAppli() {
+DroneSweep* compDroneSweep::getAppli() {
     return appli;
 }
 
 // +++++++++++++ Access for minSpeed parameter +++++++++++++
 double compDroneSweep::getMinSpeed() {
-    return appli[0]->getMinSpeed();
+    return appli->getMinSpeed();
 }
 
 void compDroneSweep::setMinSpeed(double arg) {
-    for (const auto& [id, obj] : appli)
-        obj->setMinSpeed(arg);
+    appli->setMinSpeed(arg);
 }
 
 // +++++++++++++ Access for minSpeed parameter +++++++++++++
 double compDroneSweep::getMaxSpeed() {
-    return appli[0]->getMaxSpeed();
+    return appli->getMaxSpeed();
 }
 
 void compDroneSweep::setMaxSpeed(double arg) {
-    for (const auto& [id, obj] : appli)
-        obj->setMaxSpeed(arg);
+    appli->setMaxSpeed(arg);
 }
 
 // +++++++++++++ Access for visionRadius parameter +++++++++++++
 double compDroneSweep::getVisionRadius() {
-    return appli[0]->getVisionRadius();
+    return appli->getVisionRadius();
 }
 
 void compDroneSweep::setVisionRadius(double arg) {
-    for (const auto& [id, obj] : appli)
-        obj->setVisionRadius(arg);
+    appli->setVisionRadius(arg);
 }
 
 // +++++++++++++ Access for sweepHeight parameter +++++++++++++
 double compDroneSweep::getSweepHeight() {
-    return appli[0]->getSweepHeight();
+    return appli->getSweepHeight();
 }
 
 void compDroneSweep::setSweepHeight(double arg) {
-    for (const auto& [id, obj] : appli)
-        obj->setSweepHeight(arg);
+    appli->setSweepHeight(arg);
 }
 
 // +++++++++++++ Access for batteryCapacity parameter +++++++++++++
 double compDroneSweep::getBatteryCapacity() {
-    return appli[0]->getBatteryCapacity();
+    return appli->getBatteryCapacity();
 }
 
 void compDroneSweep::setBatteryCapacity(double arg) {
-    for (const auto& [id, obj] : appli)
-        obj->setBatteryCapacity(arg);
-}
-
-// +++++++++++++ Access for numberOf parameter +++++++++++++
-long compDroneSweep::getNumberOf() {
-    return appli[0]->getNumberOf();
-}
-
-void compDroneSweep::setNumberOf(long arg) {
-    updateNumberOfInstances(arg);
-    for (const auto& [id, obj] : appli)
-        obj->setNumberOf(arg);
+    appli->setBatteryCapacity(arg);
 }
 
 // +++++++++++++ Access for startingPoint parameter +++++++++++++
 vect2 compDroneSweep::getStartingPoint() {
-    return appli[0]->getStartingPoint();
+    return appli->getStartingPoint();
 }
 
 void compDroneSweep::setStartingPoint(vect2 arg) {
-    for (const auto& [id, obj] : appli)
-        obj->setStartingPoint(arg);
+    appli->setStartingPoint(arg);
 }
 
 // +++++++++++++ Access for collisionRadius parameter +++++++++++++
 double compDroneSweep::getCollisionRadius() {
-    return appli[0]->getCollisionRadius();
+    return appli->getCollisionRadius();
 }
 
 void compDroneSweep::setCollisionRadius(double arg) {
-    for (const auto& [id, obj] : appli)
-        obj->setCollisionRadius(arg);
+    appli->setCollisionRadius(arg);
 }
 
 // +++++++++++++ Access for speed parameter +++++++++++++
 double compDroneSweep::getSpeed() {
-    return appli[0]->getSpeed();
+    return appli->getSpeed();
 }
 
 void compDroneSweep::setSpeed(double arg) {
-    for (const auto& [id, obj] : appli)
-        obj->setSpeed(arg);
+    appli->setSpeed(arg);
 }

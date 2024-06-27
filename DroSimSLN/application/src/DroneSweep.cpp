@@ -17,7 +17,7 @@
 
 DroneSweep::DroneSweep(compDroneSweep* container, int ID) {
     myContainer = container;
-    droneID = ID;
+    this->ID = ID;
     rItfGeoDataSweep = 0;
     rItfManageSimSweep = 0;
     rItfSimDataSweep = 0;
@@ -32,19 +32,19 @@ DroneSweep::~DroneSweep() {
 }
 
 void DroneSweep::initialize() {
-    status = true;
+    goesVertical = true;
+    leftToRight = false;
+    topToBottom = false;
+    heightCount = 1;
+    isInZone = false;
     // Start of user code  : Implementation of initialize method
-    assignedZone = rItfManageSimSweep->grabAssignedZone(droneID);
+    assignedZone = rItfManageSimSweep->grabAssignedZone(ID);
     const auto rescaledZone = wect2(vect2(assignedZone.getV1().getX() - visionRadius, assignedZone.getV1().getY() + visionRadius),
                               vect2(assignedZone.getV2().getX() + visionRadius, assignedZone.getV2().getY() - visionRadius));
     assignedZone = rescaledZone;
-
-    cout << droneID << " (" << assignedZone.getV1().toString() << "),(" << assignedZone.getV2().toString() << ")" << endl;
     
     leftYBound = assignedZone.getV1().getY();
     sweepLength = assignedZone.getV2().getY() - leftYBound;
-
-    heightCount = 1;
 
     const auto bottomLeftPoint = vect2(assignedZone.getV2().getX(), assignedZone.getV1().getY());
     zoneStartPoint = bottomLeftPoint + startingPoint * bottomLeftPoint;
@@ -65,40 +65,42 @@ void DroneSweep::initialize() {
 
 void DroneSweep::end() {
     // Start of user code  : Implementation of end method
-    cout << droneID << " - bat: " << battery << " // " << cpt << " steps\n";
+    cout << ID << " - bat: " << battery << " // " << cpt << " steps\n";
     // End of user code
 }
 
 ReturnCode DroneSweep::doStep(int nStep) {
     // Start of user code  : Implementation of doStep method
     cpt++;
-    
-    // Movement
-    move();
-    
-    // Battery
-    consumeBattery();
-    
-    // Test for return conditions
 
-    using enum ReturnCode;
+    // Inputs
+    
+    // Execute step
+    step(objposition,windForce,windDirection);
+    
+    // Return codes
+    using enum CustomCode;
     
     // Is objective found
-    if (condSimulationSuccess())
-        return simulation_success;
+    if (condObjectiveFound())
+        return {objective_found};
 
     // Is battery low
-    if (condLocalStop())
-        return local_stop;
-        
+    if (condLowBattery())
+        return {low_battery};
     
-    return proceed;
+    return {FormalCode::proceed};
     // End of user code
+}
+
+void DroneSweep::step(const vect2& objposition, const double windForce, const vect2& windDirection) {
+    move();
+    consumeBattery(windForce,windDirection);
 }
 
 void DroneSweep::move() {
     if (!isInZone)
-        if (vect2::distance(position, zoneStartPoint) <= movementTolerance) {
+        if (zoneStartPoint < position) {
             position = zoneStartPoint;
             isInZone = true;
         }
@@ -107,7 +109,7 @@ void DroneSweep::move() {
     sweepposition = position;
 }
 
-void DroneSweep::consumeBattery() {
+void DroneSweep::consumeBattery(const double windForce, const vect2& windDirection) {
     const int alignment = direction.alignment(windDirection);
     switch (alignment) {
     case 0: // vent arriere
@@ -125,11 +127,11 @@ void DroneSweep::consumeBattery() {
     battery -= batteryConsumption;
 }
 
-bool DroneSweep::condSimulationSuccess() {
+bool DroneSweep::condObjectiveFound() {
     return vect2::distance(position, objposition) <= visionRadius && objposition.getX() > 0;
 }
 
-bool DroneSweep::condLocalStop() {
+bool DroneSweep::condLowBattery() {
     if (battery <= 0) {
         battery = 0;
         return true;
@@ -182,8 +184,7 @@ bool DroneSweep::goesOutOfBounds(vect2& point) {
 }
 
 void DroneSweep::printRecap() {
-    cout << "*** Drone " << droneID << " ***";
-    cout << "\nnumberOf: " << numberOf;
+    cout << "*** Drone " << ID << " ***";
     cout << "\nstartingPoint: " << startingPoint.toString();
     cout << "\nspeed: " << speed;
     cout << "\nposition: " << position.toString();
@@ -271,15 +272,6 @@ double DroneSweep::getBatteryCapacity() {
 
 void DroneSweep::setBatteryCapacity(double arg) {
     batteryCapacity = arg;
-}
-
-// +++++++++++++ Access for numberOf parameter +++++++++++++
-long DroneSweep::getNumberOf() {
-    return numberOf;
-}
-
-void DroneSweep::setNumberOf(long arg) {
-    numberOf = arg;
 }
 
 // +++++++++++++ Access for startingPoint parameter +++++++++++++

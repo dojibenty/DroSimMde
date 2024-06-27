@@ -43,14 +43,15 @@ namespace {
 int main() {
     auto* root = new DroSimSystem();
     initRandom(20);
+    int simCount = 15;
     double summedTimesToFind;
     int successfulSims;
     do {
         summedTimesToFind = 0;
         successfulSims = 0;
-        for (int i = 0; i < 5; i++) {
+        for (int i = 0; i < simCount; i++) {
             //pyp : configuration des switches et autres actions
-            root->get_ADroneSpiral()->stop();
+            for (const auto& inst : root->get_ADroneSpiral()) inst->stop();
             root->initialize();
             //pyp : run des observations
             auto* simulatedScenario = new ScenarLog(root);
@@ -66,6 +67,8 @@ int main() {
             */
 
             simulatedScenario->setTime(0, 360000);
+            for (const auto& inst : root->get_ADroneSweep())
+                simulatedScenario->droneSweepList.push_back(inst);
             auto simResult = simulatedScenario->startSimulation();
             if (get<0>(simResult)) {
                 successfulSims++;
@@ -74,7 +77,7 @@ int main() {
             root->end();
             simulatedScenario->end();
         }
-        root->mutateParameters(successfulSims >= 5 / 2, summedTimesToFind/successfulSims); 
+        root->mutateParameters(successfulSims >= simCount / 2, summedTimesToFind/successfulSims); 
     } while (root->continueCondition());
 
     const auto slowConfigs = root->getSlowConfigs();

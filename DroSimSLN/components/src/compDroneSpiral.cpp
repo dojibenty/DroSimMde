@@ -8,12 +8,13 @@
 #include "compDroneSpiral.h"
 #include "DroneSpiral.h"
 
-compDroneSpiral::compDroneSpiral(double aFrequency) : LeafComponent(aFrequency) {
-    appli = new DroneSpiral(this);
+compDroneSpiral::compDroneSpiral(double aFrequency, const int ID) : LeafComponent(aFrequency) {
+    appli = new DroneSpiral(this,ID);
     delay = 0;
     delayMax = 0;
     newValue = false;
     isActive = true;
+    objectcode_ = objDroneSpiral;
     oldSpiralposition = appli->getSpiralposition();
     newSpiralposition = appli->getSpiralposition();
 }

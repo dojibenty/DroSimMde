@@ -19,7 +19,7 @@ protected :
     AWind* attAWind;
 
 public :
-    ADroneSpiral(double aFrequency);
+    ADroneSpiral(double aFrequency, int ID);
     virtual ~ADroneSpiral();
 
     void setAObjective(AObjective* pAObjective);

@@ -16,7 +16,7 @@ protected :
 
 public:
     TimeableObject(double freq);
-    virtual ~TimeableObject() =0;
+    virtual ~TimeableObject() = 0;
     double getFrequency();
     void setFrequency(double freq);
     virtual ReturnCode doStep(int nStep);

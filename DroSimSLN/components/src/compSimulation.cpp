@@ -14,6 +14,7 @@ compSimulation::compSimulation(double aFrequency) : LeafComponent(aFrequency) {
     delayMax = 0;
     newValue = false;
     isActive = true;
+    objectcode_ = objSimulation;
 }
 
 compSimulation::~compSimulation() {}

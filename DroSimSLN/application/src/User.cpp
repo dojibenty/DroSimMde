@@ -38,8 +38,7 @@ void User::end() {
 
 ReturnCode User::doStep(int nStep) {
     // Start of user code  : Implementation of doStep method
-    if (isObjectiveFound) return ReturnCode::simulation_success;
-    return ReturnCode::proceed;
+    return {FormalCode::proceed};
     // End of user code
 }
 
@@ -72,10 +71,16 @@ double User::roundToDecimal(const double number, const int decimal) {
     return rounded;
 }
 
+int User::pickInlineZonesNumber(const int n) {
+    const int sqrtN = (int)ceil(sqrt(n));
+    return sqrtN;
+}
+
 vector<wect2> User::createZones() const {
-    const int filledLines = (int)floor((float)droneCount / (float)maxInlineZones);
-    const int totalLines = (int)ceil((float)droneCount / (float)maxInlineZones);
-    const int zonesLastLine = droneCount - filledLines * maxInlineZones;
+    const int inlineZonesNumber = pickInlineZonesNumber(droneCount);
+    const int filledLines = (int)floor((float)droneCount / (float)inlineZonesNumber);
+    const int totalLines = (int)ceil((float)droneCount / (float)inlineZonesNumber);
+    const int zonesLastLine = droneCount - filledLines * inlineZonesNumber;
     vect2 envSize = rItfGeoDataUser->grabEnvLimits();
 
     vector<vector<wect2>> localZones;
@@ -83,19 +88,19 @@ vector<wect2> User::createZones() const {
     // Filled lines
     for (int line = 0; line < filledLines; line++) {
         vector<wect2> Line;
-        for (int zone = 0; zone < maxInlineZones; zone++) {
+        for (int zone = 0; zone < inlineZonesNumber; zone++) {
             wect2 Zone;
 
             // Top left point
             Zone.setV1({
                 envSize.getX() - (envSize.getX() / totalLines) * line,
-                (envSize.getY() / maxInlineZones) * zone
+                (envSize.getY() / inlineZonesNumber) * zone
             });
 
             // Bottom right point
             Zone.setV2({
                 envSize.getX() - (envSize.getX() / totalLines) * (line + 1),
-                (envSize.getY() / maxInlineZones) * (zone + 1)
+                (envSize.getY() / inlineZonesNumber) * (zone + 1)
             });
 
             Line.push_back(Zone);
@@ -139,15 +144,6 @@ vector<wect2> User::createZones() const {
 
 void User::setrItfGeoDataUser(ItfGeoDataInterface* arItfGeoDataUser) {
     rItfGeoDataUser = arItfGeoDataUser;
-}
-
-// +++++++++++++ Access for maxInlineZones parameter +++++++++++++
-long User::getMaxInlineZones() {
-    return maxInlineZones;
-}
-
-void User::setMaxInlineZones(long arg) {
-    maxInlineZones = arg;
 }
 
 // +++++++++++++ Access for droneCount calculated attribute +++++++++++++

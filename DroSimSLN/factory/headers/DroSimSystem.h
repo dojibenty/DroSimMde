@@ -31,20 +31,25 @@ protected :
     AUser* instAUser;
     AGeoZone* instAGeoZone;
     AObjective* instAObjective;
-    ADroneSweep* instADroneSweep;
-    ADroneSpiral* instADroneSpiral;
+    vector<ADroneSweep*> instADroneSweep;
+    vector<ADroneSpiral*> instADroneSpiral;
 
+    int mutableNumberOfDroneSweep = 1;
+    int numberOfDroneSpiral = 0;
+
+    double mutableSpeed;
+    
     double minSpeed;
     double maxSpeed;
     int maxBatCount;
-    int maxNumberOf;
+    int maxNumberOfDroneSweep;
     double pSpeed = -1;
     int pNumberOf = -1;
     double pBatCap = -1;
     bool isCurveFound = false;
     bool isMaxFound = false;
     double speedIncrement;
-    int numberOfIncrement;
+    int numberOfDroneSweepIncrement;
 
     vector<tuple<double,int,int>> slowConfigs;
     tuple<double,int,int> fastConfig;
@@ -58,8 +63,8 @@ public :
     AUser* get_AUser();
     AGeoZone* get_AGeoZone();
     AObjective* get_AObjective();
-    ADroneSweep* get_ADroneSweep();
-    ADroneSpiral* get_ADroneSpiral();
+    vector<ADroneSweep*> get_ADroneSweep();
+    vector<ADroneSpiral*> get_ADroneSpiral();
 
     void initialize();
 

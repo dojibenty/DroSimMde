@@ -5,12 +5,15 @@
 #include <iostream>
 #include <tuple>
 
+#include "ADroneSweep.h"
+
 Scenario::Scenario(RootComponent* aRoot) {
     stepTime = 10;
     max = 0;
     min = 0;
     simulationNumber = 0;
     root = aRoot;
+    droneSweepList.reserve(20);
 
     unsigned int j = aRoot->getListLeafComponents().size();
     for (unsigned int i = 0; i < j; i++) {
@@ -53,9 +56,15 @@ tuple<bool, double> Scenario::startSimulation() {
         unsigned int j = root->getListLeafComponents().size();
         for (unsigned int i = 0; i < j; i++) {
             LeafComponent* lc = root->getListLeafComponents().at(i);
-            if (((c->getCurrentMS() % periods.at(i)) == 0) && lc->getIsActive())
-                computeDoStepResult(c, lc->doStep(lc->getDelayMax()));
+            if (((c->getCurrentMS() % periods.at(i)) == 0) && lc->getIsActive()) {
+                const ReturnCode rc = lc->doStep(lc->getDelayMax());
+                simulationResults.emplace_back(lc,rc,c->getCurrentMS());
+            }
         }
+
+        computeDoStepResults();
+        checkForCollisions();
+        
         //pyp : run des observations
         j = getCsvLogs().size();
         for (unsigned int i = 0; i < j; i++) {
@@ -85,34 +94,56 @@ tuple<bool, double> Scenario::startSimulation() {
     return make_tuple(isSimSuccessful, c->getCurrentMS());
 }
 
-void Scenario::computeDoStepResult(Clock* c, ReturnCode returnCode) {
-    using enum ReturnCode;
-    
-    string str;
-    if (isSimSuccessful) return;
-    switch (returnCode) {
-    case proceed:
-        break;
-    case local_stop:
-        str = "";
-        break;
-    case simulation_success:
-        str = "objective found";
-        isSimSuccessful = true;
-        break;
-    case simulation_fail:
-        str = "simulation failed";
-        isSimSuccessful = false;
-        break;
-    case other:
-        str = "other";
-        break;
+void Scenario::computeDoStepResults() {
+    for (const auto& res : simulationResults) {
+        if (isSimSuccessful) return;
+
+        const auto& lc = get<0>(res);
+        
+        ReturnCode code = get<1>(res);
+        
+        using enum FormalCode;
+
+        // TODO ne fonctionne pas => pas de generalisation formal/custom
+        switch (code) {
+        case proceed:
+            break;
+        case local_stop:
+        case CustomCode::low_battery:
+            lc->stop();
+            break;
+        case simulation_success:
+        case CustomCode::objective_found:
+            isSimSuccessful = true;
+            break;
+        case simulation_fail:
+            isSimSuccessful = false;
+            break;
+        case other:
+            lc->stop();
+            break;
+        default:
+            break;
+        }
+    }
+}
+
+void Scenario::checkForCollisions() const {
+    for (const auto& d : droneSweepList) {
+        if (!d->getIsActive()) continue;
+        
+        const auto& collisionRadius = d->getCollisionRadius();
+        auto& position = d->getPosition();
+        const auto& id = d->getID();
+        for (const auto& other : droneSweepList)
+            if (vect2::distance(position, other->getPosition()) <= collisionRadius) {
+                if (id == other->getID()) continue;
+                cout << "drone " << id << "collided with drone " << other->getID() << '\n';
+                d->stop();
+                other->stop();
+            }
     }
     
-    if (returnCode != proceed) {
-        cout << '(' << c->getCurrentMS() << ',' << str << ')' << '\n';
-        doEndSim = true;
-    }
 }
 
 //pyp

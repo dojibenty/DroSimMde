@@ -42,11 +42,6 @@ public :
 
     User* getAppli();
 
-    // +++++++++++++ Access for maxInlineZones parameter +++++++++++++
-    long getMaxInlineZones();
-
-    void setMaxInlineZones(long arg);
-
     // +++++++++++++ Access for droneCount calculated attribute +++++++++++++
     long getDroneCount();
 

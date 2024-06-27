@@ -36,7 +36,6 @@ protected :
     double visionRadius;
     double sweepHeight;
     double batteryCapacity;
-    long numberOf;
     vect2 startingPoint;
     double collisionRadius;
 
@@ -45,12 +44,9 @@ protected :
     ItfManageSimInterface* rItfManageSimSweep;
     ItfSimDataInterface* rItfSimDataSweep;
 
-    // Status
-    bool status;
-
     // Start of user code  : Properties of DroneSweep
 private:
-    int droneID;
+    int ID;
     double speed;
     vect2 position;
     vect2 direction;
@@ -60,16 +56,16 @@ private:
     double battery;
     double movementTolerance;
     wect2 assignedZone;
-    bool goesVertical = true;
-    bool leftToRight = false;
-    bool topToBottom = false;
-    long heightCount = 1;
+    bool goesVertical;
+    bool leftToRight;
+    bool topToBottom;
+    long heightCount;
     double sweepLength;
     double leftYBound;
-    bool isInZone = false;
+    bool isInZone;
     vect2 zoneStartPoint;
-    double windInfluence = 0;
-    int cpt = 0;
+    double windInfluence = 0.6;
+    int cpt;
     // End of user code
 
 public :
@@ -79,10 +75,11 @@ public :
     void end();
 
     ReturnCode doStep(int nStep);
+    void step(const vect2& objposition, double windForce, const vect2& windDirection);
     void move();
-    void consumeBattery();
-    bool condSimulationSuccess();
-    bool condLocalStop();
+    void consumeBattery(double windForce, const vect2& windDirection);
+    bool condObjectiveFound();
+    bool condLowBattery();
 
 
     // Start of user code  : Additional methods
@@ -95,11 +92,9 @@ public:
     void printRecap();
     double getSpeed() { return speed; }
     void setSpeed(double arg) { speed = arg; }
-    int getDroneID() { return droneID; }
+    int getID() { return ID; }
     vect2& getPosition() { return position; }
     void setPosition(const vect2& arg) { position = arg; }
-    bool getStatus() { return status; }
-    void setStatus(bool arg) { status = arg; }
     // End of user code
 
 
@@ -134,10 +129,6 @@ public:
     double getBatteryCapacity();
 
     void setBatteryCapacity(double arg);
-    // +++++++++++++ Access for numberOf parameter +++++++++++++
-    long getNumberOf();
-
-    void setNumberOf(long arg);
     // +++++++++++++ Access for startingPoint parameter +++++++++++++
     vect2 getStartingPoint();
 

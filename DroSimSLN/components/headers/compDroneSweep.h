@@ -22,32 +22,31 @@ class DroneSweep;
 
 class compDroneSweep : public LeafComponent {
 protected :
-    unordered_map<int,DroneSweep*> appli;
-    vector<vect2> oldSweepposition;
-    vector<vect2> newSweepposition;
+    DroneSweep* appli;
+    vect2 oldSweepposition;
+    vect2 newSweepposition;
 
     bool newValue;
     int delay;
 
 public :
-    compDroneSweep(double aFrequency);
+    compDroneSweep(double aFrequency, int ID);
     virtual ~compDroneSweep();
     void doOneStep();
     ReturnCode doStep(int nStep);
-    ReturnCode makeReturnCode(const unordered_map<DroneSweep*, ReturnCode>& returnCodes);
-    bool stopCondition(DroneSweep* inst);
-    void updateNumberOfInstances(const unsigned int arg);
-    void printInstRecap();
 
     virtual void readInputs();
     void initialize();
     void end();
 
-    vector<vect2> getSweepposition();
+    vect2 getSweepposition();
     void setrItfGeoDataSweep(ItfGeoDataInterface* arItfGeoDataSweep);
     void setrItfManageSimSweep(ItfManageSimInterface* arItfManageSimSweep);
     void setrItfSimDataSweep(ItfSimDataInterface* arItfSimDataSweep);
-    unordered_map<int, DroneSweep*> getAppli();
+    DroneSweep* getAppli();
+
+    int getID();
+    vect2& getPosition();
     
     // +++++++++++++ Access for minSpeed parameter +++++++++++++
     double getMinSpeed();
@@ -69,10 +68,6 @@ public :
     double getBatteryCapacity();
 
     void setBatteryCapacity(double arg);
-    // +++++++++++++ Access for numberOf parameter +++++++++++++
-    long getNumberOf();
-
-    void setNumberOf(long arg);
     // +++++++++++++ Access for startingPoint parameter +++++++++++++
     vect2 getStartingPoint();
 

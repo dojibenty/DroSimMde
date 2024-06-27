@@ -35,7 +35,7 @@ protected :
     DroneSpiral* appli;
 
 public :
-    compDroneSpiral(double aFrequency);
+    compDroneSpiral(double aFrequency, int ID);
     virtual ~compDroneSpiral();
     void doOneStep();
     ReturnCode doStep(int nStep);

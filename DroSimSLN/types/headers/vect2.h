@@ -46,6 +46,7 @@ public :
     vect2 operator-(const vect2& vect2) const;
     vect2 operator/(double arg) const;
     bool operator==(const vect2& vect2) const;
+    bool operator<(const vect2& vect2) const;
     // End of user code
 };
 #endif /* vect2_H_ */

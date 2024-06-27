@@ -14,6 +14,7 @@ compUser::compUser(double aFrequency) : LeafComponent(aFrequency) {
     delayMax = 0;
     newValue = false;
     isActive = true;
+    objectcode_ = objUser;
 }
 
 compUser::~compUser() {}
@@ -65,15 +66,6 @@ wect2 compUser::grabAssignedZone(long droneID) {
 
 User* compUser::getAppli() {
     return appli;
-}
-
-// +++++++++++++ Access for maxInlineZones parameter +++++++++++++
-long compUser::getMaxInlineZones() {
-    return appli->getMaxInlineZones();
-}
-
-void compUser::setMaxInlineZones(long arg) {
-    appli->setMaxInlineZones(arg);
 }
 
 // +++++++++++++ Access for droneCount calculated attribute +++++++++++++

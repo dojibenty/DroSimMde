@@ -31,97 +31,113 @@ AObjective* DroSimSystem::get_AObjective() {
     return instAObjective;
 }
 
-ADroneSweep* DroSimSystem::get_ADroneSweep() {
+vector<ADroneSweep*> DroSimSystem::get_ADroneSweep() {
     return instADroneSweep;
 }
 
-ADroneSpiral* DroSimSystem::get_ADroneSpiral() {
+vector<ADroneSpiral*> DroSimSystem::get_ADroneSpiral() {
     return instADroneSpiral;
 }
 
 DroSimSystem::DroSimSystem() {
-    //leafComponents = new std::vector<LeafComponent*>();
+    // Simulation
     instASimulation = new ASimulation(1.0);
     leafComponents.push_back(instASimulation);
+
+    // Wind
     instAWind = new AWind(1.0);
     leafComponents.push_back(instAWind);
+
+    // User
     instAUser = new AUser(1.0);
     leafComponents.push_back(instAUser);
+
+    // GeoZone
     instAGeoZone = new AGeoZone(1.0);
     leafComponents.push_back(instAGeoZone);
+
+    // Objective
     instAObjective = new AObjective(1.0);
     leafComponents.push_back(instAObjective);
-    instADroneSweep = new ADroneSweep(10.0);
-    leafComponents.push_back(instADroneSweep);
-    instADroneSpiral = new ADroneSpiral(1.0);
-    leafComponents.push_back(instADroneSpiral);
-    instADroneSweep->setAObjective(instAObjective);
-    instADroneSweep->setAWind(instAWind);
-    instADroneSpiral->setAObjective(instAObjective);
-    instADroneSpiral->setAWind(instAWind);
+
     instAUser->setrItfGeoDataUser(instAGeoZone->getAppli());
     instAObjective->setrItfGeoDataObj(instAGeoZone->getAppli());
-    instADroneSweep->setrItfManageSimSweep(instAUser->getAppli());
-    instADroneSweep->setrItfGeoDataSweep(instAGeoZone->getAppli());
-    instADroneSweep->setrItfSimDataSweep(instASimulation->getAppli());
-    instADroneSpiral->setrItfManageSimSpiral(instAUser->getAppli());
-    instADroneSpiral->setrItfGeoDataSpiral(instAGeoZone->getAppli());
-    instADroneSpiral->setrItfSimDataSpiral(instASimulation->getAppli());
 
+    // TODO => parametres mutables
+    // Initialisation des mutables
     minSpeed = 10.0;
     maxSpeed = 30.0;
-    maxNumberOf = 8;
+    mutableSpeed = 10.0;
+    maxNumberOfDroneSweep = 8;
     speedIncrement = 2.0;
-    numberOfIncrement = 1;
-
-    // Parametres mutables (initialisation)
-    instADroneSweep->setSpeed(minSpeed);
-    //instADroneSpiral->setSpeed(minSpeed);
-    instADroneSweep->setNumberOf(1);
-    instADroneSpiral->setNumberOf(0);
+    numberOfDroneSweepIncrement = 1;
 }
 
 DroSimSystem::~DroSimSystem() {}
 
 void DroSimSystem::initialize() {
+    // Simulation
     instASimulation->setExpectedEndTime(300000.0);
     instASimulation->setPositionCorrection(1.0);
-    //instASimulation->setFrequency(0.0);
+
+    // Wind
     instAWind->setForce(0.0);
     instAWind->setDirection(vect2(0.5, 0.5));
-    //instAWind->setFrequency(0.0);
-    instAUser->setMaxInlineZones(4);
-    //instAUser->setFrequency(0.0);
+
+    // User
+
+    // GeoZone
     instAGeoZone->setEnvSize(vect2(20000.0, 20000.0));
     instAGeoZone->setBottomLeftPoint(vect2(45.0, -5.0));
-    //instAGeoZone->setFrequency(0.0);
+
+    // Objective
     instAObjective->setSpeedConstraint(0.0);
     instAObjective->setPosition(vect2(0, 0));
-    //instAObjective->setFrequency(1.0);
-    instADroneSweep->setMinSpeed(10.0);
-    instADroneSweep->setMaxSpeed(30.0);
-    instADroneSweep->setVisionRadius(1000.0);
-    instADroneSweep->setSweepHeight(2000.0);
-    instADroneSweep->setBatteryCapacity(200.0);
-    instADroneSweep->setCollisionRadius(5.0);
-    //instADroneSweep->setNumberOf(1); -> mutable
-    instADroneSweep->setStartingPoint(vect2(0.0, 0.0));
-    //instADroneSweep->setFrequency(1.0);
-    instADroneSpiral->setMinSpeed(10.0);
-    instADroneSpiral->setMaxSpeed(30.0);
-    instADroneSpiral->setVisionRadius(100.0);
-    instADroneSpiral->setSpiralRadius(200.0);
-    instADroneSpiral->setConcentricCircles(false);
-    instADroneSpiral->setNbCirclePoints(8);
-    instADroneSpiral->setSpiralIncrementFactor(3);
-    instADroneSpiral->setWanderSteps(5);
-    instADroneSpiral->setBatteryCapacity(900.0);
-    instADroneSpiral->setNumberOf(0);
-    instADroneSpiral->setStartingPoint(vect2(0.5, 0.5));
-    //instADroneSpiral->setFrequency(2.0);
+
+    // DroneSweep
+    for (int i = 0; i < mutableNumberOfDroneSweep; i++) {
+        const auto inst = new ADroneSweep(10.0,i);
+        inst->setMinSpeed(10.0);
+        inst->setMaxSpeed(30.0);
+        inst->setVisionRadius(1000.0);
+        inst->setSweepHeight(2000.0);
+        inst->setBatteryCapacity(200.0);
+        inst->setCollisionRadius(5.0);
+        inst->setStartingPoint(vect2(0.0, 0.0));
+        inst->setSpeed(mutableSpeed);
+        inst->setAObjective(instAObjective);
+        inst->setAWind(instAWind);
+        inst->setrItfManageSimSweep(instAUser->getAppli());
+        inst->setrItfGeoDataSweep(instAGeoZone->getAppli());
+        inst->setrItfSimDataSweep(instASimulation->getAppli());
+        instADroneSweep.emplace_back(inst);
+        leafComponents.push_back(inst);
+    }
+
+    // DroneSpiral
+    for (int i = 0; i < numberOfDroneSpiral; i++) {
+        const auto inst = new ADroneSpiral(10.0,i);
+        inst->setMinSpeed(10.0);
+        inst->setMaxSpeed(30.0);
+        inst->setVisionRadius(1000.0);
+        inst->setSpiralRadius(2000.0);
+        inst->setConcentricCircles(false);
+        inst->setNbCirclePoints(8);
+        inst->setSpiralIncrementFactor(3);
+        inst->setWanderSteps(5);
+        inst->setBatteryCapacity(200.0);
+        inst->setStartingPoint(vect2(0.5, 0.5));
+        inst->setAObjective(instAObjective);
+        inst->setAWind(instAWind);
+        inst->setrItfManageSimSpiral(instAUser->getAppli());
+        inst->setrItfGeoDataSpiral(instAGeoZone->getAppli());
+        inst->setrItfSimDataSpiral(instASimulation->getAppli());
+        instADroneSpiral.emplace_back(inst);
+        leafComponents.push_back(inst);
+    }
     
     // Calcultated attributes
-    instAUser->setDroneCount(instADroneSweep->getNumberOf() + instADroneSpiral->getNumberOf());
+    instAUser->setDroneCount(mutableNumberOfDroneSweep + numberOfDroneSpiral);
 
     // Initialization
     if (instASimulation->getIsActive()) instASimulation->initialize();
@@ -129,8 +145,10 @@ void DroSimSystem::initialize() {
     if (instAUser->getIsActive()) instAUser->initialize();
     if (instAGeoZone->getIsActive()) instAGeoZone->initialize();
     if (instAObjective->getIsActive()) instAObjective->initialize();
-    if (instADroneSweep->getIsActive()) instADroneSweep->initialize();
-    if (instADroneSpiral->getIsActive()) instADroneSpiral->initialize();
+    for (const auto& inst : instADroneSweep)
+        if (inst->getIsActive()) inst->initialize();
+    for (const auto& inst : instADroneSpiral)
+        if (inst->getIsActive()) inst->initialize();
     // Start of user code  : Implementation of initialize method DroSimSystem
     // End of user code
 }
@@ -141,8 +159,15 @@ void DroSimSystem::end() {
     instAUser->end();
     instAGeoZone->end();
     instAObjective->end();
-    instADroneSweep->end();
-    instADroneSpiral->end();
+    for (const auto& inst : instADroneSweep) inst->end();
+    instADroneSweep.clear();
+    for (const auto& inst : instADroneSpiral) inst->end();
+    instADroneSpiral.clear();
+    for (int i = 0; i < leafComponents.size(); i++) {
+        ObjectCode oc = leafComponents[i]->getObjectCode();
+        if (oc == objDroneSweep || oc == objDroneSpiral)
+            leafComponents.erase(leafComponents.begin() + i);
+    }
     // Start of user code  : Implementation of end method DroSimSystem
     // End of user code
 }
@@ -152,64 +177,62 @@ void DroSimSystem::mutateParameters(const bool isGroupSuccessful, const double a
 
     if (isGroupSuccessful) cout << "Average of " << (int)(averageTimeToFind / 1000 / 60 * 10) << " min to find\n";
 
-    const double groupSpeed = instADroneSweep->getSpeed();
-    const int groupNumberOf = instADroneSweep->getNumberOf();
-    const double groupBatCap = 200.0;
+    const double cSpeed = mutableSpeed;
+    const int cNumberOf = mutableNumberOfDroneSweep;
+    const double cBatCap = 200.0;
     
     if (!isCurveFound || isGroupSuccessful) {
         // We overwrite the saved config as we don't need it right now
-        pSpeed = groupSpeed;
-        pBatCap = groupBatCap;
-        //pBatCount = groupBatCount;
+        pSpeed = cSpeed;
+        pBatCap = cBatCap;
     }
 
     if (isCurveFound && isMaxFound) {
-        if (isGroupSuccessful && groupSpeed - speedIncrement >= minSpeed)
-            instADroneSweep->setSpeed(groupSpeed - speedIncrement);
+        if (isGroupSuccessful && cSpeed - speedIncrement >= minSpeed)
+            mutableSpeed -= speedIncrement;
         else {
-            slowConfigs.emplace_back(pSpeed, groupNumberOf, pBatCap);
-
-            instADroneSweep->setNumberOf(groupNumberOf + numberOfIncrement);
+            slowConfigs.emplace_back(pSpeed, cNumberOf, pBatCap);
+            
+            mutableNumberOfDroneSweep += numberOfDroneSweepIncrement;
 
             // We save the current config for later comparison
-            pSpeed = groupSpeed;
-            //pBatCount = groupBatCount;
+            pSpeed = cSpeed;
         }
     }
     else {
         if (!isCurveFound && isGroupSuccessful) {
             // Found the first valid configuration
-            slowConfigs.emplace_back(groupSpeed, groupNumberOf, groupBatCap);
+            slowConfigs.emplace_back(cSpeed, cNumberOf, cBatCap);
             isCurveFound = true;
             cout << "Curve found" << '\n';
         }
-        if (groupSpeed + speedIncrement <= maxSpeed)
-            instADroneSweep->setSpeed(groupSpeed + speedIncrement);
+        if (cSpeed + speedIncrement <= maxSpeed)
+            mutableSpeed += speedIncrement;
         else if (isCurveFound) {
             // Found the maximum speed drones need to go at
-            fastConfig = make_tuple(groupSpeed, groupNumberOf, groupBatCap);
+            fastConfig = make_tuple(cSpeed, cNumberOf, cBatCap);
             isMaxFound = true;
             cout << "Max speed found" << '\n';
-            instADroneSweep->setNumberOf(groupNumberOf + numberOfIncrement);
-            instADroneSweep->setSpeed(groupSpeed - speedIncrement);
+            mutableNumberOfDroneSweep += numberOfDroneSweepIncrement;
+            mutableSpeed = get<0>(slowConfigs[0]);
         }
         else {
-            instADroneSweep->setNumberOf(groupNumberOf + numberOfIncrement);
-            instADroneSweep->setSpeed(minSpeed);
+            mutableNumberOfDroneSweep += numberOfDroneSweepIncrement;
+            mutableSpeed = minSpeed;
         }
     }
     
-    cout << "Trying with " << instADroneSweep->getNumberOf()
-    << " drone" << (instADroneSweep->getNumberOf() > 1 ? "s" : "")
-    << " at " << instADroneSweep->getSpeed() << " m/s\n";
+    cout << "Trying with " << mutableNumberOfDroneSweep
+    << " drone" << (mutableNumberOfDroneSweep > 1 ? "s" : "")
+    << " at " << mutableSpeed << " m/s\n";
 }
 
 double DroSimSystem::calculateBatteryCapForGroup(const double averageTimeToFind) const {
-    return averageTimeToFind / 1000.0 * 10.0 / 60.0 / 60.0 * pow(instADroneSweep->getSpeed(), 2) * 2.0;
+    return averageTimeToFind / 1000.0 * 10.0 / 60.0 / 60.0 * pow(instADroneSweep[0]->getSpeed(), 2) * 2.0;
 }
 
 bool DroSimSystem::continueCondition() const {
-    return instADroneSweep->getNumberOf() <= maxNumberOf;
+    return mutableNumberOfDroneSweep <= maxNumberOfDroneSweep;
 }
 
 vector<tuple<double,int,int>> DroSimSystem::getSlowConfigs() {

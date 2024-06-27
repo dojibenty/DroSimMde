@@ -22,7 +22,6 @@ protected :
     compUser* myContainer;
 
     // Parameters
-    long maxInlineZones;
     // Calculated attributes
     long droneCount;
 
@@ -50,11 +49,6 @@ public :
 
     wect2 grabAssignedZone(long droneID) override;
 
-    // +++++++++++++ Access for maxInlineZones parameter +++++++++++++
-    long getMaxInlineZones();
-
-    void setMaxInlineZones(long arg);
-
     // +++++++++++++ Access for droneCount calculated attribute +++++++++++++
     long getDroneCount();
 
@@ -63,6 +57,7 @@ public :
     // Start of user code  : Additional methods
     static double randRange(double min, double max);
     static double roundToDecimal(double number, int decimal);
+    static int pickInlineZonesNumber(int n);
     vector<wect2> createZones() const;
     // End of user code
 };

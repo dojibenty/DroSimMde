@@ -18,6 +18,7 @@ class compDroneSpiral;
 #include "ItfSimDataInterface.h"
 
 // Start of user code  : Additional imports for DroneSpiral
+#define CONSUMPTION(speed) ((batConsoFactA+(batConsoFactB*(pow(speed,2.0))))/3600.0)
 // End of user code
 
 class DroneSpiral {
@@ -40,7 +41,6 @@ protected :
     double spiralIncrementFactor;
     long wanderSteps;
     double batteryCapacity;
-    long numberOf;
     vect2 startingPoint;
 
     // Required Interfaces
@@ -50,34 +50,43 @@ protected :
 
     // Start of user code  : Properties of DroneSpiral
 private:
-    int droneID = 1;
+    int ID;
     double speed;
     vect2 position;
     vect2 direction;
-    double battery;
     double batteryConsumption;
+    double batConsoFactA;
+    double batConsoFactB;
+    double battery;
     double movementTolerance;
-    bool isInZone = false;
-    vect2 zoneStartPoint;
     wect2 assignedZone;
-    int wander = 1;
+    bool isInZone;
+    vect2 zoneStartPoint;
+    int wander;
     std::vector<vect2> circlePoints;
     int currentCirclePointID;
     vect2 currentCircleCenter;
     double currentSpiralIncrementFactor;
+    double windInfluence = 0.6;
+    int cpt;
     // End of user code
 
 public :
-    DroneSpiral(compDroneSpiral* container);
+    DroneSpiral(compDroneSpiral* container, int ID);
     ~DroneSpiral();
     void initialize();
     void end();
 
     ReturnCode doStep(int nStep);
+    void step(const vect2& objposition, double windForce, const vect2& windDirection);
+    bool condObjectiveFound();
+    bool condLowBattery();
 
 
     // Start of user code  : Additional methods
 private:
+    void move();
+    void consumeBattery(double windForce, const vect2& windDirection);
     vect2 setNextPosition();
     void setCircle();
     vect2 getRandomDirection();

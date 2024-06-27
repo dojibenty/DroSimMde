@@ -14,8 +14,9 @@
 // End of user code
 
 
-DroneSpiral::DroneSpiral(compDroneSpiral* container) {
+DroneSpiral::DroneSpiral(compDroneSpiral* container, int ID) {
     myContainer = container;
+    this->ID = ID;
     rItfGeoDataSpiral = 0;
     rItfManageSimSpiral = 0;
     rItfSimDataSpiral = 0;
@@ -31,8 +32,13 @@ DroneSpiral::~DroneSpiral() {
 }
 
 void DroneSpiral::initialize() {
+    isInZone = false;
+    wander = 1;
     // Start of user code  : Implementation of initialize method
-    assignedZone = rItfManageSimSpiral->grabAssignedZone(droneID);
+    assignedZone = rItfManageSimSpiral->grabAssignedZone(ID);
+    const auto rescaledZone = wect2(vect2(assignedZone.getV1().getX() - visionRadius, assignedZone.getV1().getY() + visionRadius),
+                              vect2(assignedZone.getV2().getX() + visionRadius, assignedZone.getV2().getY() - visionRadius));
+    assignedZone = rescaledZone;
 
     const auto bottomLeftPoint = vect2(assignedZone.getV2().getX(), assignedZone.getV1().getY());
     zoneStartPoint = bottomLeftPoint + startingPoint * bottomLeftPoint;
@@ -43,40 +49,89 @@ void DroneSpiral::initialize() {
     movementTolerance = rItfSimDataSpiral->grabPositionCorrection();
 
     battery = batteryCapacity;
-    batteryConsumption = 2 * pow(speed, 2) / 3600.0;
+    batConsoFactA = 50;
+    batConsoFactB = 0.4;
+    batteryConsumption = CONSUMPTION(speed);
     // End of user code
 }
 
 void DroneSpiral::end() {
     // Start of user code  : Implementation of end method
-
+    cout << ID << " - bat: " << battery << " // " << cpt << " steps\n";
     // End of user code
 }
 
 ReturnCode DroneSpiral::doStep(int nStep) {
     // Start of user code  : Implementation of doStep method
-    // Calculate the Drone's next position
-    position = setNextPosition();
-    if (!isInZone)
-        if (vect2::distance(position, zoneStartPoint) <= movementTolerance) {
-            position = zoneStartPoint;
-            isInZone = true;
-        }
+    cpt++;
 
+    // Inputs
+
+    // Execute step
+    step(objposition,windForce,windDirection);
+
+    // Outputs
     spiralposition = position;
 
-    using enum ReturnCode;
-    
-    if (vect2::distance(position, objposition) <= visionRadius
-        && objposition.getX() > 0)
-        return simulation_success;
+    // Return codes
+    using enum CustomCode;
 
-    return proceed;
+    if (condObjectiveFound())
+        return {objective_found};
+
+    if (condLowBattery())
+        return {low_battery};
+
+    return {FormalCode::proceed};
     // End of user code
 }
 
+void DroneSpiral::step(const vect2& objposition, const double windForce, const vect2& windDirection) {
+    move();
+    consumeBattery(windForce,windDirection);
+}
+
+bool DroneSpiral::condObjectiveFound() {
+    return vect2::distance(position, objposition) <= visionRadius;
+}
+
+bool DroneSpiral::condLowBattery() {
+    if (battery <= 0) {
+        battery = 0;
+        return true;
+    }
+    return false;
+}
 
 // Start of user code  : Additional methods
+void DroneSpiral::move() {
+    if (!isInZone)
+        if (zoneStartPoint < position) {
+            position = zoneStartPoint;
+            isInZone = true;
+        }
+    
+    position = setNextPosition();
+}
+
+void DroneSpiral::consumeBattery(const double windForce, const vect2& windDirection) {
+    const int alignment = direction.alignment(windDirection);
+    switch (alignment) {
+    case 0: // vent arriere
+        batteryConsumption = CONSUMPTION(speed-(windForce*windInfluence));
+        break;
+    case 1: // vent de cote
+        batteryConsumption = CONSUMPTION(speed+(windForce*windInfluence)*0.5);
+        break;
+    case 2: // vent contraire
+        batteryConsumption = CONSUMPTION(speed+(windForce*windInfluence));
+        break;
+    default:
+        break;
+    }
+    battery -= batteryConsumption;
+}
+
 vect2 DroneSpiral::setNextPosition() {
     vect2 nextPosition;
 
@@ -264,15 +319,6 @@ double DroneSpiral::getBatteryCapacity() {
 
 void DroneSpiral::setBatteryCapacity(double arg) {
     batteryCapacity = arg;
-}
-
-// +++++++++++++ Access for numberOf parameter +++++++++++++
-long DroneSpiral::getNumberOf() {
-    return numberOf;
-}
-
-void DroneSpiral::setNumberOf(long arg) {
-    numberOf = arg;
 }
 
 // +++++++++++++ Access for startingPoint parameter +++++++++++++

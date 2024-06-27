@@ -10,7 +10,7 @@
 #include "AWind.h"
 #include "DroneSpiral.h"
 
-ADroneSpiral::ADroneSpiral(double aFrequency) : compDroneSpiral(aFrequency) {}
+ADroneSpiral::ADroneSpiral(double aFrequency, const int ID) : compDroneSpiral(aFrequency, ID) {}
 ADroneSpiral::~ADroneSpiral() {}
 
 void ADroneSpiral::setAObjective(AObjective* pAObjective) {

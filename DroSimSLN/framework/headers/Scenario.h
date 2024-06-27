@@ -5,6 +5,7 @@
 #include "LogComponent.h"
 #include <vector>
 
+#include "ADroneSweep.h"
 #include "Clock.h"
 
 class Scenario {
@@ -21,7 +22,7 @@ protected :
 
     int simulationNumber;
 
-    vector<int> simulationResults;
+    vector<tuple<LeafComponent*, ReturnCode, double>> simulationResults;
     bool isSimSuccessful;
     bool doEndSim;
 
@@ -32,12 +33,15 @@ public :
     void setTime(long min, long max);
 
     tuple<bool, double> startSimulation();
-    void computeDoStepResult(Clock* c, ReturnCode returnCode);
+    void computeDoStepResults();
+    void checkForCollisions() const;
 
     virtual void eventSimulation() = 0;
     //pyp
     vector<LogComponent*> getCsvLogs();
     void end();
     void push(LogComponent* logc);
+
+    vector<ADroneSweep*> droneSweepList;
 };
 #endif /* SCENARIO_H_ */

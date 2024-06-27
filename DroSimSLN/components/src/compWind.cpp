@@ -16,6 +16,7 @@ compWind::compWind(double aFrequency) : LeafComponent(aFrequency) {
     delayMax = 0;
     newValue = false;
     isActive = true;
+    objectcode_ = objWind;
     oldWindForce = appli->getWindForce();
     newWindForce = appli->getWindForce();
     oldWindDirection = appli->getWindDirection();

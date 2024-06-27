@@ -206,6 +206,7 @@
         <ClInclude Include="components\headers\compObjective.h"/>
         <ClInclude Include="components\headers\compSimulation.h"/>
         <ClInclude Include="components\headers\compWind.h"/>
+        <ClInclude Include="enum\headers\ObjectCode.h" />
         <ClInclude Include="enum\headers\ReturnCode.h" />
         <ClInclude Include="factory\headers\ADroneSpiral.h"/>
         <ClInclude Include="factory\headers\ADroneSweep.h"/>

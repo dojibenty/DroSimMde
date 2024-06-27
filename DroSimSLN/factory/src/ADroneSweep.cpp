@@ -8,7 +8,7 @@
 #include "ADroneSweep.h"
 #include "DroneSweep.h"
 
-ADroneSweep::ADroneSweep(double aFrequency) : compDroneSweep(aFrequency) {}
+ADroneSweep::ADroneSweep(double aFrequency, const int ID) : compDroneSweep(aFrequency, ID) {}
 ADroneSweep::~ADroneSweep() {}
 
 void ADroneSweep::setAObjective(AObjective* pAObjective) {
@@ -20,9 +20,7 @@ void ADroneSweep::setAWind(AWind* pAWind) {
 }
 
 void ADroneSweep::readInputs() {
-    for (const auto& obj : appli) {
-        obj.second->setObjposition(attAObjective->getObjposition());
-        obj.second->setWindForce(attAWind->getWindForce());
-        obj.second->setWindDirection(attAWind->getWindDirection());
-    }
+    appli->setObjposition(attAObjective->getObjposition());
+    appli->setWindForce(attAWind->getWindForce());
+    appli->setWindDirection(attAWind->getWindDirection());
 }

@@ -4,11 +4,13 @@
 
 #include <string>
 
+#include "ObjectCode.h"
+
 class LeafComponent : public TimeableObject {
 protected :
     int delayMax;
     bool isActive;
-    std::string name;
+    ObjectCode objectcode_;
 
 public :
     LeafComponent(double aFrequency);
@@ -19,9 +21,9 @@ public :
 
     int getDelayMax();
 
-    std::string getName();
-
     void setDelayMax(int delayMax);
+
+    ObjectCode getObjectCode() const;
 
     bool start();
 

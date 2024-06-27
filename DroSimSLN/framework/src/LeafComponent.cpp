@@ -7,7 +7,7 @@ LeafComponent::LeafComponent(double aFrequency) : TimeableObject(aFrequency) {
 
 LeafComponent::~LeafComponent() {}
 
-ReturnCode LeafComponent::doStep(int nStep) { return ReturnCode::proceed; }
+ReturnCode LeafComponent::doStep(int nStep) { return {FormalCode::proceed}; }
 
 bool LeafComponent::getIsActive() {
     return isActive;
@@ -21,10 +21,9 @@ void LeafComponent::setDelayMax(int dm) {
     delayMax = dm;
 }
 
-std::string LeafComponent::getName() {
-    return name;
+ObjectCode LeafComponent::getObjectCode() const {
+    return objectcode_;
 }
-
 
 bool LeafComponent::start() {
     isActive = true;

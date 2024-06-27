@@ -17,6 +17,7 @@ compObjective::compObjective(double aFrequency) : LeafComponent(aFrequency) {
     isActive = true;
     oldObjposition = appli->getObjposition();
     newObjposition = appli->getObjposition();
+    objectcode_ = objObjective;
 }
 
 compObjective::~compObjective() {}

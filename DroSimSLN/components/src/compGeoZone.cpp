@@ -14,6 +14,7 @@ compGeoZone::compGeoZone(double aFrequency) : LeafComponent(aFrequency) {
     delayMax = 0;
     newValue = false;
     isActive = true;
+    objectcode_ = objGeoZone;
 }
 
 compGeoZone::~compGeoZone() {}
