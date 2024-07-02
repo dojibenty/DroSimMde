@@ -68,9 +68,10 @@ DroSimSystem::DroSimSystem() {
     minSpeed = 10.0;
     maxSpeed = 30.0;
     mutableSpeed = 10.0;
-    maxNumberOfDroneSweep = 8;
+    maxNumberOfDrones = 10;
     speedIncrement = 2.0;
     numberOfDroneSweepIncrement = 1;
+    numberOfDroneSpiralIncrement = 1;
 }
 
 DroSimSystem::~DroSimSystem() {}
@@ -94,9 +95,11 @@ void DroSimSystem::initialize() {
     instAObjective->setSpeedConstraint(0.0);
     instAObjective->setPosition(vect2(0, 0));
 
+    int idx = 0;
+    
     // DroneSweep
-    for (int i = 0; i < mutableNumberOfDroneSweep; i++) {
-        const auto inst = new ADroneSweep(10.0,i);
+    for (int i = 0; i < mutableNumberOfDroneSweep; i++, idx++) {
+        const auto inst = new ADroneSweep(10.0,idx);
         inst->setMinSpeed(10.0);
         inst->setMaxSpeed(30.0);
         inst->setVisionRadius(1000.0);
@@ -115,8 +118,8 @@ void DroSimSystem::initialize() {
     }
 
     // DroneSpiral
-    for (int i = 0; i < numberOfDroneSpiral; i++) {
-        const auto inst = new ADroneSpiral(10.0,i);
+    for (int i = 0; i < mutableNumberOfDroneSpiral; i++, idx++) {
+        const auto inst = new ADroneSpiral(10.0,idx);
         inst->setMinSpeed(10.0);
         inst->setMaxSpeed(30.0);
         inst->setVisionRadius(1000.0);
@@ -126,7 +129,9 @@ void DroSimSystem::initialize() {
         inst->setSpiralIncrementFactor(3);
         inst->setWanderSteps(5);
         inst->setBatteryCapacity(200.0);
+        inst->setCollisionRadius(5.0);
         inst->setStartingPoint(vect2(0.5, 0.5));
+        inst->setSpeed(mutableSpeed);
         inst->setAObjective(instAObjective);
         inst->setAWind(instAWind);
         inst->setrItfManageSimSpiral(instAUser->getAppli());
@@ -137,7 +142,7 @@ void DroSimSystem::initialize() {
     }
     
     // Calcultated attributes
-    instAUser->setDroneCount(mutableNumberOfDroneSweep + numberOfDroneSpiral);
+    instAUser->setDroneCount(mutableNumberOfDroneSweep + mutableNumberOfDroneSpiral);
 
     // Initialization
     if (instASimulation->getIsActive()) instASimulation->initialize();
@@ -178,22 +183,23 @@ void DroSimSystem::mutateParameters(const bool isGroupSuccessful, const double a
     if (isGroupSuccessful) cout << "Average of " << (int)(averageTimeToFind / 1000 / 60 * 10) << " min to find\n";
 
     const double cSpeed = mutableSpeed;
-    const int cNumberOf = mutableNumberOfDroneSweep;
-    const double cBatCap = 200.0;
+    const int cNumberOfDroneSweep = mutableNumberOfDroneSweep;
+    const int cNumberOfDroneSpiral = mutableNumberOfDroneSpiral;
     
     if (!isCurveFound || isGroupSuccessful) {
         // We overwrite the saved config as we don't need it right now
         pSpeed = cSpeed;
-        pBatCap = cBatCap;
     }
 
     if (isCurveFound && isMaxFound) {
         if (isGroupSuccessful && cSpeed - speedIncrement >= minSpeed)
             mutableSpeed -= speedIncrement;
         else {
-            slowConfigs.emplace_back(pSpeed, cNumberOf, pBatCap);
-            
-            mutableNumberOfDroneSweep += numberOfDroneSweepIncrement;
+            slowConfigs.emplace_back(pSpeed, cNumberOfDroneSweep, cNumberOfDroneSpiral);
+
+            if (cNumberOfDroneSpiral > cNumberOfDroneSweep)
+                mutableNumberOfDroneSweep += numberOfDroneSweepIncrement;
+            else mutableNumberOfDroneSpiral += numberOfDroneSpiralIncrement;
 
             // We save the current config for later comparison
             pSpeed = cSpeed;
@@ -202,7 +208,7 @@ void DroSimSystem::mutateParameters(const bool isGroupSuccessful, const double a
     else {
         if (!isCurveFound && isGroupSuccessful) {
             // Found the first valid configuration
-            slowConfigs.emplace_back(cSpeed, cNumberOf, cBatCap);
+            slowConfigs.emplace_back(cSpeed, cNumberOfDroneSweep, cNumberOfDroneSpiral);
             isCurveFound = true;
             cout << "Curve found" << '\n';
         }
@@ -210,29 +216,30 @@ void DroSimSystem::mutateParameters(const bool isGroupSuccessful, const double a
             mutableSpeed += speedIncrement;
         else if (isCurveFound) {
             // Found the maximum speed drones need to go at
-            fastConfig = make_tuple(cSpeed, cNumberOf, cBatCap);
+            fastConfig = make_tuple(cSpeed, cNumberOfDroneSweep, cNumberOfDroneSpiral);
             isMaxFound = true;
             cout << "Max speed found" << '\n';
-            mutableNumberOfDroneSweep += numberOfDroneSweepIncrement;
+            if (cNumberOfDroneSpiral > cNumberOfDroneSweep)
+                mutableNumberOfDroneSweep += numberOfDroneSweepIncrement;
+            else mutableNumberOfDroneSpiral += numberOfDroneSpiralIncrement;
             mutableSpeed = get<0>(slowConfigs[0]);
         }
         else {
-            mutableNumberOfDroneSweep += numberOfDroneSweepIncrement;
+            if (cNumberOfDroneSpiral > cNumberOfDroneSweep)
+                mutableNumberOfDroneSweep += numberOfDroneSweepIncrement;
+            else mutableNumberOfDroneSpiral += numberOfDroneSpiralIncrement;
             mutableSpeed = minSpeed;
         }
     }
     
     cout << "Trying with " << mutableNumberOfDroneSweep
-    << " drone" << (mutableNumberOfDroneSweep > 1 ? "s" : "")
+    << " drone" << (mutableNumberOfDroneSweep > 1 ? "s" : "") << " making sweeps and "
+    << mutableNumberOfDroneSpiral << " drone" << (mutableNumberOfDroneSpiral > 1 ? "s" : "") << " making spirals" 
     << " at " << mutableSpeed << " m/s\n";
 }
 
-double DroSimSystem::calculateBatteryCapForGroup(const double averageTimeToFind) const {
-    return averageTimeToFind / 1000.0 * 10.0 / 60.0 / 60.0 * pow(instADroneSweep[0]->getSpeed(), 2) * 2.0;
-}
-
 bool DroSimSystem::continueCondition() const {
-    return mutableNumberOfDroneSweep <= maxNumberOfDroneSweep;
+    return mutableNumberOfDroneSweep + mutableNumberOfDroneSpiral <= maxNumberOfDrones;
 }
 
 vector<tuple<double,int,int>> DroSimSystem::getSlowConfigs() {

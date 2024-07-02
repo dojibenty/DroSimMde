@@ -1,6 +1,5 @@
-﻿#pragma once
-
-// TODO inefficace
+﻿#ifndef OBJECTCODE_H
+#define OBJECTCODE_H
 
 enum ObjectCode {
     objDroneSpiral,
@@ -11,3 +10,5 @@ enum ObjectCode {
     objUser,
     objWind
 };
+
+#endif

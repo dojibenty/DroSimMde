@@ -5,8 +5,8 @@
 #include "LogComponent.h"
 #include <vector>
 
+#include "ADroneSpiral.h"
 #include "ADroneSweep.h"
-#include "Clock.h"
 
 class Scenario {
 protected :
@@ -23,7 +23,7 @@ protected :
     int simulationNumber;
 
     vector<tuple<LeafComponent*, ReturnCode, double>> simulationResults;
-    bool isSimSuccessful;
+    int simStatus;
     bool doEndSim;
 
 public :
@@ -34,6 +34,8 @@ public :
 
     tuple<bool, double> startSimulation();
     void computeDoStepResults();
+    void postStepEvent();
+    void checkDronesStatus();
     void checkForCollisions() const;
 
     virtual void eventSimulation() = 0;
@@ -43,5 +45,6 @@ public :
     void push(LogComponent* logc);
 
     vector<ADroneSweep*> droneSweepList;
+    vector<ADroneSpiral*> droneSpiralList;
 };
 #endif /* SCENARIO_H_ */

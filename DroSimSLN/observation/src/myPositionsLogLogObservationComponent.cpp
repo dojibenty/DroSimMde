@@ -75,5 +75,5 @@ ReturnCode myPositionsLogLogObservationComponent::doStep(int nStep) {
     writeNames(s);
     endLine();
 
-    return {FormalCode::proceed};
+    return ReturnCode::proceed;
 }

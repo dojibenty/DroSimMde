@@ -45,6 +45,8 @@ public :
     void end();
 
     vect2 getSpiralposition();
+    int getID();
+    vect2& getPosition();
     void setrItfGeoDataSpiral(ItfGeoDataInterface* arItfGeoDataSpiral);
     void setrItfManageSimSpiral(ItfManageSimInterface* arItfManageSimSpiral);
     void setrItfSimDataSpiral(ItfSimDataInterface* arItfSimDataSpiral);
@@ -88,13 +90,11 @@ public :
     double getBatteryCapacity();
 
     void setBatteryCapacity(double arg);
-    // +++++++++++++ Access for numberOf parameter +++++++++++++
-    long getNumberOf();
-
-    void setNumberOf(long arg);
     // +++++++++++++ Access for startingPoint parameter +++++++++++++
     vect2 getStartingPoint();
 
     void setStartingPoint(vect2 arg);
+    double getCollisionRadius();
+    void setCollisionRadius(double arg);
 };
 #endif /* compDroneSpiral_H_ */

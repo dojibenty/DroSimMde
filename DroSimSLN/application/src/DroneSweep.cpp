@@ -65,7 +65,7 @@ void DroneSweep::initialize() {
 
 void DroneSweep::end() {
     // Start of user code  : Implementation of end method
-    cout << ID << " - bat: " << battery << " // " << cpt << " steps\n";
+    cout << "SWE" << ID << " - bat: " << battery << " // " << cpt << " steps\n";
     // End of user code
 }
 
@@ -77,19 +77,22 @@ ReturnCode DroneSweep::doStep(int nStep) {
     
     // Execute step
     step(objposition,windForce,windDirection);
+
+    // Outputs
+    sweepposition = position;
     
     // Return codes
-    using enum CustomCode;
+    using enum ReturnCode;
     
     // Is objective found
     if (condObjectiveFound())
-        return {objective_found};
+        return objective_found;
 
     // Is battery low
     if (condLowBattery())
-        return {low_battery};
+        return low_battery;
     
-    return {FormalCode::proceed};
+    return proceed;
     // End of user code
 }
 
@@ -106,7 +109,6 @@ void DroneSweep::move() {
         }
     
     position = setNextPosition();
-    sweepposition = position;
 }
 
 void DroneSweep::consumeBattery(const double windForce, const vect2& windDirection) {
@@ -184,7 +186,7 @@ bool DroneSweep::goesOutOfBounds(vect2& point) {
 }
 
 void DroneSweep::printRecap() {
-    cout << "*** Drone " << ID << " ***";
+    cout << "*** Drone SWE" << ID << " ***";
     cout << "\nstartingPoint: " << startingPoint.toString();
     cout << "\nspeed: " << speed;
     cout << "\nposition: " << position.toString();
@@ -192,10 +194,6 @@ void DroneSweep::printRecap() {
     cout << "\nbattery: " << battery;
     cout << "\nbatteryConsumption: " << batteryConsumption;
     cout << endl;
-}
-
-void DroneSweep::setAssignedZone(wect2 zone) {
-    assignedZone = zone;
 }
 
 // End of user code

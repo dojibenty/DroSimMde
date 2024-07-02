@@ -88,7 +88,6 @@ private:
     bool goesOutOfBounds(vect2& point);
 
 public:
-    void setAssignedZone(wect2 zone);
     void printRecap();
     double getSpeed() { return speed; }
     void setSpeed(double arg) { speed = arg; }

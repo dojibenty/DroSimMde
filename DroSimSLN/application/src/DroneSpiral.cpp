@@ -57,7 +57,7 @@ void DroneSpiral::initialize() {
 
 void DroneSpiral::end() {
     // Start of user code  : Implementation of end method
-    cout << ID << " - bat: " << battery << " // " << cpt << " steps\n";
+    cout << "SPI" << ID << " - bat: " << battery << " // " << cpt << " steps\n";
     // End of user code
 }
 
@@ -74,15 +74,15 @@ ReturnCode DroneSpiral::doStep(int nStep) {
     spiralposition = position;
 
     // Return codes
-    using enum CustomCode;
+    using enum ReturnCode;
 
     if (condObjectiveFound())
-        return {objective_found};
+        return objective_found;
 
     if (condLowBattery())
-        return {low_battery};
+        return low_battery;
 
-    return {FormalCode::proceed};
+    return proceed;
     // End of user code
 }
 
@@ -209,6 +209,17 @@ bool DroneSpiral::goesOutOfBounds(vect2 point) {
         || point.getY() > assignedZone.getV2().getY();
 }
 
+void DroneSpiral::printRecap() {
+    cout << "*** Drone SPI" << ID << " ***";
+    cout << "\nstartingPoint: " << startingPoint.toString();
+    cout << "\nspeed: " << speed;
+    cout << "\nposition: " << position.toString();
+    cout << "\ndirection: " << direction.toString();
+    cout << "\nbattery: " << battery;
+    cout << "\nbatteryConsumption: " << batteryConsumption;
+    cout << endl;
+}
+
 // End of user code
 
 
@@ -328,4 +339,13 @@ vect2 DroneSpiral::getStartingPoint() {
 
 void DroneSpiral::setStartingPoint(vect2 arg) {
     startingPoint = arg;
+}
+
+// +++++++++++++ Access for collisionRadius parameter +++++++++++++
+double DroneSpiral::getCollisionRadius() {
+    return collisionRadius;
+}
+
+void DroneSpiral::setCollisionRadius(double arg) {
+    collisionRadius = arg;
 }

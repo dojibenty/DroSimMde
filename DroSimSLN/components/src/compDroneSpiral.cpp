@@ -10,13 +10,13 @@
 
 compDroneSpiral::compDroneSpiral(double aFrequency, const int ID) : LeafComponent(aFrequency) {
     appli = new DroneSpiral(this,ID);
+    oldSpiralposition = appli->getSpiralposition();
+    newSpiralposition = appli->getSpiralposition();
     delay = 0;
     delayMax = 0;
     newValue = false;
     isActive = true;
     objectcode_ = objDroneSpiral;
-    oldSpiralposition = appli->getSpiralposition();
-    newSpiralposition = appli->getSpiralposition();
 }
 
 compDroneSpiral::~compDroneSpiral() {}
@@ -36,9 +36,12 @@ ReturnCode compDroneSpiral::doStep(int nStep) {
         oldSpiralposition = newSpiralposition;
         newValue = false;
     }
+    
     readInputs();
-    const auto returnCode = appli->doStep(nStep);
+    
+    const auto rc = appli->doStep(nStep);
     newSpiralposition = appli->getSpiralposition();
+    
     if (delayMax == 0) {
         oldSpiralposition = newSpiralposition;
         newValue = false;
@@ -47,12 +50,14 @@ ReturnCode compDroneSpiral::doStep(int nStep) {
         newValue = true;
         delay = 0;
     }
-    return returnCode;
+    
+    return rc;
 }
 
 void compDroneSpiral::readInputs() {}
 
 void compDroneSpiral::initialize() {
+    appli->setPosition(vect2(0.0, appli->getID() * 20 + 10));
     appli->initialize();
 }
 
@@ -62,6 +67,14 @@ void compDroneSpiral::end() {
 
 vect2 compDroneSpiral::getSpiralposition() {
     return oldSpiralposition;
+}
+
+int compDroneSpiral::getID() {
+    return appli->getID();
+}
+
+vect2& compDroneSpiral::getPosition() {
+    return appli->getPosition();
 }
 
 void compDroneSpiral::setrItfGeoDataSpiral(ItfGeoDataInterface* arItfGeoDataSpiral) {
@@ -161,15 +174,6 @@ void compDroneSpiral::setBatteryCapacity(double arg) {
     appli->setBatteryCapacity(arg);
 }
 
-// +++++++++++++ Access for numberOf parameter +++++++++++++
-long compDroneSpiral::getNumberOf() {
-    return appli->getNumberOf();
-}
-
-void compDroneSpiral::setNumberOf(long arg) {
-    appli->setNumberOf(arg);
-}
-
 // +++++++++++++ Access for startingPoint parameter +++++++++++++
 vect2 compDroneSpiral::getStartingPoint() {
     return appli->getStartingPoint();
@@ -177,4 +181,14 @@ vect2 compDroneSpiral::getStartingPoint() {
 
 void compDroneSpiral::setStartingPoint(vect2 arg) {
     appli->setStartingPoint(arg);
+}
+
+
+// +++++++++++++ Access for startingPoint parameter +++++++++++++
+double compDroneSpiral::getCollisionRadius() {
+    return appli->getCollisionRadius();
+}
+
+void compDroneSpiral::setCollisionRadius(double arg) {
+    appli->setCollisionRadius(arg);
 }

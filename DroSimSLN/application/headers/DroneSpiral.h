@@ -42,6 +42,7 @@ protected :
     long wanderSteps;
     double batteryCapacity;
     vect2 startingPoint;
+    double collisionRadius;
 
     // Required Interfaces
     ItfGeoDataInterface* rItfGeoDataSpiral;
@@ -91,10 +92,14 @@ private:
     void setCircle();
     vect2 getRandomDirection();
     bool goesOutOfBounds(vect2 point);
+    void printRecap();
 
 public:
     double getSpeed() { return speed; }
     void setSpeed(double arg) { speed = arg; }
+    int getID() { return ID; }
+    vect2& getPosition() { return position; }
+    void setPosition(const vect2& arg) { position = arg; }
     // End of user code
 
 
@@ -103,8 +108,11 @@ public:
     void setWindDirection(vect2 arg);
 
     vect2 getSpiralposition();
+    ItfGeoDataInterface* getItfGeoDataInterface() { return rItfGeoDataSpiral; }
     void setrItfGeoDataSpiral(ItfGeoDataInterface* arItfGeoDataSpiral);
+    ItfManageSimInterface* getItfManageSimInterface() { return rItfManageSimSpiral; }
     void setrItfManageSimSpiral(ItfManageSimInterface* arItfManageSimSpiral);
+    ItfSimDataInterface* getItfSimDataInterface() { return rItfSimDataSpiral; }
     void setrItfSimDataSpiral(ItfSimDataInterface* arItfSimDataSpiral);
     // +++++++++++++ Access for minSpeed parameter +++++++++++++
     double getMinSpeed();
@@ -142,13 +150,13 @@ public:
     double getBatteryCapacity();
 
     void setBatteryCapacity(double arg);
-    // +++++++++++++ Access for numberOf parameter +++++++++++++
-    long getNumberOf();
-
-    void setNumberOf(long arg);
     // +++++++++++++ Access for startingPoint parameter +++++++++++++
     vect2 getStartingPoint();
 
     void setStartingPoint(vect2 arg);
+    // +++++++++++++ Access for collisionRadius parameter +++++++++++++
+    double getCollisionRadius();
+
+    void setCollisionRadius(double arg);
 };
 #endif /*  DroneSpiral_H_ */

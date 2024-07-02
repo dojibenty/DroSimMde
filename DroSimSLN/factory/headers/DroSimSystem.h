@@ -34,22 +34,22 @@ protected :
     vector<ADroneSweep*> instADroneSweep;
     vector<ADroneSpiral*> instADroneSpiral;
 
-    int mutableNumberOfDroneSweep = 1;
-    int numberOfDroneSpiral = 0;
+    int mutableNumberOfDroneSweep = 0;
+    int mutableNumberOfDroneSpiral = 1;
 
     double mutableSpeed;
     
     double minSpeed;
     double maxSpeed;
-    int maxBatCount;
-    int maxNumberOfDroneSweep;
+    int maxNumberOfDrones;
     double pSpeed = -1;
-    int pNumberOf = -1;
-    double pBatCap = -1;
+    int pNumberOfDroneSweep = -1;
+    int pNumberOfDroneSpiral = -1;
     bool isCurveFound = false;
     bool isMaxFound = false;
     double speedIncrement;
     int numberOfDroneSweepIncrement;
+    int numberOfDroneSpiralIncrement;
 
     vector<tuple<double,int,int>> slowConfigs;
     tuple<double,int,int> fastConfig;
@@ -69,7 +69,6 @@ public :
     void initialize();
 
     void end();
-    double calculateBatteryCapForGroup(const double averageTimeToFind) const;
     bool continueCondition() const;
     vector<tuple<double, int, int>> getSlowConfigs();
     tuple<double, int, int> getFastConfig();

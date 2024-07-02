@@ -67,8 +67,12 @@ int main() {
             */
 
             simulatedScenario->setTime(0, 360000);
+            
             for (const auto& inst : root->get_ADroneSweep())
                 simulatedScenario->droneSweepList.push_back(inst);
+            for (const auto& inst : root->get_ADroneSpiral())
+                simulatedScenario->droneSpiralList.push_back(inst);
+            
             auto simResult = simulatedScenario->startSimulation();
             if (get<0>(simResult)) {
                 successfulSims++;
@@ -84,10 +88,10 @@ int main() {
     const auto fastConfig = root->getFastConfig();
 
     cout << "Fast config:\n";
-    cout << "speed:" << get<0>(fastConfig) << " ; minNumberOf: " << get<1>(fastConfig) << " ; batteryCap: " << get<2>(fastConfig) << '\n';
+    cout << "speed:" << get<0>(fastConfig) << " ; minNumberOfDroneSweep: " << get<1>(fastConfig) << " ; minNumberOfDroneSpiral: " << get<2>(fastConfig) << '\n';
     cout << "\nSlow configs:\n";
     for (auto t : slowConfigs)
-        cout << "speed:" << get<0>(t) << " ; numberOf: " << get<1>(t) << " ; batteryCap: " << get<2>(t) << '\n';
+        cout << "speed:" << get<0>(t) << " ; numberOfDroneSweep: " << get<1>(t) << " ; numberOfDroneSpiral: " << get<2>(t) << '\n';
     
     // Start of user code  : Additional code main for testDroSim
     // End of user code

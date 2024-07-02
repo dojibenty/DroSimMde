@@ -38,7 +38,7 @@ void User::end() {
 
 ReturnCode User::doStep(int nStep) {
     // Start of user code  : Implementation of doStep method
-    return {FormalCode::proceed};
+    return ReturnCode::proceed;
     // End of user code
 }
 

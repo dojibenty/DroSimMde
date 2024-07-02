@@ -47,7 +47,7 @@ ReturnCode Wind::doStep(int nStep) {
     const double dirModY = User::roundToDecimal(User::randRange(-1, 1)/10,2);
     windDirection += vect2(dirModX,dirModY);
     windDirection.normalize();
-    return {FormalCode::proceed};
+    return ReturnCode::proceed;
     // End of user code
 }
 

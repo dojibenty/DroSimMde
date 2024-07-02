@@ -13,7 +13,10 @@ Scenario::Scenario(RootComponent* aRoot) {
     min = 0;
     simulationNumber = 0;
     root = aRoot;
-    droneSweepList.reserve(20);
+    droneSweepList.reserve(10);
+    droneSpiralList.reserve(10);
+    simStatus = -1;
+    doEndSim = false;
 
     unsigned int j = aRoot->getListLeafComponents().size();
     for (unsigned int i = 0; i < j; i++) {
@@ -47,7 +50,6 @@ tuple<bool, double> Scenario::startSimulation() {
     Clock* c = Clock::getInstance();
     c->Init(min, stepTime, max);
     simulationNumber++;
-    isSimSuccessful = doEndSim = false;
     while (!c->isFinished()) {
         // scenario events
         eventSimulation();
@@ -63,7 +65,8 @@ tuple<bool, double> Scenario::startSimulation() {
         }
 
         computeDoStepResults();
-        checkForCollisions();
+
+        postStepEvent();
         
         //pyp : run des observations
         j = getCsvLogs().size();
@@ -89,43 +92,53 @@ tuple<bool, double> Scenario::startSimulation() {
         if (c->getCurrentMS() % (c->getEndTime() / 10) == 0) {
             //std::cout << (int)(100 * ((double)c->getCurrentMS() / c->getEndTime())) << " %" << std::endl;
         }
-        if (doEndSim) break;
+
+        if (simStatus != -1) break;
     }
-    return make_tuple(isSimSuccessful, c->getCurrentMS());
+    return make_tuple(simStatus == 0, c->getCurrentMS());
 }
 
 void Scenario::computeDoStepResults() {
     for (const auto& res : simulationResults) {
-        if (isSimSuccessful) return;
+        if (simStatus != -1) return;
 
         const auto& lc = get<0>(res);
-        
-        ReturnCode code = get<1>(res);
-        
-        using enum FormalCode;
+        const ReturnCode code = get<1>(res);
+        const double time = get<2>(res);
 
-        // TODO ne fonctionne pas => pas de generalisation formal/custom
+        using enum ReturnCode;
+        
         switch (code) {
+        // continue
         case proceed:
             break;
-        case local_stop:
-        case CustomCode::low_battery:
+        // local stop
+        case low_battery:
             lc->stop();
+            cout << '(' << lc->getObjectCode() << ",low_battery," << time << ')' << '\n';
             break;
-        case simulation_success:
-        case CustomCode::objective_found:
-            isSimSuccessful = true;
-            break;
-        case simulation_fail:
-            isSimSuccessful = false;
-            break;
-        case other:
-            lc->stop();
-            break;
-        default:
+        // simulation success
+        case objective_found:
+            simStatus = 0;
+            cout << '(' << lc->getObjectCode() << ",objective_found," << time << ')' << '\n';
             break;
         }
     }
+}
+
+void Scenario::postStepEvent() {
+    checkDronesStatus();
+    checkForCollisions();
+}
+
+void Scenario::checkDronesStatus() {
+    for (const auto& d : droneSweepList)
+        if (d->getIsActive()) return;
+
+    for (const auto& d : droneSpiralList)
+        if (d->getIsActive()) return;
+
+    simStatus = 1;
 }
 
 void Scenario::checkForCollisions() const {
@@ -142,8 +155,35 @@ void Scenario::checkForCollisions() const {
                 d->stop();
                 other->stop();
             }
+        for (const auto& other : droneSpiralList)
+            if (vect2::distance(position, other->getPosition()) <= collisionRadius) {
+                if (id == other->getID()) continue;
+                cout << "drone " << id << "collided with drone " << other->getID() << '\n';
+                d->stop();
+                other->stop();
+            }
     }
-    
+    for (const auto& d : droneSpiralList) {
+        if (!d->getIsActive()) continue;
+        
+        const auto& collisionRadius = d->getCollisionRadius();
+        auto& position = d->getPosition();
+        const auto& id = d->getID();
+        for (const auto& other : droneSweepList)
+            if (vect2::distance(position, other->getPosition()) <= collisionRadius) {
+                if (id == other->getID()) continue;
+                cout << "drone " << id << "collided with drone " << other->getID() << '\n';
+                d->stop();
+                other->stop();
+            }
+        for (const auto& other : droneSpiralList)
+            if (vect2::distance(position, other->getPosition()) <= collisionRadius) {
+                if (id == other->getID()) continue;
+                cout << "drone " << id << "collided with drone " << other->getID() << '\n';
+                d->stop();
+                other->stop();
+            }
+    }
 }
 
 //pyp
