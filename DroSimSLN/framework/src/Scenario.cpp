@@ -112,7 +112,6 @@ void Scenario::computeDoStepResults() {
         // continue
         case proceed:
             break;
-        // local stop
         case low_battery:
             lc->stop();
             cout << '(' << lc->getObjectCode() << ",low_battery," << time << ')' << '\n';

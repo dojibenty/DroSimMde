@@ -75,11 +75,11 @@ public :
     void end();
 
     ReturnCode doStep(int nStep);
-    void step(const vect2& objposition, double windForce, const vect2& windDirection);
-    void move();
+    void step(const vect2& objposition, const double windForce, const vect2& windDirection, vect2* sweepposition);
+    void move(vect2* sweepposition);
     void consumeBattery(double windForce, const vect2& windDirection);
-    bool condObjectiveFound();
-    bool condLowBattery();
+    bool condObjectiveFound(vect2& position, vect2& objposition, const double visionRadius);
+    bool condLowBattery(double battery);
 
 
     // Start of user code  : Additional methods

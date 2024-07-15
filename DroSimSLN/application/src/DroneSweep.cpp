@@ -72,36 +72,31 @@ void DroneSweep::end() {
 ReturnCode DroneSweep::doStep(int nStep) {
     // Start of user code  : Implementation of doStep method
     cpt++;
-
-    // Inputs
     
     // Execute step
-    step(objposition,windForce,windDirection);
-
-    // Outputs
-    sweepposition = position;
+    step(objposition,windForce,windDirection,&sweepposition);
     
     // Return codes
     using enum ReturnCode;
     
     // Is objective found
-    if (condObjectiveFound())
+    if (condObjectiveFound(position,objposition,visionRadius))
         return objective_found;
 
     // Is battery low
-    if (condLowBattery())
+    if (condLowBattery(battery))
         return low_battery;
     
     return proceed;
     // End of user code
 }
 
-void DroneSweep::step(const vect2& objposition, const double windForce, const vect2& windDirection) {
-    move();
+void DroneSweep::step(const vect2& objposition, const double windForce, const vect2& windDirection, vect2* sweepposition) {
+    move(sweepposition);
     consumeBattery(windForce,windDirection);
 }
 
-void DroneSweep::move() {
+void DroneSweep::move(vect2* sweepposition) {
     if (!isInZone)
         if (zoneStartPoint < position) {
             position = zoneStartPoint;
@@ -109,6 +104,7 @@ void DroneSweep::move() {
         }
     
     position = setNextPosition();
+    *sweepposition = vect2(position.getX(),position.getY());
 }
 
 void DroneSweep::consumeBattery(const double windForce, const vect2& windDirection) {
@@ -129,13 +125,13 @@ void DroneSweep::consumeBattery(const double windForce, const vect2& windDirecti
     battery -= batteryConsumption;
 }
 
-bool DroneSweep::condObjectiveFound() {
+bool DroneSweep::condObjectiveFound(vect2& position, vect2& objposition, const double visionRadius) {
     return vect2::distance(position, objposition) <= visionRadius && objposition.getX() > 0;
 }
 
-bool DroneSweep::condLowBattery() {
+bool DroneSweep::condLowBattery(double battery) {
     if (battery <= 0) {
-        battery = 0;
+        this->battery = 0;
         return true;
     }
     return false;
