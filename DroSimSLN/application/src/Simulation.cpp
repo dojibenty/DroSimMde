@@ -7,6 +7,7 @@
 
 #include "Simulation.h"
 #include "compSimulation.h"
+#include "DroSimSystem.h"
 // Start of user code  : Additional imports for Simulation
 // End of user code
 
@@ -25,6 +26,8 @@ Simulation::~Simulation() {
 }
 
 void Simulation::initialize() {
+    // Communication
+    systemRef_->AddToMessage("Simulation");
     // Start of user code  : Implementation of initialize method
 
     // End of user code
@@ -38,6 +41,7 @@ void Simulation::end() {
 
 ReturnCode Simulation::doStep(int nStep) {
     // Start of user code  : Implementation of doStep method
+    
     return ReturnCode::proceed;
     // End of user code
 }
@@ -77,4 +81,8 @@ double Simulation::getPositionCorrection() {
 
 void Simulation::setPositionCorrection(double arg) {
     positionCorrection = arg;
+}
+
+void Simulation::setSystemRef(DroSimSystem* systemRef) {
+    systemRef_ = systemRef;
 }

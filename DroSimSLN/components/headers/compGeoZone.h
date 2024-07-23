@@ -8,10 +8,11 @@
 #ifndef compGeoZone_H_
 #define compGeoZone_H_
 
+
 #include "LeafComponent.h"
 #include "ReturnCode.h"
 class GeoZone;
-
+class DroSimSystem;
 #include "vect2.h"
 
 #include "ItfGeoDataInterface.h"
@@ -34,6 +35,7 @@ public :
     void initialize();
     void end();
 
+    void setSystemRef(DroSimSystem* systemRef);
     GeoZone* getAppli();
 
     // +++++++++++++ Methods of the pItfGeoData interface +++++++++++++

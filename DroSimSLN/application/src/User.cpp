@@ -7,6 +7,7 @@
 
 #include "User.h"
 #include "compUser.h"
+#include "DroSimSystem.h"
 // Start of user code  : Additional imports for User
 // End of user code
 
@@ -25,6 +26,8 @@ User::~User() {
 }
 
 void User::initialize() {
+    // Communication
+    systemRef_->AddToMessage("User");
     // Start of user code  : Implementation of initialize method
     zones = createZones();
     // End of user code
@@ -38,6 +41,7 @@ void User::end() {
 
 ReturnCode User::doStep(int nStep) {
     // Start of user code  : Implementation of doStep method
+
     return ReturnCode::proceed;
     // End of user code
 }
@@ -153,4 +157,8 @@ long User::getDroneCount() {
 
 void User::setDroneCount(long arg) {
     droneCount = arg;
+}
+
+void User::setSystemRef(DroSimSystem* systemRef) {
+    systemRef_ = systemRef;
 }

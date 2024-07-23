@@ -110,7 +110,7 @@
             <ConformanceMode>true</ConformanceMode>
             <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
             <ScanSourceForModuleDependencies>true</ScanSourceForModuleDependencies>
-            <AdditionalIncludeDirectories>application/headers;components/headers;factory/headers;interfaces/headers;observation/headers;run/headers;scenario/headers;types/headers;framework/headers;enum/headers</AdditionalIncludeDirectories>
+            <AdditionalIncludeDirectories>application/headers;components/headers;factory/headers;interfaces/headers;observation/headers;run/headers;scenario/headers;types/headers;framework/headers;enum/headers;network/headers</AdditionalIncludeDirectories>
             <LanguageStandard>stdcpp20</LanguageStandard>
         </ClCompile>
         <Link>
@@ -185,50 +185,126 @@
         <ClCompile Include="framework\src\RootComponent.cpp"/>
         <ClCompile Include="framework\src\Scenario.cpp"/>
         <ClCompile Include="framework\src\TimeableObject.cpp"/>
-        <ClCompile Include="observation\src\myPositionsLogLogObservationComponent.cpp"/>
-        <ClCompile Include="run\src\MainDroSimSystem.cpp"/>
-        <ClCompile Include="scenario\src\ScenarLog.cpp"/>
-        <ClCompile Include="types\src\vect2.cpp"/>
-        <ClCompile Include="types\src\wect2.cpp"/>
+        <ClCompile Include="network\src\Client.cpp">
+          <RuntimeLibrary>MultiThreadedDebugDll</RuntimeLibrary>
+          <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
+          <Optimization>Disabled</Optimization>
+          <SupportJustMyCode>true</SupportJustMyCode>
+          <AssemblerOutput>NoListing</AssemblerOutput>
+          <AssemblerListingLocation>x64\Debug\</AssemblerListingLocation>
+          <UndefineAllPreprocessorDefinitions>false</UndefineAllPreprocessorDefinitions>
+          <BrowseInformation>false</BrowseInformation>
+          <BrowseInformationFile>x64\Debug\</BrowseInformationFile>
+          <CompileAs>Default</CompileAs>
+          <ConformanceMode>true</ConformanceMode>
+          <DiagnosticsFormat>Column</DiagnosticsFormat>
+          <DisableLanguageExtensions>false</DisableLanguageExtensions>
+          <ErrorReporting>Prompt</ErrorReporting>
+          <ExpandAttributedSource>false</ExpandAttributedSource>
+          <ExceptionHandling>Sync</ExceptionHandling>
+          <EnableASAN>false</EnableASAN>
+          <EnableFuzzer>false</EnableFuzzer>
+          <EnableFiberSafeOptimizations>false</EnableFiberSafeOptimizations>
+          <EnableEnhancedInstructionSet>NotSet</EnableEnhancedInstructionSet>
+          <FloatingPointModel>Precise</FloatingPointModel>
+          <ForceConformanceInForLoopScope>true</ForceConformanceInForLoopScope>
+          <GenerateModuleDependencies>false</GenerateModuleDependencies>
+          <GenerateSourceDependencies>false</GenerateSourceDependencies>
+          <GenerateXMLDocumentationFiles>false</GenerateXMLDocumentationFiles>
+          <InlineFunctionExpansion>Default</InlineFunctionExpansion>
+          <IntrinsicFunctions>false</IntrinsicFunctions>
+          <IgnoreStandardIncludePath>false</IgnoreStandardIncludePath>
+          <LanguageStandard>stdcpp20</LanguageStandard>
+          <LanguageStandard_C>Default</LanguageStandard_C>
+          <MinimalRebuild>false</MinimalRebuild>
+          <ModuleDependenciesFile>x64\Debug\</ModuleDependenciesFile>
+          <ModuleOutputFile>x64\Debug\</ModuleOutputFile>
+          <OmitDefaultLibName>false</OmitDefaultLibName>
+          <FavorSizeOrSpeed>Neither</FavorSizeOrSpeed>
+          <WholeProgramOptimization>false</WholeProgramOptimization>
+          <ObjectFileName>x64\Debug\</ObjectFileName>
+          <CallingConvention>Cdecl</CallingConvention>
+          <ProgramDataBaseFileName>x64\Debug\vc143.pdb</ProgramDataBaseFileName>
+          <PrecompiledHeader>NotUsing</PrecompiledHeader>
+          <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
+          <PrecompiledHeaderOutputFile>x64\Debug\DroSimSLN.pch</PrecompiledHeaderOutputFile>
+          <PreprocessToFile>false</PreprocessToFile>
+          <PreprocessKeepComments>false</PreprocessKeepComments>
+          <PreprocessSuppressLineNumbers>false</PreprocessSuppressLineNumbers>
+          <RemoveUnreferencedCodeData>true</RemoveUnreferencedCodeData>
+          <ScanSourceForModuleDependencies>true</ScanSourceForModuleDependencies>
+          <ShowIncludes>false</ShowIncludes>
+          <SourceDependenciesFile>x64\Debug\</SourceDependenciesFile>
+          <SuppressStartupBanner>true</SuppressStartupBanner>
+          <BufferSecurityCheck>true</BufferSecurityCheck>
+          <SmallerTypeCheck>false</SmallerTypeCheck>
+          <SpectreMitigation>false</SpectreMitigation>
+          <StructMemberAlignment>Default</StructMemberAlignment>
+          <TrackerLogDirectory>x64\Debug\DroSimSLN.tlog\</TrackerLogDirectory>
+          <TranslateIncludes>false</TranslateIncludes>
+          <MinimalRebuildFromTracking>true</MinimalRebuildFromTracking>
+          <TreatWarningAsError>false</TreatWarningAsError>
+          <TreatWChar_tAsBuiltInType>true</TreatWChar_tAsBuiltInType>
+          <UseFullPaths>true</UseFullPaths>
+          <WarningLevel>Level3</WarningLevel>
+          <XMLDocumentationFileName>x64\Debug\</XMLDocumentationFileName>
+          <DebugInformationFormat>EditAndContinue</DebugInformationFormat>
+          <IntelJCCErratum>false</IntelJCCErratum>
+          <BuildStlModules>false</BuildStlModules>
+          <TreatAngleIncludeAsExternal>false</TreatAngleIncludeAsExternal>
+          <ExternalWarningLevel>InheritWarningLevel</ExternalWarningLevel>
+          <TreatExternalTemplatesAsInternal>true</TreatExternalTemplatesAsInternal>
+          <DisableAnalyzeExternal>false</DisableAnalyzeExternal>
+          <PreprocessorDefinitions>_DEBUG;_CONSOLE;_UNICODE;UNICODE;</PreprocessorDefinitions>
+          <SDLCheck>true</SDLCheck>
+          <AdditionalIncludeDirectories>application/headers;components/headers;factory/headers;interfaces/headers;observation/headers;run/headers;scenario/headers;types/headers;framework/headers;enum/headers;network/headers;C:\Users\dojib\Documents\Code\vcpkg\installed\x64-windows\include</AdditionalIncludeDirectories>
+          <LinkCompiled>true</LinkCompiled>
+        </ClCompile>
+        <ClCompile Include="observation\src\myPositionsLogLogObservationComponent.cpp" />
+        <ClCompile Include="run\src\MainDroSimSystem.cpp" />
+        <ClCompile Include="scenario\src\ScenarLog.cpp" />
+        <ClCompile Include="types\src\vect2.cpp" />
+        <ClCompile Include="types\src\wect2.cpp" />
     </ItemGroup>
     <ItemGroup>
-        <ClInclude Include="application\headers\DroneSpiral.h"/>
-        <ClInclude Include="application\headers\DroneSweep.h"/>
-        <ClInclude Include="application\headers\GeoZone.h"/>
-        <ClInclude Include="application\headers\User.h"/>
-        <ClInclude Include="application\headers\Objective.h"/>
-        <ClInclude Include="application\headers\Simulation.h"/>
-        <ClInclude Include="application\headers\Wind.h"/>
-        <ClInclude Include="components\headers\compDroneSpiral.h"/>
-        <ClInclude Include="components\headers\compDroneSweep.h"/>
-        <ClInclude Include="components\headers\compGeoZone.h"/>
-        <ClInclude Include="components\headers\compUser.h"/>
-        <ClInclude Include="components\headers\compObjective.h"/>
-        <ClInclude Include="components\headers\compSimulation.h"/>
-        <ClInclude Include="components\headers\compWind.h"/>
+        <ClInclude Include="application\headers\DroneSpiral.h" />
+        <ClInclude Include="application\headers\DroneSweep.h" />
+        <ClInclude Include="application\headers\GeoZone.h" />
+        <ClInclude Include="application\headers\User.h" />
+        <ClInclude Include="application\headers\Objective.h" />
+        <ClInclude Include="application\headers\Simulation.h" />
+        <ClInclude Include="application\headers\Wind.h" />
+        <ClInclude Include="components\headers\compDroneSpiral.h" />
+        <ClInclude Include="components\headers\compDroneSweep.h" />
+        <ClInclude Include="components\headers\compGeoZone.h" />
+        <ClInclude Include="components\headers\compUser.h" />
+        <ClInclude Include="components\headers\compObjective.h" />
+        <ClInclude Include="components\headers\compSimulation.h" />
+        <ClInclude Include="components\headers\compWind.h" />
         <ClInclude Include="enum\headers\ObjectCode.h" />
         <ClInclude Include="enum\headers\ReturnCode.h" />
-        <ClInclude Include="factory\headers\ADroneSpiral.h"/>
-        <ClInclude Include="factory\headers\ADroneSweep.h"/>
-        <ClInclude Include="factory\headers\AGeoZone.h"/>
-        <ClInclude Include="factory\headers\AUser.h"/>
-        <ClInclude Include="factory\headers\AObjective.h"/>
-        <ClInclude Include="factory\headers\ASimulation.h"/>
-        <ClInclude Include="factory\headers\AWind.h"/>
-        <ClInclude Include="factory\headers\DroSimSystem.h"/>
-        <ClInclude Include="framework\headers\Clock.h"/>
-        <ClInclude Include="framework\headers\LeafComponent.h"/>
-        <ClInclude Include="framework\headers\LogComponent.h"/>
-        <ClInclude Include="framework\headers\RootComponent.h"/>
-        <ClInclude Include="framework\headers\Scenario.h"/>
-        <ClInclude Include="framework\headers\TimeableObject.h"/>
-        <ClInclude Include="interfaces\headers\ItfGeoDataInterface.h"/>
-        <ClInclude Include="interfaces\headers\ItfManageSimInterface.h"/>
-        <ClInclude Include="interfaces\headers\ItfSimDataInterface.h"/>
-        <ClInclude Include="observation\headers\myPositionsLogLogObservationComponent.h"/>
-        <ClInclude Include="scenario\headers\ScenarLog.h"/>
-        <ClInclude Include="types\headers\vect2.h"/>
-        <ClInclude Include="types\headers\wect2.h"/>
+        <ClInclude Include="factory\headers\ADroneSpiral.h" />
+        <ClInclude Include="factory\headers\ADroneSweep.h" />
+        <ClInclude Include="factory\headers\AGeoZone.h" />
+        <ClInclude Include="factory\headers\AUser.h" />
+        <ClInclude Include="factory\headers\AObjective.h" />
+        <ClInclude Include="factory\headers\ASimulation.h" />
+        <ClInclude Include="factory\headers\AWind.h" />
+        <ClInclude Include="factory\headers\DroSimSystem.h" />
+        <ClInclude Include="framework\headers\Clock.h" />
+        <ClInclude Include="framework\headers\LeafComponent.h" />
+        <ClInclude Include="framework\headers\LogComponent.h" />
+        <ClInclude Include="framework\headers\RootComponent.h" />
+        <ClInclude Include="framework\headers\Scenario.h" />
+        <ClInclude Include="framework\headers\TimeableObject.h" />
+        <ClInclude Include="interfaces\headers\ItfGeoDataInterface.h" />
+        <ClInclude Include="interfaces\headers\ItfManageSimInterface.h" />
+        <ClInclude Include="interfaces\headers\ItfSimDataInterface.h" />
+        <ClInclude Include="network\headers\Client.h" />
+        <ClInclude Include="observation\headers\myPositionsLogLogObservationComponent.h" />
+        <ClInclude Include="scenario\headers\ScenarLog.h" />
+        <ClInclude Include="types\headers\vect2.h" />
+        <ClInclude Include="types\headers\wect2.h" />
     </ItemGroup>
     <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets"/>
     <ImportGroup Label="ExtensionTargets">

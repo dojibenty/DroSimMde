@@ -8,6 +8,7 @@
 #define GeoZone_H_
 #include "ReturnCode.h"
 class compGeoZone;
+class DroSimSystem;
 #include "vect2.h"
 
 #include "ItfGeoDataInterface.h"
@@ -23,6 +24,8 @@ protected :
     vect2 envSize;
     vect2 bottomLeftPoint;
 
+    DroSimSystem* systemRef_;
+
     // Start of user code  : Properties of GeoZone
     // End of user code
 
@@ -33,6 +36,8 @@ public :
     void end();
 
     ReturnCode doStep(int nStep);
+
+    void setSystemRef(DroSimSystem* systemRef);
 
     // +++++++++++++ Methods of the pItfGeoData interface +++++++++++++
     vect2 grabEnvLimits() override;

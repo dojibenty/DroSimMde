@@ -7,8 +7,10 @@
 #ifndef DroneSpiral_H_
 #define DroneSpiral_H_
 #include "Clock.h"
+
 #include "ReturnCode.h"
 class compDroneSpiral;
+class DroSimSystem;
 // Inputs
 #include "vect2.h"
 
@@ -44,6 +46,8 @@ protected :
     vect2 startingPoint;
     double collisionRadius;
 
+    DroSimSystem* systemRef_;
+    
     // Required Interfaces
     ItfGeoDataInterface* rItfGeoDataSpiral;
     ItfManageSimInterface* rItfManageSimSpiral;
@@ -108,6 +112,7 @@ public:
     void setWindDirection(vect2 arg);
 
     vect2 getSpiralposition();
+    void setSystemRef(DroSimSystem* systemRef);
     ItfGeoDataInterface* getItfGeoDataInterface() { return rItfGeoDataSpiral; }
     void setrItfGeoDataSpiral(ItfGeoDataInterface* arItfGeoDataSpiral);
     ItfManageSimInterface* getItfManageSimInterface() { return rItfManageSimSpiral; }

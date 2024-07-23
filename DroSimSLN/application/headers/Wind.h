@@ -9,6 +9,7 @@
 #include "Clock.h"
 #include "ReturnCode.h"
 class compWind;
+class DroSimSystem;
 #include "vect2.h"
 
 // Start of user code  : Additional imports for Wind
@@ -26,6 +27,7 @@ protected :
     vect2 direction;
     double maxWindForce = 14.0;
 
+    DroSimSystem* systemRef_;
 
     // Start of user code  : Properties of Wind
     double damp = .98;
@@ -38,7 +40,10 @@ public :
     void end();
 
     ReturnCode doStep(int nStep);
+    void step();
 
+    void setSystemRef(DroSimSystem* systemRef);
+    
     double getWindForce();
     vect2 getWindDirection();
 

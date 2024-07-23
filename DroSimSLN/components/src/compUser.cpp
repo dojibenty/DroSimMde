@@ -76,3 +76,7 @@ long compUser::getDroneCount() {
 void compUser::setDroneCount(long arg) {
     appli->setDroneCount(arg);
 }
+
+void compUser::setSystemRef(DroSimSystem* systemRef) {
+    appli->setSystemRef(systemRef);
+}

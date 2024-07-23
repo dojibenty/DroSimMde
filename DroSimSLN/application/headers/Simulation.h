@@ -8,6 +8,7 @@
 #define Simulation_H_
 #include "ReturnCode.h"
 class compSimulation;
+class DroSimSystem;
 
 #include "ItfSimDataInterface.h"
 
@@ -22,6 +23,7 @@ protected :
     double expectedEndTime;
     double positionCorrection;
 
+    DroSimSystem* systemRef_;
 
     // Start of user code  : Properties of Simulation
     // End of user code
@@ -33,6 +35,8 @@ public :
     void end();
 
     ReturnCode doStep(int nStep);
+
+    void setSystemRef(DroSimSystem* systemRef);
 
     // +++++++++++++ Methods of the pItfSimData interface +++++++++++++
     double grabExpectedEndTime();

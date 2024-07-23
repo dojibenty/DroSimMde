@@ -8,10 +8,11 @@
 #ifndef compWind_H_
 #define compWind_H_
 
+
 #include "LeafComponent.h"
 #include "ReturnCode.h"
 class Wind;
-
+class DroSimSystem;
 #include "vect2.h"
 
 class compWind : public LeafComponent {
@@ -38,6 +39,7 @@ public :
 
     double getWindForce();
     vect2 getWindDirection();
+    void setSystemRef(DroSimSystem* systemRef);
     Wind* getAppli();
     
     // +++++++++++++ Access for force parameter +++++++++++++

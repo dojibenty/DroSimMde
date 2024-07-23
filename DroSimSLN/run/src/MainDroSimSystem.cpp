@@ -67,6 +67,8 @@ int main() {
             */
 
             simulatedScenario->setTime(0, 360000);
+
+            simulatedScenario->systemRef = root;
             
             for (const auto& inst : root->get_ADroneSweep())
                 simulatedScenario->droneSweepList.push_back(inst);

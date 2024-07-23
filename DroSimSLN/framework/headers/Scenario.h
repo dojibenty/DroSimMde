@@ -34,7 +34,8 @@ public :
 
     tuple<bool, double> startSimulation();
     void computeDoStepResults();
-    void postStepEvent();
+    void updateFromServer() const;
+    void postStepEvent(Clock* c);
     void checkDronesStatus();
     void checkForCollisions() const;
 
@@ -46,5 +47,7 @@ public :
 
     vector<ADroneSweep*> droneSweepList;
     vector<ADroneSpiral*> droneSpiralList;
+
+    DroSimSystem* systemRef;
 };
 #endif /* SCENARIO_H_ */

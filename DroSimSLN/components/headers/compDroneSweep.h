@@ -11,14 +11,13 @@
 #include "DroneSweep.h"
 #include "LeafComponent.h"
 class DroneSweep;
+class DroSimSystem;
 
 #include "vect2.h"
 
 #include "ItfGeoDataInterface.h"
 #include "ItfManageSimInterface.h"
 #include "ItfSimDataInterface.h"
-
-#include <unordered_map>
 
 class compDroneSweep : public LeafComponent {
 protected :
@@ -40,6 +39,7 @@ public :
     void end();
 
     vect2 getSweepposition();
+    void setSystemRef(DroSimSystem* systemRef);
     void setrItfGeoDataSweep(ItfGeoDataInterface* arItfGeoDataSweep);
     void setrItfManageSimSweep(ItfManageSimInterface* arItfManageSimSweep);
     void setrItfSimDataSweep(ItfSimDataInterface* arItfSimDataSweep);

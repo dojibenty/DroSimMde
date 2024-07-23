@@ -40,25 +40,32 @@ vector<ADroneSpiral*> DroSimSystem::get_ADroneSpiral() {
 }
 
 DroSimSystem::DroSimSystem() {
+    client_ = new Client("system");
+    
     // Simulation
     instASimulation = new ASimulation(1.0);
     leafComponents.push_back(instASimulation);
+    instASimulation->setSystemRef(this);
 
     // Wind
     instAWind = new AWind(1.0);
     leafComponents.push_back(instAWind);
+    instAWind->setSystemRef(this);
 
     // User
     instAUser = new AUser(1.0);
     leafComponents.push_back(instAUser);
+    instAUser->setSystemRef(this);
 
     // GeoZone
     instAGeoZone = new AGeoZone(1.0);
     leafComponents.push_back(instAGeoZone);
+    instAGeoZone->setSystemRef(this);
 
     // Objective
     instAObjective = new AObjective(1.0);
     leafComponents.push_back(instAObjective);
+    instAObjective->setSystemRef(this);
 
     instAUser->setrItfGeoDataUser(instAGeoZone->getAppli());
     instAObjective->setrItfGeoDataObj(instAGeoZone->getAppli());
@@ -115,6 +122,7 @@ void DroSimSystem::initialize() {
         inst->setrItfSimDataSweep(instASimulation->getAppli());
         instADroneSweep.emplace_back(inst);
         leafComponents.push_back(inst);
+        inst->setSystemRef(this);
     }
 
     // DroneSpiral
@@ -139,6 +147,7 @@ void DroSimSystem::initialize() {
         inst->setrItfSimDataSpiral(instASimulation->getAppli());
         instADroneSpiral.emplace_back(inst);
         leafComponents.push_back(inst);
+        inst->setSystemRef(this);
     }
     
     // Calcultated attributes
@@ -159,6 +168,7 @@ void DroSimSystem::initialize() {
 }
 
 void DroSimSystem::end() {
+    message_ = "";
     instASimulation->end();
     instAWind->end();
     instAUser->end();
@@ -248,4 +258,27 @@ vector<tuple<double,int,int>> DroSimSystem::getSlowConfigs() {
 
 tuple<double,int,int> DroSimSystem::getFastConfig() {
     return fastConfig;
+}
+
+void DroSimSystem::AddToMessage(const std::string& identifier) {
+    if (message_.length() != 0) message_ += ',';
+    message_ += identifier;
+}
+
+/*
+void DroSimSystem::AddToMessage(const std::string& identifier, const std::string& varType, const std::string& varName) {
+    if (message_.length() == 0) message_ += ',';
+    message_ += identifier;
+}
+*/
+
+int DroSimSystem::SendRequestMessage() const {
+    const int ok = client_->sendToServer(message_);
+    return ok;
+}
+
+void DroSimSystem::GetResponse() const {
+    const string res = client_->waitResponse();
+    if (res.length() == 0) return;
+    std::cout << res << '\n';
 }

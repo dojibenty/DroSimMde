@@ -90,3 +90,7 @@ vect2 compObjective::getPosition() {
 void compObjective::setPosition(vect2 arg) {
     appli->setPosition(arg);
 }
+
+void compObjective::setSystemRef(DroSimSystem* systemRef) {
+    appli->setSystemRef(systemRef);
+}

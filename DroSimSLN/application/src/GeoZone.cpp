@@ -7,6 +7,7 @@
 
 #include "GeoZone.h"
 #include "compGeoZone.h"
+#include "DroSimSystem.h"
 // Start of user code  : Additional imports for GeoZone
 // End of user code
 
@@ -25,6 +26,8 @@ GeoZone::~GeoZone() {
 }
 
 void GeoZone::initialize() {
+    // Communication
+    systemRef_->AddToMessage("GeoZone");
     // Start of user code  : Implementation of initialize method
     // End of user code
 }
@@ -37,6 +40,7 @@ void GeoZone::end() {
 
 ReturnCode GeoZone::doStep(int nStep) {
     // Start of user code  : Implementation of doStep method
+    
     return ReturnCode::proceed;
     // End of user code
 }
@@ -73,4 +77,8 @@ vect2 GeoZone::getBottomLeftPoint() {
 
 void GeoZone::setBottomLeftPoint(vect2 arg) {
     bottomLeftPoint = arg;
+}
+
+void GeoZone::setSystemRef(DroSimSystem* systemRef) {
+    systemRef_ = systemRef;
 }

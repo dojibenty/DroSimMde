@@ -13,11 +13,11 @@
 #include "AWind.h"
 
 class ADroneSweep : public compDroneSweep {
-protected :
+protected:
     AObjective* attAObjective;
     AWind* attAWind;
 
-public :
+public:
     ADroneSweep(double aFrequency, int ID);
     virtual ~ADroneSweep();
 

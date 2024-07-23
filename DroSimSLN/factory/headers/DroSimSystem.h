@@ -34,6 +34,9 @@ protected :
     vector<ADroneSweep*> instADroneSweep;
     vector<ADroneSpiral*> instADroneSpiral;
 
+    Client* client_;
+    string message_;
+
     int mutableNumberOfDroneSweep = 0;
     int mutableNumberOfDroneSpiral = 1;
 
@@ -72,6 +75,9 @@ public :
     bool continueCondition() const;
     vector<tuple<double, int, int>> getSlowConfigs();
     tuple<double, int, int> getFastConfig();
+    void AddToMessage(const std::string& identifier);
+    int SendRequestMessage() const;
+    void GetResponse() const;
     void mutateParameters(bool isGroupSuccessful, double averageTimeToFind);
 };
 #endif /*  DroSimSystem_H_ */

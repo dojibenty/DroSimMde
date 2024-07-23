@@ -8,12 +8,13 @@
 #ifndef compUser_H_
 #define compUser_H_
 
+
 #include "ItfGeoDataInterface.h"
 #include "LeafComponent.h"
 #include "ReturnCode.h"
 #include "wect2.h"
 class User;
-
+class DroSimSystem;
 
 #include "ItfManageSimInterface.h"
 
@@ -34,6 +35,7 @@ public :
     void initialize();
     void end();
 
+    void setSystemRef(DroSimSystem* systemRef);
     void setrItfGeoDataUser(ItfGeoDataInterface* arItfGeoDataUser);
 
     // +++++++++++++ Methods of the pItfManageSimulation interface +++++++++++++

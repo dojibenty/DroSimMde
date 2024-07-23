@@ -8,10 +8,11 @@
 #ifndef compSimulation_H_
 #define compSimulation_H_
 
+
 #include "LeafComponent.h"
 #include "ReturnCode.h"
 class Simulation;
-
+class DroSimSystem;
 
 #include "ItfSimDataInterface.h"
 
@@ -40,6 +41,7 @@ public :
 
     double grabPositionCorrection();
 
+    void setSystemRef(DroSimSystem* systemRef);
     Simulation* getAppli();
     // +++++++++++++ Access for expectedEndTime parameter +++++++++++++
     double getExpectedEndTime();

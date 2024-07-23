@@ -8,10 +8,11 @@
 #ifndef compObjective_H_
 #define compObjective_H_
 
+
 #include "LeafComponent.h"
 #include "ReturnCode.h"
 class Objective;
-
+class DroSimSystem;
 #include "vect2.h"
 
 #include "ItfGeoDataInterface.h"
@@ -37,6 +38,7 @@ public :
     void end();
 
     vect2 getObjposition();
+    void setSystemRef(DroSimSystem* systemRef);
     void setrItfGeoDataObj(ItfGeoDataInterface* arItfGeoDataObj);
     Objective* getAppli();
 

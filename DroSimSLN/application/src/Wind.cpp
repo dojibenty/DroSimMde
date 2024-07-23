@@ -7,6 +7,7 @@
 
 #include "Wind.h"
 #include "User.h"
+#include "DroSimSystem.h"
 // Start of user code  : Additional imports for Wind
 // End of user code
 
@@ -25,6 +26,8 @@ Wind::~Wind() {
 }
 
 void Wind::initialize() {
+    // Communication
+    systemRef_->AddToMessage("Wind");
     // Start of user code  : Implementation of initialize method
     windForce = force;
     windDirection = direction;
@@ -39,6 +42,13 @@ void Wind::end() {
 
 ReturnCode Wind::doStep(int nStep) {
     // Start of user code  : Implementation of doStep method
+    //step();
+    
+    return ReturnCode::proceed;
+    // End of user code
+}
+
+void Wind::step() {
     windForce += User::roundToDecimal(User::randRange(-2, 2),2);
     if (windForce < 0) windForce = 0;
     if (windForce > maxWindForce) windForce = maxWindForce;
@@ -47,8 +57,6 @@ ReturnCode Wind::doStep(int nStep) {
     const double dirModY = User::roundToDecimal(User::randRange(-1, 1)/10,2);
     windDirection += vect2(dirModX,dirModY);
     windDirection.normalize();
-    return ReturnCode::proceed;
-    // End of user code
 }
 
 // Start of user code  : Additional methods
@@ -79,4 +87,8 @@ vect2 Wind::getDirection() {
 
 void Wind::setDirection(vect2 arg) {
     direction = arg;
+}
+
+void Wind::setSystemRef(DroSimSystem* systemRef) {
+    systemRef_ = systemRef;
 }

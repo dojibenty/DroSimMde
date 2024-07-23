@@ -6,8 +6,10 @@
  */
 #ifndef DroneSweep_H_
 #define DroneSweep_H_
+
 #include "ReturnCode.h"
 class compDroneSweep;
+class DroSimSystem;
 // Inputs
 #include "vect2.h"
 
@@ -38,6 +40,8 @@ protected :
     double batteryCapacity;
     vect2 startingPoint;
     double collisionRadius;
+
+    DroSimSystem* systemRef_;
 
     // Required Interfaces
     ItfGeoDataInterface* rItfGeoDataSweep;
@@ -102,6 +106,7 @@ public:
     void setWindDirection(vect2 arg);
 
     vect2 getSweepposition();
+    void setSystemRef(DroSimSystem* systemRef);
     ItfGeoDataInterface* getItfGeoDataInterface() { return rItfGeoDataSweep; }
     void setrItfGeoDataSweep(ItfGeoDataInterface* arItfGeoDataSweep);
     ItfManageSimInterface* getItfManageSimInterface() { return rItfManageSimSweep; }

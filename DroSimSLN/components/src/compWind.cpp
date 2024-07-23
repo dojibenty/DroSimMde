@@ -97,3 +97,7 @@ vect2 compWind::getDirection() {
 void compWind::setDirection(vect2 arg) {
     appli->setDirection(arg);
 }
+
+void compWind::setSystemRef(DroSimSystem* systemRef) {
+    appli->setSystemRef(systemRef);
+}

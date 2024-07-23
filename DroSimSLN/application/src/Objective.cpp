@@ -9,6 +9,7 @@
 #include "compObjective.h"
 // Start of user code  : Additional imports for Objective
 #include "User.h"
+#include "DroSimSystem.h"
 // End of user code
 
 
@@ -35,6 +36,9 @@ void Objective::initialize() {
 
     objposition = position = vect2(posX, posY);
     YLimit = envLimits.getY();
+
+    // Communication
+    systemRef_->AddToMessage("Objective");
     // End of user code
 }
 
@@ -48,15 +52,19 @@ ReturnCode Objective::doStep(int nStep) {
     // Start of user code  : Implementation of doStep method
     if (speedConstraint == 0.0) return ReturnCode::proceed;
 
+    //step();
+
+    return ReturnCode::proceed;
+    // End of user code
+}
+
+void Objective::step() {
     vect2 nextPosition = position + direction * speedConstraint;
 
     if (nextPosition.getY() >= 0 && nextPosition.getY() <= YLimit) position = nextPosition;
     else direction.switchSignY();
 
     objposition = position;
-
-    return ReturnCode::proceed;
-    // End of user code
 }
 
 
@@ -88,4 +96,8 @@ vect2 Objective::getPosition() {
 
 void Objective::setPosition(vect2 arg) {
     position = arg;
+}
+
+void Objective::setSystemRef(DroSimSystem* systemRef) {
+    systemRef_ = systemRef;
 }

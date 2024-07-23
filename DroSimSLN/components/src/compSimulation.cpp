@@ -80,3 +80,7 @@ double compSimulation::getPositionCorrection() {
 void compSimulation::setPositionCorrection(double arg) {
     appli->setPositionCorrection(arg);
 }
+
+void compSimulation::setSystemRef(DroSimSystem* systemRef) {
+    appli->setSystemRef(systemRef);
+}

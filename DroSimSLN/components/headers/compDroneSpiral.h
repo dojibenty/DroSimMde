@@ -12,6 +12,7 @@
 #include "LeafComponent.h"
 #include "ReturnCode.h"
 class DroneSpiral;
+class DroSimSystem;
 
 #include "vect2.h"
 
@@ -47,6 +48,7 @@ public :
     vect2 getSpiralposition();
     int getID();
     vect2& getPosition();
+    void setSystemRef(DroSimSystem* systemRef);
     void setrItfGeoDataSpiral(ItfGeoDataInterface* arItfGeoDataSpiral);
     void setrItfManageSimSpiral(ItfManageSimInterface* arItfManageSimSpiral);
     void setrItfSimDataSpiral(ItfSimDataInterface* arItfSimDataSpiral);

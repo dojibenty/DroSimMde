@@ -10,7 +10,7 @@
 #include "ReturnCode.h"
 // Start of user code  : Additional imports for DroneSweep
 #include <sstream>
-
+#include "DroSimSystem.h"
 #include "User.h"
 // End of user code
 
@@ -59,6 +59,10 @@ void DroneSweep::initialize() {
     batConsoFactB = 0.4;
     batteryConsumption = CONSUMPTION(speed);
     cpt = 0;
+
+    // Communication
+    systemRef_->AddToMessage("DroneSweep" + to_string(ID));
+    
     //printRecap();
     // End of user code
 }
@@ -74,7 +78,7 @@ ReturnCode DroneSweep::doStep(int nStep) {
     cpt++;
     
     // Execute step
-    step(objposition,windForce,windDirection,&sweepposition);
+    //step(objposition,windForce,windDirection,&sweepposition);
     
     // Return codes
     using enum ReturnCode;
@@ -284,4 +288,8 @@ double DroneSweep::getCollisionRadius() {
 
 void DroneSweep::setCollisionRadius(double arg) {
     collisionRadius = arg;
+}
+
+void DroneSweep::setSystemRef(DroSimSystem* systemRef) {
+    systemRef_ = systemRef;
 }

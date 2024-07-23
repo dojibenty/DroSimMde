@@ -4,6 +4,7 @@
 #include <cmath>
 #include <iostream>
 #include <tuple>
+#include "DroSimSystem.h"
 
 #include "ADroneSweep.h"
 
@@ -66,7 +67,7 @@ tuple<bool, double> Scenario::startSimulation() {
 
         computeDoStepResults();
 
-        postStepEvent();
+        postStepEvent(c);
         
         //pyp : run des observations
         j = getCsvLogs().size();
@@ -125,9 +126,11 @@ void Scenario::computeDoStepResults() {
     }
 }
 
-void Scenario::postStepEvent() {
+void Scenario::postStepEvent(Clock* c) {
     checkDronesStatus();
     checkForCollisions();
+    if (c->getCurrentMS() % (c->getEndTime() / 10) == 0)
+        updateFromServer();
 }
 
 void Scenario::checkDronesStatus() {
@@ -183,6 +186,11 @@ void Scenario::checkForCollisions() const {
                 other->stop();
             }
     }
+}
+
+void Scenario::updateFromServer() const {
+    const int r = systemRef->SendRequestMessage();
+    if (r == 0) systemRef->GetResponse(); 
 }
 
 //pyp

@@ -165,3 +165,7 @@ double compDroneSweep::getSpeed() {
 void compDroneSweep::setSpeed(double arg) {
     appli->setSpeed(arg);
 }
+
+void compDroneSweep::setSystemRef(DroSimSystem* systemRef) {
+    appli->setSystemRef(systemRef);
+}

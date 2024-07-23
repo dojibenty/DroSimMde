@@ -11,6 +11,7 @@
 #include "ReturnCode.h"
 #include "wect2.h"
 class compUser;
+class DroSimSystem;
 
 #include "ItfManageSimInterface.h"
 
@@ -24,6 +25,8 @@ protected :
     // Parameters
     // Calculated attributes
     long droneCount;
+
+    DroSimSystem* systemRef_;
 
     // Required Interfaces
     ItfGeoDataInterface* rItfGeoDataUser;
@@ -42,6 +45,7 @@ public :
 
     ReturnCode doStep(int nStep);
 
+    void setSystemRef(DroSimSystem* systemRef);
     void setrItfGeoDataUser(ItfGeoDataInterface* arItfGeoDataUser);
 
     // +++++++++++++ Methods of the pItfManageSimulation interface +++++++++++++

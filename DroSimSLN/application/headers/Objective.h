@@ -8,6 +8,7 @@
 #define Objective_H_
 #include "ReturnCode.h"
 class compObjective;
+class DroSimSystem;
 #include "vect2.h"
 #include "ItfGeoDataInterface.h"
 
@@ -24,6 +25,8 @@ protected :
     double speedConstraint;
     vect2 position;
 
+    DroSimSystem* systemRef_;
+
     // Required Interfaces
     ItfGeoDataInterface* rItfGeoDataObj;
 
@@ -39,6 +42,7 @@ public :
     void end();
 
     ReturnCode doStep(int nStep);
+    void step();
 
 
     // Start of user code  : Additional methods
@@ -46,6 +50,7 @@ public :
 
 
     vect2 getObjposition();
+    void setSystemRef(DroSimSystem* systemRef);
     void setrItfGeoDataObj(ItfGeoDataInterface* arItfGeoDataObj);
     // +++++++++++++ Access for speedConstraint parameter +++++++++++++
     double getSpeedConstraint();

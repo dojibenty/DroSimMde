@@ -4,6 +4,7 @@
 
 #include <string>
 
+#include "Client.h"
 #include "ObjectCode.h"
 
 class LeafComponent : public TimeableObject {

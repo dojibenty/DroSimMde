@@ -11,6 +11,7 @@
 #include <iostream>
 #include "User.h"
 #define PI 3.14159265358979323846
+#include "DroSimSystem.h"
 // End of user code
 
 
@@ -52,6 +53,9 @@ void DroneSpiral::initialize() {
     batConsoFactA = 50;
     batConsoFactB = 0.4;
     batteryConsumption = CONSUMPTION(speed);
+
+    // Communication
+    systemRef_->AddToMessage("DroneSpiral" + to_string(ID));
     // End of user code
 }
 
@@ -68,7 +72,7 @@ ReturnCode DroneSpiral::doStep(int nStep) {
     // Inputs
 
     // Execute step
-    step(objposition,windForce,windDirection);
+    //step(objposition,windForce,windDirection);
 
     // Outputs
     spiralposition = position;
@@ -349,3 +353,8 @@ double DroneSpiral::getCollisionRadius() {
 void DroneSpiral::setCollisionRadius(double arg) {
     collisionRadius = arg;
 }
+
+void DroneSpiral::setSystemRef(DroSimSystem* systemRef) {
+    systemRef_ = systemRef;
+}
+
