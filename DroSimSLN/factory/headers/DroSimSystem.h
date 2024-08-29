@@ -19,12 +19,25 @@
 #include "AObjective.h"
 #include "ADroneSweep.h"
 #include "ADroneSpiral.h"
+#include "DroSimSystem.h"
+#include "DroSimSystem.h"
+#include "DroSimSystem.h"
+#include "DroSimSystem.h"
+#include "DroSimSystem.h"
+#include "DroSimSystem.h"
+#include "DroSimSystem.h"
+#include "DroSimSystem.h"
+#include "nlohmann/json.hpp"
+
+using json = nlohmann::json;
 // Start of user code  : Additional imports for DroSimSystem
 #include <tuple>
 // End of user code
 
 class DroSimSystem : public RootComponent {
     // generated pointers on child leafComponents
+    int cpt;
+    
 protected :
     ASimulation* instASimulation;
     AWind* instAWind;
@@ -35,10 +48,12 @@ protected :
     vector<ADroneSpiral*> instADroneSpiral;
 
     Client* client_;
-    string message_;
+    json requestMessage_;
+    json instructionMessage_;
+    map<string,LeafComponent*> requestingComponents_;
 
-    int mutableNumberOfDroneSweep = 0;
-    int mutableNumberOfDroneSpiral = 1;
+    int mutableNumberOfDroneSweep = 1;
+    int mutableNumberOfDroneSpiral = 0;
 
     double mutableSpeed;
     
@@ -69,15 +84,25 @@ public :
     vector<ADroneSweep*> get_ADroneSweep();
     vector<ADroneSpiral*> get_ADroneSpiral();
 
+    void distantInitialize();
     void initialize();
 
     void end();
     bool continueCondition() const;
     vector<tuple<double, int, int>> getSlowConfigs();
     tuple<double, int, int> getFastConfig();
-    void AddToMessage(const std::string& identifier);
-    int SendRequestMessage() const;
-    void GetResponse() const;
+    void AddRequest(const std::string& identifier, const std::string& variable);
+    void StopSim();
+    json PrepareGlobalMessage();
+    void AddStopInstructionsToMessage(json& message, const vector<string>& components);
+    bool CompareJsonField(const json& field, const string& str);
+    string GetFieldValue(const json& field);
+    int SendMessageToServer(const json& message) const;
+    json GetResponse();
+    json getRequestMessage() { return requestMessage_; }
+    void UpdateComponents(const json& response);
+    void UpdateCustomProperties_Local(const json& other);
+    void UpdateCustomProperties_Global(const json& other);
     void mutateParameters(bool isGroupSuccessful, double averageTimeToFind);
 };
 #endif /*  DroSimSystem_H_ */

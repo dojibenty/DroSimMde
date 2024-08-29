@@ -27,7 +27,6 @@ Simulation::~Simulation() {
 
 void Simulation::initialize() {
     // Communication
-    systemRef_->AddToMessage("Simulation");
     // Start of user code  : Implementation of initialize method
 
     // End of user code

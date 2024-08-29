@@ -94,6 +94,15 @@ DroneSweep* compDroneSweep::getAppli() {
     return appli;
 }
 
+void compDroneSweep::getRequestResponse(const std::string& variable, const std::string& value) {
+    appli->getRequestResponse(variable,value);
+}
+
+void compDroneSweep::getRequestResponseArray(const std::string& variable, const std::vector<std::string>& values) {
+    appli->getRequestResponseArray(variable,values);
+}
+
+
 // +++++++++++++ Access for minSpeed parameter +++++++++++++
 double compDroneSweep::getMinSpeed() {
     return appli->getMinSpeed();
@@ -164,6 +173,10 @@ double compDroneSweep::getSpeed() {
 
 void compDroneSweep::setSpeed(double arg) {
     appli->setSpeed(arg);
+}
+
+string compDroneSweep::getIdentifier() {
+    return appli->getIdentifier();
 }
 
 void compDroneSweep::setSystemRef(DroSimSystem* systemRef) {

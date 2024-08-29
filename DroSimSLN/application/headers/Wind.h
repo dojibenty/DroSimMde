@@ -41,6 +41,8 @@ public :
 
     ReturnCode doStep(int nStep);
     void step();
+    void getRequestResponse(const std::string& variable, const std::string& value);
+    void getRequestResponseArray(const std::string& variable, const std::vector<std::string>& values);
 
     void setSystemRef(DroSimSystem* systemRef);
     

@@ -3,6 +3,7 @@
 #include "TimeableObject.h"
 
 #include <string>
+#include <vector>
 
 #include "Client.h"
 #include "ObjectCode.h"
@@ -25,6 +26,8 @@ public :
     void setDelayMax(int delayMax);
 
     ObjectCode getObjectCode() const;
+    virtual void getRequestResponse(const std::string& variable, const std::string& strvalue);
+    virtual void getRequestResponseArray(const std::string& variable, const std::vector<std::string>& strvalues);
 
     bool start();
 

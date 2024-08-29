@@ -96,6 +96,7 @@ tuple<bool, double> Scenario::startSimulation() {
 
         if (simStatus != -1) break;
     }
+    systemRef->StopSim();
     return make_tuple(simStatus == 0, c->getCurrentMS());
 }
 
@@ -189,8 +190,8 @@ void Scenario::checkForCollisions() const {
 }
 
 void Scenario::updateFromServer() const {
-    const int r = systemRef->SendRequestMessage();
-    if (r == 0) systemRef->GetResponse(); 
+    const int r = systemRef->SendMessageToServer(systemRef->getRequestMessage());
+    if (r == 0) systemRef->GetResponse();
 }
 
 //pyp

@@ -27,7 +27,6 @@ User::~User() {
 
 void User::initialize() {
     // Communication
-    systemRef_->AddToMessage("User");
     // Start of user code  : Implementation of initialize method
     zones = createZones();
     // End of user code

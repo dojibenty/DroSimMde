@@ -51,6 +51,7 @@ protected :
     // Start of user code  : Properties of DroneSweep
 private:
     int ID;
+    string identifier;
     double speed;
     vect2 position;
     vect2 direction;
@@ -93,6 +94,11 @@ private:
 
 public:
     void printRecap();
+
+    void getRequestResponse(const std::string& variable, const std::string& value);
+    void getRequestResponseArray(const std::string& variable, const std::vector<std::string>& values);
+
+    string getIdentifier() { return identifier; }
     double getSpeed() { return speed; }
     void setSpeed(double arg) { speed = arg; }
     int getID() { return ID; }

@@ -41,7 +41,9 @@ public :
     vect2 getWindDirection();
     void setSystemRef(DroSimSystem* systemRef);
     Wind* getAppli();
-    
+    void getRequestResponse(const std::string& variable, const std::string& value) override;
+    void getRequestResponseArray(const std::string& variable, const std::vector<std::string>& values) override;
+
     // +++++++++++++ Access for force parameter +++++++++++++
     double getForce();
 

@@ -55,7 +55,6 @@ void DroneSpiral::initialize() {
     batteryConsumption = CONSUMPTION(speed);
 
     // Communication
-    systemRef_->AddToMessage("DroneSpiral" + to_string(ID));
     // End of user code
 }
 

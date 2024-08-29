@@ -27,7 +27,6 @@ GeoZone::~GeoZone() {
 
 void GeoZone::initialize() {
     // Communication
-    systemRef_->AddToMessage("GeoZone");
     // Start of user code  : Implementation of initialize method
     // End of user code
 }

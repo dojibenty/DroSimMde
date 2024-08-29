@@ -38,7 +38,6 @@ void Objective::initialize() {
     YLimit = envLimits.getY();
 
     // Communication
-    systemRef_->AddToMessage("Objective");
     // End of user code
 }
 

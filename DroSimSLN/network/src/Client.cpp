@@ -3,6 +3,10 @@
 #include <string>
 #include <cstring>
 
+#define ADDRESS "127.0.0.1"
+#define PORT 7777
+#define MESSAGE_MAX_SIZE 2048
+
 Client::Client(const std::string& name) {
     name_ = name;
     
@@ -22,8 +26,8 @@ Client::Client(const std::string& name) {
     }
     
     clientService_.sin_family = AF_INET;
-    inet_pton(AF_INET, "127.0.0.1", &clientService_.sin_addr);
-    clientService_.sin_port = htons(7777);
+    inet_pton(AF_INET, ADDRESS, &clientService_.sin_addr);
+    clientService_.sin_port = htons(PORT);
 
     const int iResult = connect(connectSocket_, (SOCKADDR*)&clientService_, sizeof(clientService_));
     if (iResult == SOCKET_ERROR) {
@@ -56,8 +60,8 @@ int Client::sendToServer(const std::string& message) const {
 }
 
 std::string Client::waitResponse() const {
-    char recvbuf[512];
-    const int iResult = recv(connectSocket_, recvbuf, 512, 0);
+    char recvbuf[MESSAGE_MAX_SIZE];
+    const int iResult = recv(connectSocket_, recvbuf, MESSAGE_MAX_SIZE, 0);
     if (iResult > 0) {
         const auto res = std::string(recvbuf, iResult);
         log(std::cout,"Got response : " + res);

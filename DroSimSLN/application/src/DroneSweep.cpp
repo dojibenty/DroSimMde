@@ -39,10 +39,11 @@ void DroneSweep::initialize() {
     isInZone = false;
     // Start of user code  : Implementation of initialize method
     assignedZone = rItfManageSimSweep->grabAssignedZone(ID);
-    const auto rescaledZone = wect2(vect2(assignedZone.getV1().getX() - visionRadius, assignedZone.getV1().getY() + visionRadius),
-                              vect2(assignedZone.getV2().getX() + visionRadius, assignedZone.getV2().getY() - visionRadius));
+    const auto rescaledZone = wect2(
+        vect2(assignedZone.getV1().getX() - visionRadius, assignedZone.getV1().getY() + visionRadius),
+        vect2(assignedZone.getV2().getX() + visionRadius, assignedZone.getV2().getY() - visionRadius));
     assignedZone = rescaledZone;
-    
+
     leftYBound = assignedZone.getV1().getY();
     sweepLength = assignedZone.getV2().getY() - leftYBound;
 
@@ -61,8 +62,13 @@ void DroneSweep::initialize() {
     cpt = 0;
 
     // Communication
-    systemRef_->AddToMessage("DroneSweep" + to_string(ID));
-    
+    identifier = "dronesweep" + to_string(ID);
+
+    systemRef_->AddRequest(identifier, "speed");
+    systemRef_->AddRequest(identifier, "position");
+
+    systemRef_->AddRequest(identifier, "collision");
+
     //printRecap();
     // End of user code
 }
@@ -76,28 +82,29 @@ void DroneSweep::end() {
 ReturnCode DroneSweep::doStep(int nStep) {
     // Start of user code  : Implementation of doStep method
     cpt++;
-    
+
     // Execute step
     //step(objposition,windForce,windDirection,&sweepposition);
-    
+
     // Return codes
     using enum ReturnCode;
-    
+
     // Is objective found
-    if (condObjectiveFound(position,objposition,visionRadius))
+    if (condObjectiveFound(position, objposition, visionRadius))
         return objective_found;
 
     // Is battery low
     if (condLowBattery(battery))
         return low_battery;
-    
+
     return proceed;
     // End of user code
 }
 
-void DroneSweep::step(const vect2& objposition, const double windForce, const vect2& windDirection, vect2* sweepposition) {
+void DroneSweep::step(const vect2& objposition, const double windForce, const vect2& windDirection,
+                      vect2* sweepposition) {
     move(sweepposition);
-    consumeBattery(windForce,windDirection);
+    consumeBattery(windForce, windDirection);
 }
 
 void DroneSweep::move(vect2* sweepposition) {
@@ -106,9 +113,9 @@ void DroneSweep::move(vect2* sweepposition) {
             position = zoneStartPoint;
             isInZone = true;
         }
-    
+
     position = setNextPosition();
-    *sweepposition = vect2(position.getX(),position.getY());
+    *sweepposition = vect2(position.getX(), position.getY());
 }
 
 void DroneSweep::consumeBattery(const double windForce, const vect2& windDirection) {
@@ -139,6 +146,22 @@ bool DroneSweep::condLowBattery(double battery) {
         return true;
     }
     return false;
+}
+
+void DroneSweep::getRequestResponse(const std::string& variable, const std::string& value) {
+    if (variable == "speed")
+        cout << "dronesweep" + to_string(ID) << " : ma variable speed a recu la valeur " << value << '\n';
+    else
+        cout << "dronesweep" + to_string(ID) << " : la variable " << variable << "(" << value << ") n'est pas geree" << '\n';
+}
+
+void DroneSweep::getRequestResponseArray(const std::string& variable, const std::vector<std::string>& values) {
+    if (variable == "position")
+        cout << "dronesweep" + to_string(ID) << " : ma variable position a recu une valeur" << '\n';
+    else if (variable == "direction")
+        cout << "dronesweep" + to_string(ID) << " : ma variable direction a recu une valeur" << '\n';
+    else
+        cout << "dronesweep" + to_string(ID) << " : la variable " << variable << " n'est pas geree" << '\n';
 }
 
 

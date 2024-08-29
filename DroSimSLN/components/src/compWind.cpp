@@ -80,6 +80,14 @@ Wind* compWind::getAppli() {
     return appli;
 }
 
+void compWind::getRequestResponse(const std::string& variable, const std::string& value) {
+    appli->getRequestResponse(variable,value);
+}
+
+void compWind::getRequestResponseArray(const std::string& variable, const std::vector<std::string>& values) {
+    appli->getRequestResponseArray(variable, values);
+}
+
 // +++++++++++++ Access for force parameter +++++++++++++
 double compWind::getForce() {
     return appli->getForce();

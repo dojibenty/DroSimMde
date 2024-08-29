@@ -45,6 +45,9 @@ public :
     void setrItfSimDataSweep(ItfSimDataInterface* arItfSimDataSweep);
     DroneSweep* getAppli();
 
+    void getRequestResponse(const std::string& variable, const std::string& value) override;
+    void getRequestResponseArray(const std::string& variable, const std::vector<std::string>& values) override;
+
     int getID();
     vect2& getPosition();
     
@@ -80,5 +83,8 @@ public :
     double getSpeed();
     
     void setSpeed(double arg);
+    // +++++++++++++ Access for speed parameter +++++++++++++
+    string getIdentifier();
+    
 };
 #endif /* compDroneSweep_H_ */

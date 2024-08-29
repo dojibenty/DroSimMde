@@ -1,5 +1,7 @@
 #include "LeafComponent.h"
 
+#include <vector>
+
 LeafComponent::LeafComponent(double aFrequency) : TimeableObject(aFrequency) {
     delayMax = 0;
     isActive = false;
@@ -24,6 +26,9 @@ void LeafComponent::setDelayMax(int dm) {
 ObjectCode LeafComponent::getObjectCode() const {
     return objectcode_;
 }
+
+void LeafComponent::getRequestResponse(const std::string& variable, const std::string& strvalue) {}
+void LeafComponent::getRequestResponseArray(const std::string& variable, const std::vector<std::string>& strvalues) {}
 
 bool LeafComponent::start() {
     isActive = true;

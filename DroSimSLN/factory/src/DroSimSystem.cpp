@@ -6,10 +6,15 @@
  * Author: pyp
  */
 #include "DroSimSystem.h"
+#include "DroSimSystem.h"
+#include "DroSimSystem.h"
 #include "Simulation.h"
 #include "Wind.h"
 #include "User.h"
 #include "GeoZone.h"
+#include "nlohmann/json.hpp"
+
+using json = nlohmann::json;
 
 ASimulation* DroSimSystem::get_ASimulation() {
     return instASimulation;
@@ -41,7 +46,13 @@ vector<ADroneSpiral*> DroSimSystem::get_ADroneSpiral() {
 
 DroSimSystem::DroSimSystem() {
     client_ = new Client("system");
-    
+    requestMessage_["type"] = "request";
+    requestMessage_["content"] = json::array();
+    instructionMessage_["type"] = "instruction";
+    instructionMessage_["content"] = json::array();
+
+    cpt = 0;
+
     // Simulation
     instASimulation = new ASimulation(1.0);
     leafComponents.push_back(instASimulation);
@@ -83,14 +94,86 @@ DroSimSystem::DroSimSystem() {
 
 DroSimSystem::~DroSimSystem() {}
 
+json newItem(const string& objectName) {
+    json item;
+    item["object"] = objectName;
+    item["attributes"] = json::array();
+    return item;
+}
+
+json newAttribute(const string& name, const string& value) {
+    json attrItem;
+    attrItem[name] = value;
+    return attrItem;
+}
+
+json newAttributeArray(const string& name, const vector<string>& values) {
+    json attrItem;
+    attrItem[name] = json::array();
+    for (const auto& value : values) attrItem[name].push_back(value);
+    return attrItem;
+}
+
+void DroSimSystem::distantInitialize() {
+    json item;
+
+    // Current (Wind)
+    item = newItem("current");
+    item["attributes"].push_back(newAttribute("force", "-5.0"));
+    item["attributes"].push_back(newAttributeArray("direction", {"0.5", "0.5", "0.0"}));
+    instructionMessage_["content"].push_back(item);
+    requestingComponents_["current"] = instAWind;
+
+    int idx = 0;
+
+    // DroneSweep
+    for (int i = 0; i < mutableNumberOfDroneSweep; i++, idx++) {
+        const auto inst = new ADroneSweep(10.0, idx);
+        inst->setVisionRadius(1000.0);
+        inst->setSweepHeight(2000.0);
+        inst->setBatteryCapacity(200.0);
+        inst->setCollisionRadius(5.0);
+        inst->setStartingPoint(vect2(0.0, 0.0));
+        inst->setAObjective(instAObjective);
+        inst->setAWind(instAWind);
+        inst->setrItfManageSimSweep(instAUser->getAppli());
+        inst->setrItfGeoDataSweep(instAGeoZone->getAppli());
+        inst->setrItfSimDataSweep(instASimulation->getAppli());
+        instADroneSweep.emplace_back(inst);
+        leafComponents.push_back(inst);
+        inst->setSystemRef(this);
+
+        item = newItem("dronesweep" + to_string(idx));
+        item["attributes"].push_back(newAttribute("min_speed", "10.0"));
+        item["attributes"].push_back(newAttribute("max_speed", "30.0"));
+        item["attributes"].push_back(newAttribute("vision_radius", "1000.0"));
+        item["attributes"].push_back(newAttribute("sweep_height", "2000.0"));
+        item["attributes"].push_back(newAttribute("battery_cap", "200.0"));
+        item["attributes"].push_back(newAttribute("collision_radius", "5.0"));
+        item["attributes"].push_back(newAttributeArray("starting_point", {"0.0", "0.0"}));
+        item["attributes"].push_back(newAttribute("speed", "50.0"));
+        instructionMessage_["content"].push_back(item);
+        requestingComponents_["dronesweep" + to_string(idx)] = inst;
+    }
+
+    const int err = SendMessageToServer(instructionMessage_);
+    if (err) return;
+    const json response = GetResponse();
+    auto status = response["status"].template get<string>();
+    if (status == "fail") StopSim();
+    else UpdateComponents(response);
+}
+
 void DroSimSystem::initialize() {
+    distantInitialize();
+
     // Simulation
     instASimulation->setExpectedEndTime(300000.0);
     instASimulation->setPositionCorrection(1.0);
 
     // Wind
-    instAWind->setForce(0.0);
-    instAWind->setDirection(vect2(0.5, 0.5));
+    //instAWind->setForce(0.0);
+    //instAWind->setDirection(vect2(0.5, 0.5));
 
     // User
 
@@ -103,10 +186,11 @@ void DroSimSystem::initialize() {
     instAObjective->setPosition(vect2(0, 0));
 
     int idx = 0;
-    
+
     // DroneSweep
+    /*
     for (int i = 0; i < mutableNumberOfDroneSweep; i++, idx++) {
-        const auto inst = new ADroneSweep(10.0,idx);
+        const auto inst = new ADroneSweep(10.0, idx);
         inst->setMinSpeed(10.0);
         inst->setMaxSpeed(30.0);
         inst->setVisionRadius(1000.0);
@@ -124,10 +208,11 @@ void DroSimSystem::initialize() {
         leafComponents.push_back(inst);
         inst->setSystemRef(this);
     }
+    */
 
     // DroneSpiral
     for (int i = 0; i < mutableNumberOfDroneSpiral; i++, idx++) {
-        const auto inst = new ADroneSpiral(10.0,idx);
+        const auto inst = new ADroneSpiral(10.0, idx);
         inst->setMinSpeed(10.0);
         inst->setMaxSpeed(30.0);
         inst->setVisionRadius(1000.0);
@@ -149,7 +234,7 @@ void DroSimSystem::initialize() {
         leafComponents.push_back(inst);
         inst->setSystemRef(this);
     }
-    
+
     // Calcultated attributes
     instAUser->setDroneCount(mutableNumberOfDroneSweep + mutableNumberOfDroneSpiral);
 
@@ -168,7 +253,8 @@ void DroSimSystem::initialize() {
 }
 
 void DroSimSystem::end() {
-    message_ = "";
+    requestMessage_ = "";
+    instructionMessage_ = "";
     instASimulation->end();
     instAWind->end();
     instAUser->end();
@@ -195,7 +281,7 @@ void DroSimSystem::mutateParameters(const bool isGroupSuccessful, const double a
     const double cSpeed = mutableSpeed;
     const int cNumberOfDroneSweep = mutableNumberOfDroneSweep;
     const int cNumberOfDroneSpiral = mutableNumberOfDroneSpiral;
-    
+
     if (!isCurveFound || isGroupSuccessful) {
         // We overwrite the saved config as we don't need it right now
         pSpeed = cSpeed;
@@ -241,44 +327,143 @@ void DroSimSystem::mutateParameters(const bool isGroupSuccessful, const double a
             mutableSpeed = minSpeed;
         }
     }
-    
+
     cout << "Trying with " << mutableNumberOfDroneSweep
-    << " drone" << (mutableNumberOfDroneSweep > 1 ? "s" : "") << " making sweeps and "
-    << mutableNumberOfDroneSpiral << " drone" << (mutableNumberOfDroneSpiral > 1 ? "s" : "") << " making spirals" 
-    << " at " << mutableSpeed << " m/s\n";
+        << " drone" << (mutableNumberOfDroneSweep > 1 ? "s" : "") << " making sweeps and "
+        << mutableNumberOfDroneSpiral << " drone" << (mutableNumberOfDroneSpiral > 1 ? "s" : "") << " making spirals"
+        << " at " << mutableSpeed << " m/s\n";
 }
 
 bool DroSimSystem::continueCondition() const {
     return mutableNumberOfDroneSweep + mutableNumberOfDroneSpiral <= maxNumberOfDrones;
 }
 
-vector<tuple<double,int,int>> DroSimSystem::getSlowConfigs() {
+vector<tuple<double, int, int>> DroSimSystem::getSlowConfigs() {
     return slowConfigs;
 }
 
-tuple<double,int,int> DroSimSystem::getFastConfig() {
+tuple<double, int, int> DroSimSystem::getFastConfig() {
     return fastConfig;
 }
 
-void DroSimSystem::AddToMessage(const std::string& identifier) {
-    if (message_.length() != 0) message_ += ',';
-    message_ += identifier;
+void DroSimSystem::AddRequest(const string& identifier, const string& variable) {
+    for (auto& item : requestMessage_["content"])
+        if (item["object"] == identifier) {
+            item["attributes"].push_back(variable);
+            return;
+        }
+
+    json newItem;
+    newItem["object"] = identifier;
+    newItem["attributes"] = {variable};
+    requestMessage_["content"].push_back(newItem);
 }
 
-/*
-void DroSimSystem::AddToMessage(const std::string& identifier, const std::string& varType, const std::string& varName) {
-    if (message_.length() == 0) message_ += ',';
-    message_ += identifier;
+void DroSimSystem::StopSim() {
+    json message = PrepareGlobalMessage();
+    AddStopInstructionsToMessage(message,{"sim"});
+    const int err = SendMessageToServer(message);
+    if (err) exit(err);
+    const json response = GetResponse();
+    if (CompareJsonField(response["status"],"fail")) exit(1);
+    end();
 }
-*/
 
-int DroSimSystem::SendRequestMessage() const {
-    const int ok = client_->sendToServer(message_);
+json DroSimSystem::PrepareGlobalMessage() {
+    json message;
+    message["type"] = "global";
+    message["content"] = json::array();
+    return message;
+}
+
+void DroSimSystem::AddStopInstructionsToMessage(json& message, const vector<string>& components) {
+    json stopItem;
+    stopItem["stop"] = components;
+    message["content"].push_back(stopItem);
+}
+
+bool DroSimSystem::CompareJsonField(const json& field, const string& str) {
+    const auto fieldvalue = GetFieldValue(field);
+    return fieldvalue == str;
+}
+
+string DroSimSystem::GetFieldValue(const json& field) {
+    return field.template get<string>();
+}
+
+int DroSimSystem::SendMessageToServer(const json& message) const {
+    const int ok = client_->sendToServer(message.dump());
     return ok;
 }
 
-void DroSimSystem::GetResponse() const {
+json DroSimSystem::GetResponse() {
     const string res = client_->waitResponse();
-    if (res.length() == 0) return;
-    std::cout << res << '\n';
+    if (res.empty()) return "";
+    json response = json::parse(res);
+    auto type = GetFieldValue(response["type"]);
+    if (type == "update")
+        UpdateComponents(response);
+    else if (type == "return") {
+        if (CompareJsonField(response["status"],"fail")) {
+            for (const auto& str : response["verbose"]) {
+                auto desc = str.template get<string>();
+                cout << "failed : " << desc << '\n';
+            }
+        }
+    }
+    return response;
+}
+
+void DroSimSystem::UpdateComponents(const json& response) {
+    for (const auto& item : response["content"]) {
+        auto identifier = item["object"].template get<string>();
+        LeafComponent* requester = requestingComponents_[identifier];
+        for (const auto& attribute : item["attributes"])
+            for (const auto& [name, value] : attribute.items()) {
+                if (value.is_array()) { // l'attribut est un tableau (position, direction...)
+                    vector<string> strvalues;
+                    for (const auto& v : value)
+                        strvalues.push_back(v.template get<string>());
+                    requester->getRequestResponseArray(name, strvalues);
+                }
+                else { // l'attribut est une valeur
+                    auto strvalue = value.template get<string>();
+                    requester->getRequestResponse(name, strvalue);
+                }
+            }
+        if (item.contains("other")) UpdateCustomProperties_Local(item["other"]);
+    }
+    UpdateCustomProperties_Global(response);
+    if (cpt++ == 5) throw 1;
+}
+
+void DroSimSystem::UpdateCustomProperties_Local(const json& other) {
+    // begin user code
+    
+    // end user code
+}
+
+void DroSimSystem::UpdateCustomProperties_Global(const json& response) {
+    // begin user code
+    json message = PrepareGlobalMessage();
+    
+    vector<string> stopList;
+    for (const auto& item : response["content"]) {
+        if (!item.contains("other")) break;
+        const json& other = item["other"];
+        
+        // collisions
+        for (const auto& identifier : other["collisions"])
+            if (find(stopList.begin(), stopList.end(), identifier) == stopList.end())
+                stopList.push_back(identifier);
+    }
+    
+    AddStopInstructionsToMessage(message, stopList);
+
+    const int err = SendMessageToServer(message);
+    if (err) StopSim();
+    const json res = GetResponse();
+    if (CompareJsonField(res["status"],"fail")) StopSim();
+    
+    // end user code
 }
