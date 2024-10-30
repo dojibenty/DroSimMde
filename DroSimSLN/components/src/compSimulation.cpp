@@ -55,10 +55,6 @@ double compSimulation::grabExpectedEndTime() {
     return appli->grabExpectedEndTime();
 }
 
-double compSimulation::grabPositionCorrection() {
-    return appli->grabPositionCorrection();
-}
-
 Simulation* compSimulation::getAppli() {
     return appli;
 }
@@ -72,13 +68,8 @@ void compSimulation::setExpectedEndTime(double arg) {
     appli->setExpectedEndTime(arg);
 }
 
-// +++++++++++++ Access for positionCorrection parameter +++++++++++++
-double compSimulation::getPositionCorrection() {
-    return appli->getPositionCorrection();
-}
-
-void compSimulation::setPositionCorrection(double arg) {
-    appli->setPositionCorrection(arg);
+string compSimulation::getIdentifier() {
+    return appli->getIdentifier();
 }
 
 void compSimulation::setSystemRef(DroSimSystem* systemRef) {

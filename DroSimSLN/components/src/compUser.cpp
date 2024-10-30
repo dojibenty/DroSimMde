@@ -63,6 +63,9 @@ wect2 compUser::grabAssignedZone(long droneID) {
     return appli->grabAssignedZone(droneID);
 }
 
+wect2 compUser::grabRescaledZone(long droneID, double visionRadius) {
+    return appli->grabRescaledZone(droneID, visionRadius);
+}
 
 User* compUser::getAppli() {
     return appli;
@@ -75,6 +78,10 @@ long compUser::getDroneCount() {
 
 void compUser::setDroneCount(long arg) {
     appli->setDroneCount(arg);
+}
+
+string compUser::getIdentifier() {
+    return appli->getIdentifier();
 }
 
 void compUser::setSystemRef(DroSimSystem* systemRef) {

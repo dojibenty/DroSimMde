@@ -27,8 +27,8 @@ ObjectCode LeafComponent::getObjectCode() const {
     return objectcode_;
 }
 
-void LeafComponent::getRequestResponse(const std::string& variable, const std::string& strvalue) {}
-void LeafComponent::getRequestResponseArray(const std::string& variable, const std::vector<std::string>& strvalues) {}
+void LeafComponent::getRequestResponse(const std::string& variable, const double& doublevalue) {}
+void LeafComponent::getRequestResponseArray(const std::string& variable, const std::vector<double>& doublevalues) {}
 
 bool LeafComponent::start() {
     isActive = true;

@@ -57,8 +57,17 @@ wect2 User::grabAssignedZone(long droneID) {
     return zones[droneID];
 }
 
+wect2 User::grabRescaledZone(long droneID, double visionRadius) {
+    wect2& zone = zones[droneID];
+    auto rescaledZone = wect2(
+        vect2(zone.getV1().getX() - visionRadius, zone.getV1().getY() + visionRadius),
+        vect2(zone.getV2().getX() + visionRadius, zone.getV2().getY() - visionRadius));
+    zones[droneID] = rescaledZone;
+    return rescaledZone;
+}
 
 // Start of user code  : Additional methods
+
 double User::randRange(const double min, const double max) {
     return min + (double)rand()/RAND_MAX * (max - min);
 }

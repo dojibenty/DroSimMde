@@ -91,6 +91,10 @@ void compObjective::setPosition(vect2 arg) {
     appli->setPosition(arg);
 }
 
+string compObjective::getIdentifier() {
+    return appli->getIdentifier();
+}
+
 void compObjective::setSystemRef(DroSimSystem* systemRef) {
     appli->setSystemRef(systemRef);
 }

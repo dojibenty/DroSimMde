@@ -193,6 +193,10 @@ void compDroneSpiral::setCollisionRadius(double arg) {
     appli->setCollisionRadius(arg);
 }
 
+string compDroneSpiral::getIdentifier() {
+    return appli->getIdentifier();
+}
+
 void compDroneSpiral::setSystemRef(DroSimSystem* systemRef) {
     appli->setSystemRef(systemRef);
 }

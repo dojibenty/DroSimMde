@@ -42,10 +42,13 @@ namespace {
 
 int main() {
     auto* root = new DroSimSystem();
+    
     initRandom(20);
+    
     int simCount = 15;
     double summedTimesToFind;
     int successfulSims;
+    
     do {
         summedTimesToFind = 0;
         successfulSims = 0;
@@ -55,25 +58,17 @@ int main() {
             root->initialize();
             //pyp : run des observations
             auto* simulatedScenario = new ScenarLog(root);
-            /*
-            string si = to_string(i);
-            string fileName = "PositionsLog";
-            const string completeFileName = fileName + si;
-            auto* PositionsLogLogObservationComponent = new
-                myPositionsLogLogObservationComponent(completeFileName, 1.0);
-            PositionsLogLogObservationComponent->setObjective(root->get_AObjective()->getAppli());
-            PositionsLogLogObservationComponent->setDroneSweep(root->get_ADroneSweep()->getAppli());
-            simulatedScenario->push(PositionsLogLogObservationComponent);
-            */
 
             simulatedScenario->setTime(0, 360000);
 
             simulatedScenario->systemRef = root;
-            
+
+            /*
             for (const auto& inst : root->get_ADroneSweep())
                 simulatedScenario->droneSweepList.push_back(inst);
             for (const auto& inst : root->get_ADroneSpiral())
                 simulatedScenario->droneSpiralList.push_back(inst);
+            */
             
             auto simResult = simulatedScenario->startSimulation();
             if (get<0>(simResult)) {

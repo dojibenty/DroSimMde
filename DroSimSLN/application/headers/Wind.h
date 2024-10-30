@@ -41,10 +41,10 @@ public :
 
     ReturnCode doStep(int nStep);
     void step();
-    void getRequestResponse(const std::string& variable, const std::string& value);
-    void getRequestResponseArray(const std::string& variable, const std::vector<std::string>& values);
 
     void setSystemRef(DroSimSystem* systemRef);
+
+    string getIdentifier() const { return "current"; }
     
     double getWindForce();
     vect2 getWindDirection();

@@ -8,16 +8,20 @@
 #ifndef compDroneSweep_H_
 #define compDroneSweep_H_
 
-#include "DroneSweep.h"
 #include "LeafComponent.h"
 class DroneSweep;
 class DroSimSystem;
 
 #include "vect2.h"
+#include "wect2.h"
 
 #include "ItfGeoDataInterface.h"
 #include "ItfManageSimInterface.h"
 #include "ItfSimDataInterface.h"
+
+#include "nlohmann/json.hpp"
+
+using json = nlohmann::json;
 
 class compDroneSweep : public LeafComponent {
 protected :
@@ -40,13 +44,14 @@ public :
 
     vect2 getSweepposition();
     void setSystemRef(DroSimSystem* systemRef);
+    json makePathWaypoints(wect2& zone, double depth);
     void setrItfGeoDataSweep(ItfGeoDataInterface* arItfGeoDataSweep);
     void setrItfManageSimSweep(ItfManageSimInterface* arItfManageSimSweep);
     void setrItfSimDataSweep(ItfSimDataInterface* arItfSimDataSweep);
     DroneSweep* getAppli();
 
-    void getRequestResponse(const std::string& variable, const std::string& value) override;
-    void getRequestResponseArray(const std::string& variable, const std::vector<std::string>& values) override;
+    void getRequestResponse(const std::string& variable, const double& value) override;
+    void getRequestResponseArray(const std::string& variable, const std::vector<double>& values) override;
 
     int getID();
     vect2& getPosition();

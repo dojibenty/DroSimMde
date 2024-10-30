@@ -48,6 +48,7 @@ public :
     // Start of user code  : Additional methods
     // End of user code
 
+    string getIdentifier() const { return "objective"; }
 
     vect2 getObjposition();
     void setSystemRef(DroSimSystem* systemRef);

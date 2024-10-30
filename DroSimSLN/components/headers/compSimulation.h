@@ -39,17 +39,13 @@ public :
     // +++++++++++++ Methods of the pItfSimData interface +++++++++++++
     double grabExpectedEndTime();
 
-    double grabPositionCorrection();
-
     void setSystemRef(DroSimSystem* systemRef);
     Simulation* getAppli();
     // +++++++++++++ Access for expectedEndTime parameter +++++++++++++
     double getExpectedEndTime();
 
     void setExpectedEndTime(double arg);
-    // +++++++++++++ Access for positionCorrection parameter +++++++++++++
-    double getPositionCorrection();
-
-    void setPositionCorrection(double arg);
+    
+    string getIdentifier();
 };
 #endif /* compSimulation_H_ */

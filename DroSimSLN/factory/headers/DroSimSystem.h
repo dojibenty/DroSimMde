@@ -8,8 +8,6 @@
 #ifndef DroSimSystem_H_
 #define DroSimSystem_H_
 
-//#include <vector>
-//#include "LeafComponent.h"
 #include "RootComponent.h"
 
 #include "ASimulation.h"
@@ -19,14 +17,6 @@
 #include "AObjective.h"
 #include "ADroneSweep.h"
 #include "ADroneSpiral.h"
-#include "DroSimSystem.h"
-#include "DroSimSystem.h"
-#include "DroSimSystem.h"
-#include "DroSimSystem.h"
-#include "DroSimSystem.h"
-#include "DroSimSystem.h"
-#include "DroSimSystem.h"
-#include "DroSimSystem.h"
 #include "nlohmann/json.hpp"
 
 using json = nlohmann::json;
@@ -50,6 +40,7 @@ protected :
     Client* client_;
     json requestMessage_;
     json instructionMessage_;
+    json initMessage_;
     map<string,LeafComponent*> requestingComponents_;
 
     int mutableNumberOfDroneSweep = 1;
@@ -83,8 +74,8 @@ public :
     AObjective* get_AObjective();
     vector<ADroneSweep*> get_ADroneSweep();
     vector<ADroneSpiral*> get_ADroneSpiral();
-
-    void distantInitialize();
+    
+    void initializeServer();
     void initialize();
 
     void end();
@@ -92,11 +83,15 @@ public :
     vector<tuple<double, int, int>> getSlowConfigs();
     tuple<double, int, int> getFastConfig();
     void AddRequest(const std::string& identifier, const std::string& variable);
+    void AddInstruction(const string& identifier, const string& variable, const json& instruction);
+    void AddInstruction(const string& identifier, const string& variable, double value);
+    void AddInstruction(const string& identifier, const string& variable, const vector<double>& value);
     void StopSim();
-    json PrepareGlobalMessage();
-    void AddStopInstructionsToMessage(json& message, const vector<string>& components);
+    json PrepareMessage(const string& type);
+    void AddStopToMessage(json& message, const vector<string>& components);
     bool CompareJsonField(const json& field, const string& str);
-    string GetFieldValue(const json& field);
+    string GetFieldStringValue(const json& field);
+    double GetFieldDoubleValue(const json& field);
     int SendMessageToServer(const json& message) const;
     json GetResponse();
     json getRequestMessage() { return requestMessage_; }

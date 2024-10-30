@@ -10,7 +10,8 @@
 
 #include "compDroneSweep.h"
 #include "AObjective.h"
-#include "AWind.h"
+class AWind;
+class AObjective;
 
 class ADroneSweep : public compDroneSweep {
 protected:

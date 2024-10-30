@@ -26,8 +26,8 @@ public :
     void setDelayMax(int delayMax);
 
     ObjectCode getObjectCode() const;
-    virtual void getRequestResponse(const std::string& variable, const std::string& strvalue);
-    virtual void getRequestResponseArray(const std::string& variable, const std::vector<std::string>& strvalues);
+    virtual void getRequestResponse(const std::string& variable, const double& doublevalue);
+    virtual void getRequestResponseArray(const std::string& variable, const std::vector<double>& doublevalues);
 
     bool start();
 

@@ -39,6 +39,8 @@ public :
 
     void setSystemRef(DroSimSystem* systemRef);
 
+    string getIdentifier() const { return "geozone"; }
+
     // +++++++++++++ Methods of the pItfGeoData interface +++++++++++++
     vect2 grabEnvLimits() override;
     vect2 grabBottomLeftPoint() override;

@@ -82,6 +82,10 @@ void compGeoZone::setBottomLeftPoint(vect2 arg) {
     appli->setBottomLeftPoint(arg);
 }
 
+string compGeoZone::getIdentifier() {
+    return appli->getIdentifier();
+}
+
 void compGeoZone::setSystemRef(DroSimSystem* systemRef) {
     appli->setSystemRef(systemRef);
 }

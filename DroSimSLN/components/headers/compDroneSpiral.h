@@ -98,5 +98,6 @@ public :
     void setStartingPoint(vect2 arg);
     double getCollisionRadius();
     void setCollisionRadius(double arg);
+    string getIdentifier();
 };
 #endif /* compDroneSpiral_H_ */

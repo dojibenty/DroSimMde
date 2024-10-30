@@ -27,8 +27,10 @@ Wind::~Wind() {
 
 void Wind::initialize() {
     // Communication
-    systemRef_->AddRequest("current", "force");
-    systemRef_->AddRequest("current", "direction");
+    const string identifier = getIdentifier();
+    
+    systemRef_->AddRequest(identifier, "force");
+    systemRef_->AddRequest(identifier, "direction");
     // Start of user code  : Implementation of initialize method
     windForce = force;
     windDirection = direction;
@@ -58,22 +60,6 @@ void Wind::step() {
     const double dirModY = User::roundToDecimal(User::randRange(-1, 1)/10,2);
     windDirection += vect2(dirModX,dirModY);
     windDirection.normalize();
-}
-
-void Wind::getRequestResponse(const std::string& variable, const std::string& value) {
-    if (variable == "force")
-        cout << "current" << " : ma variable force a recu la valeur " << value << '\n';
-    else if (variable == "direction")
-        cout << "current" << " : ma variable direction a recu la valeur " << value << '\n';
-    else
-        cout << "current" << " : la variable " << variable << "(" << value << ") n'est pas geree" << '\n';
-}
-
-void Wind::getRequestResponseArray(const std::string& variable, const std::vector<std::string>& values) {
-    if (variable == "direction")
-        cout << "current" << " : ma variable direction a recu une valeur" << '\n';
-    else
-        cout << "current" << " : la variable " << variable << " n'est pas geree" << '\n';
 }
 
 // Start of user code  : Additional methods

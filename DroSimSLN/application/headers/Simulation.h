@@ -21,7 +21,6 @@ protected :
 
     // Parameters
     double expectedEndTime;
-    double positionCorrection;
 
     DroSimSystem* systemRef_;
 
@@ -38,10 +37,10 @@ public :
 
     void setSystemRef(DroSimSystem* systemRef);
 
+    string getIdentifier() const { return "simulation"; }
+    
     // +++++++++++++ Methods of the pItfSimData interface +++++++++++++
     double grabExpectedEndTime();
-
-    double grabPositionCorrection();
 
 
     // Start of user code  : Additional methods
@@ -52,9 +51,5 @@ public :
     double getExpectedEndTime();
 
     void setExpectedEndTime(double arg);
-    // +++++++++++++ Access for positionCorrection parameter +++++++++++++
-    double getPositionCorrection();
-
-    void setPositionCorrection(double arg);
 };
 #endif /*  Simulation_H_ */

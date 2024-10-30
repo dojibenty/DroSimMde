@@ -48,10 +48,13 @@ public :
     void setSystemRef(DroSimSystem* systemRef);
     void setrItfGeoDataUser(ItfGeoDataInterface* arItfGeoDataUser);
 
+    string getIdentifier() const { return "user"; }
+
     // +++++++++++++ Methods of the pItfManageSimulation interface +++++++++++++
     void signalObjectiveFound(long droneID) override;
 
     wect2 grabAssignedZone(long droneID) override;
+    wect2 grabRescaledZone(long droneID, double visionRadius);
 
     // +++++++++++++ Access for droneCount calculated attribute +++++++++++++
     long getDroneCount();

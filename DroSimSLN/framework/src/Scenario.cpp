@@ -129,12 +129,12 @@ void Scenario::computeDoStepResults() {
 
 void Scenario::postStepEvent(Clock* c) {
     checkDronesStatus();
-    checkForCollisions();
     if (c->getCurrentMS() % (c->getEndTime() / 10) == 0)
         updateFromServer();
 }
 
 void Scenario::checkDronesStatus() {
+    /*
     for (const auto& d : droneSweepList)
         if (d->getIsActive()) return;
 
@@ -142,51 +142,7 @@ void Scenario::checkDronesStatus() {
         if (d->getIsActive()) return;
 
     simStatus = 1;
-}
-
-void Scenario::checkForCollisions() const {
-    for (const auto& d : droneSweepList) {
-        if (!d->getIsActive()) continue;
-        
-        const auto& collisionRadius = d->getCollisionRadius();
-        auto& position = d->getPosition();
-        const auto& id = d->getID();
-        for (const auto& other : droneSweepList)
-            if (vect2::distance(position, other->getPosition()) <= collisionRadius) {
-                if (id == other->getID()) continue;
-                cout << "drone " << id << "collided with drone " << other->getID() << '\n';
-                d->stop();
-                other->stop();
-            }
-        for (const auto& other : droneSpiralList)
-            if (vect2::distance(position, other->getPosition()) <= collisionRadius) {
-                if (id == other->getID()) continue;
-                cout << "drone " << id << "collided with drone " << other->getID() << '\n';
-                d->stop();
-                other->stop();
-            }
-    }
-    for (const auto& d : droneSpiralList) {
-        if (!d->getIsActive()) continue;
-        
-        const auto& collisionRadius = d->getCollisionRadius();
-        auto& position = d->getPosition();
-        const auto& id = d->getID();
-        for (const auto& other : droneSweepList)
-            if (vect2::distance(position, other->getPosition()) <= collisionRadius) {
-                if (id == other->getID()) continue;
-                cout << "drone " << id << "collided with drone " << other->getID() << '\n';
-                d->stop();
-                other->stop();
-            }
-        for (const auto& other : droneSpiralList)
-            if (vect2::distance(position, other->getPosition()) <= collisionRadius) {
-                if (id == other->getID()) continue;
-                cout << "drone " << id << "collided with drone " << other->getID() << '\n';
-                d->stop();
-                other->stop();
-            }
-    }
+    */
 }
 
 void Scenario::updateFromServer() const {

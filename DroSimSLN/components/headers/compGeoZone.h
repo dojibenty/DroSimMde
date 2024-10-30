@@ -50,5 +50,6 @@ public :
     vect2 getBottomLeftPoint();
 
     void setBottomLeftPoint(vect2 arg);
+    string getIdentifier();
 };
 #endif /* compGeoZone_H_ */

@@ -41,6 +41,7 @@ public :
     // +++++++++++++ Methods of the pItfManageSimulation interface +++++++++++++
     void signalObjectiveFound(long droneID) override;
     wect2 grabAssignedZone(long droneID) override;
+    wect2 grabRescaledZone(long droneID, double visionRadius);
 
     User* getAppli();
 
@@ -48,5 +49,6 @@ public :
     long getDroneCount();
 
     void setDroneCount(long arg);
+    string getIdentifier();
 };
 #endif /* compUser_H_ */

@@ -7,7 +7,12 @@
 #ifndef DroneSweep_H_
 #define DroneSweep_H_
 
+#include "DroSimSystem.h"
 #include "ReturnCode.h"
+#include "nlohmann/json.hpp"
+
+using json = nlohmann::json;
+
 class compDroneSweep;
 class DroSimSystem;
 // Inputs
@@ -38,7 +43,7 @@ protected :
     double visionRadius;
     double sweepHeight;
     double batteryCapacity;
-    vect2 startingPoint;
+    vect2 startingPoint; 
     double collisionRadius;
 
     DroSimSystem* systemRef_;
@@ -51,24 +56,16 @@ protected :
     // Start of user code  : Properties of DroneSweep
 private:
     int ID;
-    string identifier;
     double speed;
     vect2 position;
+    vector<double> position3;
     vect2 direction;
+    vector<double> direction3;
     double batteryConsumption;
     double batConsoFactA;
     double batConsoFactB;
     double battery;
     double movementTolerance;
-    wect2 assignedZone;
-    bool goesVertical;
-    bool leftToRight;
-    bool topToBottom;
-    long heightCount;
-    double sweepLength;
-    double leftYBound;
-    bool isInZone;
-    vect2 zoneStartPoint;
     double windInfluence = 0.6;
     int cpt;
     // End of user code
@@ -85,6 +82,7 @@ public :
     void consumeBattery(double windForce, const vect2& windDirection);
     bool condObjectiveFound(vect2& position, vect2& objposition, const double visionRadius);
     bool condLowBattery(double battery);
+    json makePathWaypoints(wect2& zone, double depth);
 
 
     // Start of user code  : Additional methods
@@ -95,10 +93,10 @@ private:
 public:
     void printRecap();
 
-    void getRequestResponse(const std::string& variable, const std::string& value);
-    void getRequestResponseArray(const std::string& variable, const std::vector<std::string>& values);
+    void getRequestResponse(const std::string& variable, const double value);
+    void getRequestResponseArray(const std::string& variable, const std::vector<double>& values);
 
-    string getIdentifier() { return identifier; }
+    string getIdentifier() const { return "dronesweep" + ID; }
     double getSpeed() { return speed; }
     void setSpeed(double arg) { speed = arg; }
     int getID() { return ID; }

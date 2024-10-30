@@ -99,6 +99,7 @@ private:
     void printRecap();
 
 public:
+    string getIdentifier() const { return "dronespiral" + ID; }
     double getSpeed() { return speed; }
     void setSpeed(double arg) { speed = arg; }
     int getID() { return ID; }

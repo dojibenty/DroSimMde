@@ -52,13 +52,6 @@ double Simulation::grabExpectedEndTime() {
     // End of user code
 }
 
-double Simulation::grabPositionCorrection() {
-    // Start of user code  : Implementation of method grabPositionCorrection
-    return positionCorrection;
-    // End of user code
-}
-
-
 // Start of user code  : Additional methods
 
 // End of user code
@@ -71,15 +64,6 @@ double Simulation::getExpectedEndTime() {
 
 void Simulation::setExpectedEndTime(double arg) {
     expectedEndTime = arg;
-}
-
-// +++++++++++++ Access for positionCorrection parameter +++++++++++++
-double Simulation::getPositionCorrection() {
-    return positionCorrection;
-}
-
-void Simulation::setPositionCorrection(double arg) {
-    positionCorrection = arg;
 }
 
 void Simulation::setSystemRef(DroSimSystem* systemRef) {

@@ -6,8 +6,6 @@
  * Author: pyp
  */
 #include "DroSimSystem.h"
-#include "DroSimSystem.h"
-#include "DroSimSystem.h"
 #include "Simulation.h"
 #include "Wind.h"
 #include "User.h"
@@ -46,13 +44,12 @@ vector<ADroneSpiral*> DroSimSystem::get_ADroneSpiral() {
 
 DroSimSystem::DroSimSystem() {
     client_ = new Client("system");
-    requestMessage_["type"] = "request";
-    requestMessage_["content"] = json::array();
-    instructionMessage_["type"] = "instruction";
-    instructionMessage_["content"] = json::array();
+    requestMessage_ = PrepareMessage("request");
+    instructionMessage_ = PrepareMessage("instruction");
+    initMessage_ = PrepareMessage("init");
 
     cpt = 0;
-
+    
     // Simulation
     instASimulation = new ASimulation(1.0);
     leafComponents.push_back(instASimulation);
@@ -80,8 +77,7 @@ DroSimSystem::DroSimSystem() {
 
     instAUser->setrItfGeoDataUser(instAGeoZone->getAppli());
     instAObjective->setrItfGeoDataObj(instAGeoZone->getAppli());
-
-    // TODO => parametres mutables
+    
     // Initialisation des mutables
     minSpeed = 10.0;
     maxSpeed = 30.0;
@@ -107,133 +103,86 @@ json newAttribute(const string& name, const string& value) {
     return attrItem;
 }
 
-json newAttributeArray(const string& name, const vector<string>& values) {
+json newAttribute(const string& name, const double value) {
+    json attrItem;
+    attrItem[name] = value;
+    return attrItem;
+}
+
+json newAttributeArray(const string& name, const vector<double>& values) {
     json attrItem;
     attrItem[name] = json::array();
     for (const auto& value : values) attrItem[name].push_back(value);
     return attrItem;
 }
 
-void DroSimSystem::distantInitialize() {
-    json item;
-
-    // Current (Wind)
-    item = newItem("current");
-    item["attributes"].push_back(newAttribute("force", "-5.0"));
-    item["attributes"].push_back(newAttributeArray("direction", {"0.5", "0.5", "0.0"}));
-    instructionMessage_["content"].push_back(item);
-    requestingComponents_["current"] = instAWind;
-
+void DroSimSystem::initializeServer() {
     int idx = 0;
 
     // DroneSweep
     for (int i = 0; i < mutableNumberOfDroneSweep; i++, idx++) {
         const auto inst = new ADroneSweep(10.0, idx);
-        inst->setVisionRadius(1000.0);
-        inst->setSweepHeight(2000.0);
-        inst->setBatteryCapacity(200.0);
-        inst->setCollisionRadius(5.0);
-        inst->setStartingPoint(vect2(0.0, 0.0));
+        const string& identifier = inst->getIdentifier();
+        
+        // Inputs & Outputs
         inst->setAObjective(instAObjective);
         inst->setAWind(instAWind);
+        // Parameters
+        inst->setVisionRadius(1000.0);
+        // Interfaces
         inst->setrItfManageSimSweep(instAUser->getAppli());
         inst->setrItfGeoDataSweep(instAGeoZone->getAppli());
         inst->setrItfSimDataSweep(instASimulation->getAppli());
+        // Lists
         instADroneSweep.emplace_back(inst);
         leafComponents.push_back(inst);
+        requestingComponents_[identifier] = inst;
+        // Reference to system instance
         inst->setSystemRef(this);
 
-        item = newItem("dronesweep" + to_string(idx));
-        item["attributes"].push_back(newAttribute("min_speed", "10.0"));
-        item["attributes"].push_back(newAttribute("max_speed", "30.0"));
-        item["attributes"].push_back(newAttribute("vision_radius", "1000.0"));
-        item["attributes"].push_back(newAttribute("sweep_height", "2000.0"));
-        item["attributes"].push_back(newAttribute("battery_cap", "200.0"));
-        item["attributes"].push_back(newAttribute("collision_radius", "5.0"));
-        item["attributes"].push_back(newAttributeArray("starting_point", {"0.0", "0.0"}));
-        item["attributes"].push_back(newAttribute("speed", "50.0"));
-        instructionMessage_["content"].push_back(item);
-        requestingComponents_["dronesweep" + to_string(idx)] = inst;
+        // Assigned zone
+        wect2 assignedZone = instAUser->grabRescaledZone(idx, 1000.0);
+        inst->setSweepHeight(2000.0);
+
+        // Prepare for init message
+        json servComp;
+        servComp["object"] = identifier;
+        servComp["init_pos"] = { 0.0, 0.0, 0.0 };
+        servComp["waypoints"] = inst->makePathWaypoints(assignedZone, 0.0);
+        servComp["speed"] = 20.0;
+
+        initMessage_["content"].push_back(servComp);
+
+        // Subscribe variables
+        AddRequest(identifier, "position");
+        AddRequest(identifier, "collision");
     }
 
-    const int err = SendMessageToServer(instructionMessage_);
+    const int err = SendMessageToServer(initMessage_);
     if (err) return;
     const json response = GetResponse();
     auto status = response["status"].template get<string>();
-    if (status == "fail") StopSim();
-    else UpdateComponents(response);
+    if (status == "fail") {
+        cout << "Init failed\nDump:\n" << response.dump(4);
+        StopSim();
+    }
 }
 
 void DroSimSystem::initialize() {
-    distantInitialize();
+    initializeServer();
 
     // Simulation
     instASimulation->setExpectedEndTime(300000.0);
-    instASimulation->setPositionCorrection(1.0);
-
-    // Wind
-    //instAWind->setForce(0.0);
-    //instAWind->setDirection(vect2(0.5, 0.5));
 
     // User
 
     // GeoZone
     instAGeoZone->setEnvSize(vect2(20000.0, 20000.0));
-    instAGeoZone->setBottomLeftPoint(vect2(45.0, -5.0));
+    instAGeoZone->setBottomLeftPoint(vect2(0.0, 0.0));
 
     // Objective
     instAObjective->setSpeedConstraint(0.0);
     instAObjective->setPosition(vect2(0, 0));
-
-    int idx = 0;
-
-    // DroneSweep
-    /*
-    for (int i = 0; i < mutableNumberOfDroneSweep; i++, idx++) {
-        const auto inst = new ADroneSweep(10.0, idx);
-        inst->setMinSpeed(10.0);
-        inst->setMaxSpeed(30.0);
-        inst->setVisionRadius(1000.0);
-        inst->setSweepHeight(2000.0);
-        inst->setBatteryCapacity(200.0);
-        inst->setCollisionRadius(5.0);
-        inst->setStartingPoint(vect2(0.0, 0.0));
-        inst->setSpeed(mutableSpeed);
-        inst->setAObjective(instAObjective);
-        inst->setAWind(instAWind);
-        inst->setrItfManageSimSweep(instAUser->getAppli());
-        inst->setrItfGeoDataSweep(instAGeoZone->getAppli());
-        inst->setrItfSimDataSweep(instASimulation->getAppli());
-        instADroneSweep.emplace_back(inst);
-        leafComponents.push_back(inst);
-        inst->setSystemRef(this);
-    }
-    */
-
-    // DroneSpiral
-    for (int i = 0; i < mutableNumberOfDroneSpiral; i++, idx++) {
-        const auto inst = new ADroneSpiral(10.0, idx);
-        inst->setMinSpeed(10.0);
-        inst->setMaxSpeed(30.0);
-        inst->setVisionRadius(1000.0);
-        inst->setSpiralRadius(2000.0);
-        inst->setConcentricCircles(false);
-        inst->setNbCirclePoints(8);
-        inst->setSpiralIncrementFactor(3);
-        inst->setWanderSteps(5);
-        inst->setBatteryCapacity(200.0);
-        inst->setCollisionRadius(5.0);
-        inst->setStartingPoint(vect2(0.5, 0.5));
-        inst->setSpeed(mutableSpeed);
-        inst->setAObjective(instAObjective);
-        inst->setAWind(instAWind);
-        inst->setrItfManageSimSpiral(instAUser->getAppli());
-        inst->setrItfGeoDataSpiral(instAGeoZone->getAppli());
-        inst->setrItfSimDataSpiral(instASimulation->getAppli());
-        instADroneSpiral.emplace_back(inst);
-        leafComponents.push_back(inst);
-        inst->setSystemRef(this);
-    }
 
     // Calcultated attributes
     instAUser->setDroneCount(mutableNumberOfDroneSweep + mutableNumberOfDroneSpiral);
@@ -359,9 +308,35 @@ void DroSimSystem::AddRequest(const string& identifier, const string& variable) 
     requestMessage_["content"].push_back(newItem);
 }
 
+void DroSimSystem::AddInstruction(const string& identifier, const string& variable, const json& instruction) {
+    for (auto& item : instructionMessage_["content"]) {
+        if (item["object"] == identifier) {
+            item["attributes"].push_back(instruction);
+            return;
+        }
+    }
+
+    json newItem;
+    newItem["object"] = identifier;
+    newItem["attributes"] = {instruction};
+    instructionMessage_.push_back(newItem);
+}
+
+void DroSimSystem::AddInstruction(const string& identifier, const string& variable, const double value) {
+    json instruction;
+    instruction[variable] = value;
+    AddInstruction(identifier,variable,instruction);
+}
+
+void DroSimSystem::AddInstruction(const string& identifier, const string& variable, const vector<double>& value) {
+    json instruction;
+    instruction[variable] = {value};
+    AddInstruction(identifier,variable,instruction);
+}
+
 void DroSimSystem::StopSim() {
-    json message = PrepareGlobalMessage();
-    AddStopInstructionsToMessage(message,{"sim"});
+    json message = PrepareMessage("global");
+    AddStopToMessage(message,{"sim"});
     const int err = SendMessageToServer(message);
     if (err) exit(err);
     const json response = GetResponse();
@@ -369,26 +344,30 @@ void DroSimSystem::StopSim() {
     end();
 }
 
-json DroSimSystem::PrepareGlobalMessage() {
+json DroSimSystem::PrepareMessage(const string& type) {
     json message;
-    message["type"] = "global";
+    message["type"] = type;
     message["content"] = json::array();
     return message;
 }
 
-void DroSimSystem::AddStopInstructionsToMessage(json& message, const vector<string>& components) {
+void DroSimSystem::AddStopToMessage(json& message, const vector<string>& components) {
     json stopItem;
     stopItem["stop"] = components;
     message["content"].push_back(stopItem);
 }
 
 bool DroSimSystem::CompareJsonField(const json& field, const string& str) {
-    const auto fieldvalue = GetFieldValue(field);
+    const auto fieldvalue = GetFieldStringValue(field);
     return fieldvalue == str;
 }
 
-string DroSimSystem::GetFieldValue(const json& field) {
+string DroSimSystem::GetFieldStringValue(const json& field) {
     return field.template get<string>();
+}
+
+double DroSimSystem::GetFieldDoubleValue(const json& field) {
+    return field.template get<double>();
 }
 
 int DroSimSystem::SendMessageToServer(const json& message) const {
@@ -400,7 +379,7 @@ json DroSimSystem::GetResponse() {
     const string res = client_->waitResponse();
     if (res.empty()) return "";
     json response = json::parse(res);
-    auto type = GetFieldValue(response["type"]);
+    auto type = GetFieldStringValue(response["type"]);
     if (type == "update")
         UpdateComponents(response);
     else if (type == "return") {
@@ -421,20 +400,19 @@ void DroSimSystem::UpdateComponents(const json& response) {
         for (const auto& attribute : item["attributes"])
             for (const auto& [name, value] : attribute.items()) {
                 if (value.is_array()) { // l'attribut est un tableau (position, direction...)
-                    vector<string> strvalues;
+                    vector<double> doublevalues;
                     for (const auto& v : value)
-                        strvalues.push_back(v.template get<string>());
-                    requester->getRequestResponseArray(name, strvalues);
+                        doublevalues.push_back(v.template get<double>());
+                    requester->getRequestResponseArray(name, doublevalues);
                 }
                 else { // l'attribut est une valeur
-                    auto strvalue = value.template get<string>();
-                    requester->getRequestResponse(name, strvalue);
+                    auto doublevalue = value.template get<double>();
+                    requester->getRequestResponse(name, doublevalue);
                 }
             }
         if (item.contains("other")) UpdateCustomProperties_Local(item["other"]);
     }
     UpdateCustomProperties_Global(response);
-    if (cpt++ == 5) throw 1;
 }
 
 void DroSimSystem::UpdateCustomProperties_Local(const json& other) {
@@ -445,7 +423,7 @@ void DroSimSystem::UpdateCustomProperties_Local(const json& other) {
 
 void DroSimSystem::UpdateCustomProperties_Global(const json& response) {
     // begin user code
-    json message = PrepareGlobalMessage();
+    json message = PrepareMessage("global");
     
     vector<string> stopList;
     for (const auto& item : response["content"]) {
@@ -458,7 +436,7 @@ void DroSimSystem::UpdateCustomProperties_Global(const json& response) {
                 stopList.push_back(identifier);
     }
     
-    AddStopInstructionsToMessage(message, stopList);
+    AddStopToMessage(message, stopList);
 
     const int err = SendMessageToServer(message);
     if (err) StopSim();

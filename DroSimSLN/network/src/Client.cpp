@@ -5,7 +5,7 @@
 
 #define ADDRESS "127.0.0.1"
 #define PORT 7777
-#define MESSAGE_MAX_SIZE 2048
+#define MESSAGE_MAX_SIZE 4096
 
 Client::Client(const std::string& name) {
     name_ = name;

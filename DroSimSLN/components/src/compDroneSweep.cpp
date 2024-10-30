@@ -7,6 +7,9 @@
 
 #include "compDroneSweep.h"
 #include "DroneSweep.h"
+#include "nlohmann/json.hpp"
+
+using json = nlohmann::json;
 
 compDroneSweep::compDroneSweep(double aFrequency, const int ID) : LeafComponent(aFrequency) {
     appli = new DroneSweep(this, ID);
@@ -94,11 +97,11 @@ DroneSweep* compDroneSweep::getAppli() {
     return appli;
 }
 
-void compDroneSweep::getRequestResponse(const std::string& variable, const std::string& value) {
+void compDroneSweep::getRequestResponse(const std::string& variable, const double& value) {
     appli->getRequestResponse(variable,value);
 }
 
-void compDroneSweep::getRequestResponseArray(const std::string& variable, const std::vector<std::string>& values) {
+void compDroneSweep::getRequestResponseArray(const std::string& variable, const std::vector<double>& values) {
     appli->getRequestResponseArray(variable,values);
 }
 
@@ -181,4 +184,8 @@ string compDroneSweep::getIdentifier() {
 
 void compDroneSweep::setSystemRef(DroSimSystem* systemRef) {
     appli->setSystemRef(systemRef);
+}
+
+json compDroneSweep::makePathWaypoints(wect2& zone, const double depth) {
+    return appli->makePathWaypoints(zone, depth);
 }

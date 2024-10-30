@@ -32,28 +32,7 @@ DroneSweep::~DroneSweep() {
 }
 
 void DroneSweep::initialize() {
-    goesVertical = true;
-    leftToRight = false;
-    topToBottom = false;
-    heightCount = 1;
-    isInZone = false;
     // Start of user code  : Implementation of initialize method
-    assignedZone = rItfManageSimSweep->grabAssignedZone(ID);
-    const auto rescaledZone = wect2(
-        vect2(assignedZone.getV1().getX() - visionRadius, assignedZone.getV1().getY() + visionRadius),
-        vect2(assignedZone.getV2().getX() + visionRadius, assignedZone.getV2().getY() - visionRadius));
-    assignedZone = rescaledZone;
-
-    leftYBound = assignedZone.getV1().getY();
-    sweepLength = assignedZone.getV2().getY() - leftYBound;
-
-    const auto bottomLeftPoint = vect2(assignedZone.getV2().getX(), assignedZone.getV1().getY());
-    zoneStartPoint = bottomLeftPoint + startingPoint * bottomLeftPoint;
-
-    direction = zoneStartPoint;
-    direction.normalize();
-
-    movementTolerance = rItfSimDataSweep->grabPositionCorrection();
 
     battery = batteryCapacity;
     batConsoFactA = 50;
@@ -61,13 +40,7 @@ void DroneSweep::initialize() {
     batteryConsumption = CONSUMPTION(speed);
     cpt = 0;
 
-    // Communication
-    identifier = "dronesweep" + to_string(ID);
-
-    systemRef_->AddRequest(identifier, "speed");
-    systemRef_->AddRequest(identifier, "position");
-
-    systemRef_->AddRequest(identifier, "collision");
+    position3 = {0.0,0.0,0.0};
 
     //printRecap();
     // End of user code
@@ -77,6 +50,10 @@ void DroneSweep::end() {
     // Start of user code  : Implementation of end method
     cout << "SWE" << ID << " - bat: " << battery << " // " << cpt << " steps\n";
     // End of user code
+}
+
+vect2 cutZAxis(const vector<double>& v3) {
+    return {v3[0], v3[1]};
 }
 
 ReturnCode DroneSweep::doStep(int nStep) {
@@ -90,9 +67,12 @@ ReturnCode DroneSweep::doStep(int nStep) {
     using enum ReturnCode;
 
     // Is objective found
-    if (condObjectiveFound(position, objposition, visionRadius))
+    auto cutPos = cutZAxis(position3);
+    if (condObjectiveFound(cutPos, objposition, visionRadius))
         return objective_found;
 
+    return proceed; // TODO cut flow here temporarily
+    
     // Is battery low
     if (condLowBattery(battery))
         return low_battery;
@@ -101,21 +81,60 @@ ReturnCode DroneSweep::doStep(int nStep) {
     // End of user code
 }
 
+json newPoint(double x, double y, double z) {
+    json point = json::array();
+    point.push_back(x);
+    point.push_back(y);
+    point.push_back(z);
+    return point;
+}
+
+json DroneSweep::makePathWaypoints(wect2& zone, const double depth) {
+    startingPoint = {0.0, 0.0};
+    
+    const double leftYBound = zone.getV1().getY();
+    const double topXBound = zone.getV1().getX();
+    const double sweepLength = zone.getV2().getY() - leftYBound;
+
+    const auto bottomLeftPoint = vect2(zone.getV2().getX(), zone.getV1().getY());
+    vect2 start = bottomLeftPoint + startingPoint * bottomLeftPoint;
+
+    json waypoints = json::array();
+    
+    const double X = start.getX();
+    const double lY = start.getY(); // left Y
+    const double rY = start.getY() + sweepLength; // right Y
+    const double Z = depth;
+    
+    waypoints.push_back(newPoint(X, lY, Z)); // starting point
+    waypoints.push_back(newPoint(X, rY, Z)); // first right point
+    
+    bool leftToRight = false;
+    double currentHeight = 0.0;
+
+    while (currentHeight + sweepHeight <= topXBound) {
+        currentHeight += sweepHeight;
+        
+        if (leftToRight) {
+            waypoints.push_back(newPoint(X + currentHeight, lY, Z)); // up point
+            waypoints.push_back(newPoint(X + currentHeight, rY, Z)); // going right
+        }
+        else {
+            waypoints.push_back(newPoint(X + currentHeight, rY, Z)); // up point
+            waypoints.push_back(newPoint(X + currentHeight, lY, Z)); // going left
+        }
+        
+        leftToRight = !leftToRight;
+    }
+
+    return waypoints;
+}
+
+
 void DroneSweep::step(const vect2& objposition, const double windForce, const vect2& windDirection,
                       vect2* sweepposition) {
     move(sweepposition);
     consumeBattery(windForce, windDirection);
-}
-
-void DroneSweep::move(vect2* sweepposition) {
-    if (!isInZone)
-        if (zoneStartPoint < position) {
-            position = zoneStartPoint;
-            isInZone = true;
-        }
-
-    position = setNextPosition();
-    *sweepposition = vect2(position.getX(), position.getY());
 }
 
 void DroneSweep::consumeBattery(const double windForce, const vect2& windDirection) {
@@ -148,76 +167,22 @@ bool DroneSweep::condLowBattery(double battery) {
     return false;
 }
 
-void DroneSweep::getRequestResponse(const std::string& variable, const std::string& value) {
-    if (variable == "speed")
-        cout << "dronesweep" + to_string(ID) << " : ma variable speed a recu la valeur " << value << '\n';
-    else
-        cout << "dronesweep" + to_string(ID) << " : la variable " << variable << "(" << value << ") n'est pas geree" << '\n';
+void DroneSweep::getRequestResponse(const std::string& variable, const double value) {
+    cout << getIdentifier() << " : la variable " << variable << "(" << value << ") n'est pas geree" << '\n';
 }
 
-void DroneSweep::getRequestResponseArray(const std::string& variable, const std::vector<std::string>& values) {
-    if (variable == "position")
-        cout << "dronesweep" + to_string(ID) << " : ma variable position a recu une valeur" << '\n';
+void DroneSweep::getRequestResponseArray(const std::string& variable, const std::vector<double>& values) {
+    if (variable == "position") {
+        position3 = values;
+    }
     else if (variable == "direction")
-        cout << "dronesweep" + to_string(ID) << " : ma variable direction a recu une valeur" << '\n';
+        direction3 = values;
     else
-        cout << "dronesweep" + to_string(ID) << " : la variable " << variable << " n'est pas geree" << '\n';
+        cout << getIdentifier() << " : la variable " << variable << " n'est pas geree" << '\n';
 }
 
 
 // Start of user code  : Additional methods
-vect2 DroneSweep::setNextPosition() {
-    if (!isInZone) return {position + direction * speed};
-
-    const double targetHeight = sweepHeight * heightCount;
-    if (goesVertical &&
-        (!topToBottom && position.getX() >= targetHeight) || (topToBottom && position.getX() <= targetHeight)) {
-        goesVertical = false;
-        direction.setX(0.0);
-        direction.setY(1.0);
-        if (leftToRight) direction.switchSignY();
-        leftToRight = !leftToRight;
-        if (topToBottom) heightCount--;
-        else heightCount++;
-    }
-    else if (position.getY() - speed < leftYBound
-        || position.getY() + speed > sweepLength + leftYBound) {
-        goesVertical = true;
-        direction.setX(1.0);
-        direction.setY(0.0);
-        if (topToBottom) direction.switchSignX();
-    }
-
-    vect2 nextPosition = position + direction * speed;
-    if (goesOutOfBounds(nextPosition)) {
-        if (goesVertical) {
-            nextPosition = position - direction * speed;
-            topToBottom = !topToBottom;
-        }
-        else if (leftToRight) nextPosition = position + direction * (assignedZone.getV2().getY() - position.getY());
-        else nextPosition = position + direction * (position.getY() - assignedZone.getV1().getY());
-    }
-
-    return nextPosition;
-}
-
-bool DroneSweep::goesOutOfBounds(vect2& point) {
-    return point.getX() < assignedZone.getV2().getX()
-        || point.getY() < assignedZone.getV1().getY()
-        || point.getX() > assignedZone.getV1().getX()
-        || point.getY() > assignedZone.getV2().getY();
-}
-
-void DroneSweep::printRecap() {
-    cout << "*** Drone SWE" << ID << " ***";
-    cout << "\nstartingPoint: " << startingPoint.toString();
-    cout << "\nspeed: " << speed;
-    cout << "\nposition: " << position.toString();
-    cout << "\ndirection: " << direction.toString();
-    cout << "\nbattery: " << battery;
-    cout << "\nbatteryConsumption: " << batteryConsumption;
-    cout << endl;
-}
 
 // End of user code
 

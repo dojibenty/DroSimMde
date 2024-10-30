@@ -47,8 +47,6 @@ void DroneSpiral::initialize() {
     direction = zoneStartPoint;
     direction.normalize();
 
-    movementTolerance = rItfSimDataSpiral->grabPositionCorrection();
-
     battery = batteryCapacity;
     batConsoFactA = 50;
     batConsoFactB = 0.4;

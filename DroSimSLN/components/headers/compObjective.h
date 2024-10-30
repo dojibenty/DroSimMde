@@ -50,5 +50,6 @@ public :
     vect2 getPosition();
 
     void setPosition(vect2 arg);
+    string getIdentifier();
 };
 #endif /* compObjective_H_ */
